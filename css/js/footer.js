@@ -1,5 +1,3 @@
-// ==================== NEWSLETTER - ĐĂNG KÝ NHẬN TIN ====================
-
 function validateEmail(email) {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(email);
@@ -32,14 +30,12 @@ function initNewsletter() {
             return;
         }
         
-        // Thành công
         errorDiv.style.display = 'none';
         alert('✅ Cảm ơn bạn đã đăng ký! Chúng tôi sẽ gửi thông tin mới nhất cho bạn.');
         
-        emailInput.value = ''; // Reset input
+        emailInput.value = '';
     });
 
-    // Hỗ trợ nhấn Enter
     emailInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
             submitBtn.click();
@@ -47,5 +43,4 @@ function initNewsletter() {
     });
 }
 
-// Khởi tạo khi DOM load
 document.addEventListener('DOMContentLoaded', initNewsletter);
