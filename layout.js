@@ -97,70 +97,96 @@ function renderFooter() {
       </div>
     </section>
 
-    <footer class="footer"> 
-      <div class="footer-container">
-        <div class="footer-column brand">
-          <h2>LADY ROSE</h2>
-          <p>
-            Lady Rose mang đến những thiết kế túi xách,
-            cao cấp, tinh tế và sang trọng dành cho phụ nữ hiện đại.
-          </p>
-          <div class="social-icons">
-            <a href="https://www.facebook.com/share/14fpebXc47p/" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
-            <a href="https://www.instagram.com/lady.rose.offical?igsh=eXV6c3VwZmNndmw2" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
-            <a href="https://tiktok.com/@nguynnh8510" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
-          </div>
-        </div>
-        <div class="footer-column">
-          <h3>Mua sắm</h3>
-          <ul>
-            <li><a href="product.html">Cửa hàng</a></li>
-            <li><a href="#">Bộ sưu tập</a></li>
-          </ul>
-        </div>
-        <div class="footer-column">
-          <h3>Hỗ trợ khách hàng</h3>
-          <ul>
-            <li><a href="#">Chính sách đổi trả</a></li>
-            <li><a href="#">Hướng dẫn mua hàng</a></li>
-            <li><a href="#">Thanh toán &amp; Vận chuyển</a></li>
-            <li><a href="#">Câu hỏi thường gặp</a></li>
-          </ul>
-        </div>
-        <div class="footer-column contact">
-          <h3>Liên hệ</h3>
-          <ul>
-            <li>
-              <i class="fa-solid fa-location-dot"></i>
-              123, Nguyễn Huệ, Quận 1, TP.HCM
-            </li>
-            <li>
-              <i class="fa-solid fa-phone"></i>
-              012345678
-            </li>
-            <li>
-              <i class="fa-solid fa-envelope"></i>
-              support.ladyrose@gmail.com
-            </li>
-          </ul>
-        </div>
-        <div class="footer-column subscribe">
-          <h3>ĐĂNG KÝ NHẬN TIN</h3>
-          <p>
-            Nhận ưu đãi và thông tin mới nhất từ Lady Rose
-          </p>
-          <div class="subscribe-form">
-            <input type="email" id="newsletter-email" placeholder="Nhập email của bạn">
-            <button id="newsletter-btn" type="button">ĐĂNG KÝ</button>
-            <div id="newsletter-error" class="error-message" style="display: none;">
-              * Hãy nhập email
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-column footer-accordion brand">
+                <button class="footer-toggle" type="button">
+                    <h2>LADY ROSE</h2>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </button>
+                <div class="footer-panel">
+                    <p>
+                        Lady Rose mang đến những thiết kế túi xách,
+                        cao cấp, tinh tế và sang trọng dành cho phụ nữ hiện đại.
+                    </p>
+
+                    <div class="social-icons">
+                        <a href="https://www.facebook.com/share/14fpebXc47p/"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="https://www.instagram.com/lady.rose.offical?igsh=eXV6c3VwZmNndmw2"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="https://tiktok.com/@nguynnh8510"><i class="fa-brands fa-tiktok"></i></a>
+                    </div>
+                </div>
             </div>
-          </div>
+
+            <div class="footer-column footer-accordion">
+                <button class="footer-toggle" type="button">
+                    <h3>Mua sắm</h3>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </button>
+                <ul class="footer-panel">
+                    <li><a href="#">Sản phẩm</a></li>
+                    <li><a href="#">Bộ sưu tập</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-column footer-accordion">
+                <button class="footer-toggle" type="button">
+                    <h3>Hỗ trợ khách hàng</h3>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </button>
+                <ul class="footer-panel">
+                    <li><a href="cart.html">Chính sách đổi trả</a></li>
+                    <li><a href="cart.html">Hướng dẫn mua hàng</a></li>
+                    <li><a href="cart.html">Thanh toán & Vận chuyển</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-column footer-accordion contact">
+                <button class="footer-toggle" type="button">
+                    <h3>Liên hệ</h3>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </button>
+                <ul class="footer-panel">
+                    <li>
+                        <i class="fa-solid fa-location-dot"></i>
+                        123, Nguyễn Huệ, Quận 1, TP.HCM
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-phone"></i>
+                        012345678
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-envelope"></i>
+                        support.ladyrose@gmail.com
+                    </li>
+                </ul>
+            </div>
+
+            <div class="footer-column footer-accordion subscribe">
+                <button class="footer-toggle" type="button">
+                    <h3>ĐĂNG KÝ NHẬN TIN</h3>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </button>
+                <div class="footer-panel">
+                    <p>
+                        Nhận ưu đãi và thông tin mới nhất từ Lady Rose
+                    </p>
+
+                    <div class="subscribe-form">
+                        <input type="email" id="newsletter-email"
+                            placeholder="Nhập email của bạn">
+                        <button id="newsletter-btn">ĐĂNG KÝ</button>
+
+                        <div id="newsletter-error" class="error-message" style="display: none;">
+                            * Hãy nhập email
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
-      </div>
-      <div class="footer-bottom">
-        © 2026 LADY ROSE. All rights reserved.
-      </div>
-    </footer>
-  `;
-}
+
+        <div class="footer-bottom">
+            © 2026 LADY ROSE. All rights reserved.
+        </div>
+    </footer> 
