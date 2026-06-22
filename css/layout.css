@@ -1,19 +1,20 @@
 @import url('https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400;0,500;0,700;1,400&family=Moderustic:wght@400;500;600;700&family=Roboto:wght@400;500;700&display=swap');
 
+/* ===== LADY ROSE - GLOBAL STYLE ===== */
 :root {
-  --color-bg: #FFFFF3;          
+  --color-bg: #FFFFF3;           /* nền chính - kem rất nhạt theo spec */
   --color-bg-soft: #F5EFE6;
-  --color-primary: #3A2E26;      
-  --color-secondary: #7A5C3E;    
-  --color-accent: #C9A876;    
-  --color-accent-soft: #E8C9C9;  
+  --color-primary: #3A2E26;      /* nâu đậm - text chính chung */
+  --color-secondary: #7A5C3E;    /* nâu vừa */
+  --color-accent: #C9A876;       /* vàng đồng - nhấn / CTA chung */
+  --color-accent-soft: #E8C9C9;  /* hồng pastel nhấn phụ */
   --color-border: #E3D7C7;
   --color-text-muted: #9C8E7E;
   --color-white: #FFFFFF;
   --color-star: #E0B84B;
 
-
-  --promo-bar-color: #C6A27A;          
+  /* màu riêng theo spec mới của trang danh sách sản phẩm */
+  --promo-bar-color: #C6A27A;          /* màu gốc dải khuyến mãi, dùng với opacity 20% */
   --filter-bg: #FBF0E8;
   --filter-border: #B2947E;
   --banner-eyebrow-color: #BA8C42;
@@ -49,8 +50,9 @@ ul {
   padding: 0;
 }
 
+/* ===== TOP BAR (1440x50, màu C6A27A @ 20% opacity) ===== */
 .top-bar {
-  background-color: rgba(198, 162, 122, 0.2);
+  background-color: rgba(198, 162, 122, 0.2); /* #C6A27A 20% opacity theo spec */
   color: var(--color-primary);
   text-align: center;
   font-size: 13px;
@@ -66,8 +68,9 @@ ul {
   color: var(--color-secondary);
 }
 
+/* ===== HEADER (1440x100) ===== */
 .main-header {
-  background-color: var(--color-bg);
+  background-color: var(--color-white);
   border-bottom: 1px solid var(--color-border);
   height: 100px;
   display: flex;
@@ -75,7 +78,7 @@ ul {
 }
 
 .brand-logo img {
-  height: 170px;
+  height: 60px;
   width: auto;
   object-fit: contain;
 }
@@ -93,6 +96,7 @@ ul {
   color: var(--color-accent);
 }
 
+/* Dropdown "Sản phẩm" trong header — hiện khi hover */
 .main-nav .product-menu {
   position: relative;
 }
@@ -114,6 +118,7 @@ ul {
   transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
 }
 
+/* Vùng vô hình nối từ nav-link xuống dropdown để chuột không bị "rớt" khi di chuyển */
 .product-dropdown::before {
   content: "";
   position: absolute;
@@ -171,6 +176,7 @@ ul {
   align-items: center;
   justify-content: center;
 }
+
 /* ==========================================================
    LADY ROSE — FOOTER
    ========================================================== */
@@ -363,3 +369,184 @@ ul {
     font-size: 12px;
     color: #8c8270;
 }
+/* ==========================================================
+   LADY ROSE — FOOTER RESPONSIVE
+   Breakpoints: Desktop (>991px) | Tablet (577–991px) | Mobile (≤576px)
+
+   - Desktop: grid 5 cột bình thường, không accordion.
+   - Tablet : "LADY ROSE" (brand) luôn hiện đầy đủ; 4 mục còn lại
+              (Mua sắm / Hỗ trợ khách hàng / Liên hệ / Đăng ký) là accordion.
+   - Mobile : TẤT CẢ 5 mục (kể cả "LADY ROSE") đều là accordion.
+   ========================================================== */
+
+/* ==========================================================
+   TABLET — 577px to 991px
+   ========================================================== */
+@media (max-width: 991px) {
+
+    .footer {
+        padding: 0;
+    }
+
+    .footer-container {
+        display: block;
+        max-width: 100%;
+        padding-bottom: 0;
+    }
+
+    /* "LADY ROSE" luôn hiện đầy đủ, không phải accordion ở tablet */
+    .footer-column.brand {
+        padding: 28px 5% 20px;
+        border-top: none;
+    }
+
+    .footer-column.brand .footer-toggle {
+        cursor: default;
+        pointer-events: none;
+    }
+
+    .footer-column.brand .footer-toggle i {
+        display: none;
+    }
+
+    .footer-column.brand .footer-panel {
+        max-height: none;
+        overflow: visible;
+        padding: 0;
+    }
+
+    .footer-column.brand p {
+        max-width: 480px;
+    }
+
+    /* 4 mục còn lại: accordion */
+    .footer-accordion:not(.brand) {
+        border-top: 1px solid #e3d9c6;
+    }
+
+    .footer-accordion:not(.brand) .footer-toggle {
+        cursor: pointer;
+        padding: 16px 5%;
+    }
+
+    .footer-accordion:not(.brand) .footer-toggle h3 {
+        margin: 0;
+        font-size: 14.5px;
+    }
+
+    .footer-accordion:not(.brand) .footer-toggle i {
+        display: inline-block;
+        font-size: 12px;
+        color: #5c5346;
+        transition: transform 0.25s ease;
+    }
+
+    .footer-accordion:not(.brand) .footer-panel {
+        max-height: 0;
+        overflow: hidden;
+        padding: 0 5%;
+        transition: max-height 0.25s ease, padding 0.25s ease;
+    }
+
+    .footer-accordion:not(.brand).open .footer-toggle i {
+        transform: rotate(180deg);
+    }
+
+    .footer-accordion:not(.brand).open .footer-panel {
+        max-height: 500px;
+        padding: 0 5% 18px;
+    }
+
+    .footer-bottom {
+        padding: 16px 5%;
+    }
+}
+
+/* ==========================================================
+   MOBILE — up to 576px
+   TẤT CẢ mục (kể cả brand) đều là accordion.
+   ========================================================== */
+@media (max-width: 576px) {
+
+    /* Bỏ override của tablet: brand cũng toggle được như các mục khác */
+    .footer-column.brand {
+        padding: 0;
+        border-top: 1px solid #e3d9c6;
+    }
+
+    .footer-column.brand .footer-toggle {
+        cursor: pointer;
+        pointer-events: auto;
+        padding: 16px 6%;
+    }
+
+    .footer-column.brand .footer-toggle h2 {
+        font-size: 15px;
+        margin: 0;
+    }
+
+    .footer-column.brand .footer-toggle i {
+        display: inline-block;
+        font-size: 12px;
+        color: #5c5346;
+        transition: transform 0.25s ease;
+    }
+
+    .footer-column.brand .footer-panel {
+        max-height: 0;
+        overflow: hidden;
+        padding: 0 6%;
+        transition: max-height 0.25s ease, padding 0.25s ease;
+    }
+
+    .footer-column.brand.open .footer-toggle i {
+        transform: rotate(180deg);
+    }
+
+    .footer-column.brand.open .footer-panel {
+        max-height: 500px;
+        padding: 0 6% 20px;
+    }
+
+    .footer-column.brand p {
+        max-width: 100%;
+    }
+
+    /* Các mục khác: giữ accordion như tablet nhưng padding theo lề mobile (6%) */
+    .footer-accordion:not(.brand) .footer-toggle,
+    .footer-accordion:not(.brand) .footer-panel {
+        padding-left: 6%;
+        padding-right: 6%;
+    }
+
+    .footer-accordion:not(.brand).open .footer-panel {
+        padding-bottom: 18px;
+    }
+
+    .footer-bottom {
+        padding: 14px 6%;
+    }
+}
+@media (max-width: 1024px) {
+
+  /* HEADER */
+  .brand-logo img {
+    height: 120px;
+  }
+  .main-nav .nav-link {
+    padding: 8px 10px !important;
+    font-size: 14px;
+  }
+  @media (max-width: 767px) {
+
+  /* HEADER — ẩn nav chữ, giữ logo + icons */
+  .main-nav {
+    display: none;
+  }
+  .brand-logo img {
+    height: 80px;
+  }
+  .header-icons a {
+    margin-left: 12px;
+    font-size: 16px;
+  }
