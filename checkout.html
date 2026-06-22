@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thanh Toán - LADY ROSE</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="css/layout.css">
+    
+    <link rel="stylesheet" href="css/checkout.css">
+</head>
+<body>
+
+    <div id="siteHeader"></div>
+
+    <div class="breadcrumb">
+        <a href="index.html">Trang chủ</a> / <a href="cart.html">Giỏ hàng</a> / <a href="#" style="color: var(--color-primary); font-weight:600;">Thanh toán</a>
+    </div>
+
+    <div class="container">
+        <h2 class="page-title">Thanh Toán</h2>
+
+        <div class="steps-bar">
+            <div class="step active"><span class="step-num">1</span><span class="step-name">Giỏ Hàng</span></div>
+            <div class="step active-main" id="step-checkout"><span class="step-num">2</span><span class="step-name">Thanh Toán</span></div>
+            <div class="step" id="step-shipping"><span class="step-num">3</span><span class="step-name">Vận Chuyển</span></div>
+            <div class="step" id="step-complete"><span class="step-num">4</span><span class="step-name">Hoàn Tất</span></div>
+        </div>
+
+        <div class="checkout-layout">
+            
+            <div class="left-column">
+                <div class="section-card">
+                    <div class="section-title">Thông Tin Giao Hàng</div>
+                    <div class="form-grid" id="shipping-form">
+                        <div class="form-group compulsory">
+                            <label>Họ Và Tên</label>
+                            <input type="text" id="fullname" placeholder="Nhập họ và tên">
+                            <span class="error-message">* Vui lòng điền họ và tên</span>
+                        </div>
+                        <div class="form-group compulsory">
+                            <label>Số Điện Thoại</label>
+                            <input type="tel" id="phone" placeholder="Nhập số điện thoại">
+                            <span class="error-message">* Vui lòng nhập số điện thoại</span>
+                        </div>
+                        <div class="form-group">
+                            <label>Email (Không Bắt Buộc)</label>
+                            <input type="email" placeholder="Nhập email">
+                        </div>
+                        <div class="form-group compulsory">
+                            <label>Địa Chỉ</label>
+                            <input type="text" id="address" placeholder="Số nhà, tên đường...">
+                            <span class="error-message">* Vui lòng nhập địa chỉ cụ thể</span>
+                        </div>
+                        <div class="form-grid full-width" style="gap:16px; margin:0;">
+                            <div class="form-group compulsory">
+                                <label>Tỉnh/Thành Phố</label>
+                                <select id="province">
+                                    <option value="">Chọn Tỉnh/Thành Phố</option>
+                                    <option value="hcm">Hồ Chí Minh</option>
+                                    <option value="hn">Hà Nội</option>
+                                </select>
+                                <span class="error-message">* Vui lòng chọn Tỉnh/Thành phố</span>
+                            </div>
+                            <div class="form-group compulsory">
+                                <label>Quận/Huyện</label>
+                                <select id="district">
+                                    <option value="">Chọn Quận/Huyện</option>
+                                </select>
+                                <span class="error-message">* Vui lòng chọn Quận/Huyện</span>
+                            </div>
+                        </div>
+                        <div class="form-group full-width compulsory">
+                            <label>Phường/Xã</label>
+                            <select id="ward">
+                                <option value="">Chọn Phường/Xã</option>
+                            </select>
+                            <span class="error-message">* Vui lòng chọn Phường/Xã</span>
+                        </div>
+                        <div class="form-group full-width">
+                            <label>Ghi Chú (Không Bắt Buộc)</label>
+                            <textarea rows="3" placeholder="Ghi chú thêm về đơn hàng..."></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-title">Phương Thức vận chuyển</div>
+                    <div class="option-list" id="shipping-methods">
+                        <div class="option-item selected" data-fee="30000">
+                            <input type="radio" name="shipping" checked>
+                            <div class="option-content">
+                                <div class="option-details">
+                                    <strong>Giao hàng nhanh</strong>
+                                    <span class="sub-text">Dự kiến giao: 1-2 ngày</span>
+                                </div>
+                            </div>
+                            <span class="price">30.000đ</span>
+                        </div>
+                        <div class="option-item" data-fee="25000">
+                            <input type="radio" name="shipping">
+                            <div class="option-content">
+                                <div class="option-details">
+                                    <strong>Giao hàng tiết kiệm</strong>
+                                    <span class="sub-text">Dự kiến giao: 2-4 ngày</span>
+                                </div>
+                            </div>
+                            <span class="price">25.000đ</span>
+                        </div>
+                        <div class="option-item" data-fee="50000">
+                            <input type="radio" name="shipping">
+                            <div class="option-content">
+                                <div class="option-details">
+                                    <strong>Giao hàng siêu tốc</strong>
+                                    <span class="sub-text">Dự kiến giao: trong ngày</span>
+                                </div>
+                            </div>
+                            <span class="price">50.000đ</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-title">Phương Thức Thanh Toán</div>
+                    <div class="option-list" id="payment-methods">
+                        <div class="option-item selected" data-type="online">
+                            <input type="radio" name="payment" checked>
+                            <div class="option-content">
+                                <img src="https://img.icons8.com/color/48/000000/visa.png" alt="Visa" class="payment-logo">
+                                <div class="option-details"><strong>Thẻ tín dụng/ghi nợ</strong></div>
+                            </div>
+                        </div>
+                        <div class="option-item" data-type="cod">
+                            <input type="radio" name="payment">
+                            <div class="option-content">
+                                <img src="https://img.icons8.com/fluency/48/000000/delivery.png" alt="COD" class="payment-logo">
+                                <div class="option-details"><strong>Thanh toán khi nhận hàng (COD)</strong></div>
+                            </div>
+                        </div>
+                        <div class="option-item" data-type="online">
+                            <input type="radio" name="payment">
+                            <div class="option-content">
+                                <img src="https://img.icons8.com/fluency/48/000000/bank.png" alt="Bank" class="payment-logo">
+                                <div class="option-details"><strong>Chuyển khoản ngân hàng</strong></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="right-column">
+                <div class="section-card">
+                    <div class="section-title">Đơn Hàng Của Bạn</div>
+                    <div class="cart-items" id="cart-list">
+                        <div class="cart-item" data-price="1183000">
+                            <img src="images/Túi xách tay LR Lyra - Nâu.png" alt="Túi" class="item-img">
+                            <div class="item-info">
+                                <div class="item-title">Túi xách tay LR Lyra Size 24</div>
+                                <div class="item-meta">Kem / 24</div>
+                                <div class="item-qty-price">
+                                    <div class="qty-controls">
+                                        <button class="qty-btn minus">-</button>
+                                        <span class="qty-val">1</span>
+                                        <button class="qty-btn plus">+</button>
+                                    </div>
+                                    <div class="item-price">1.183.000đ</div>
+                                </div>
+                            </div>
+                            <button class="remove-btn"><i class="fa-solid fa-trash remove-btn"></i></button>
+                        </div>
+
+                        <div class="cart-item" data-price="1183000">
+                            <img src="images/Túi đeo vai Nova - Nâu.png" alt="Túi" class="item-img">
+                            <div class="item-info">
+                                <div class="item-title">Túi đeo vai Nova Size 24</div>
+                                <div class="item-meta">Kem / 24</div>
+                                <div class="item-qty-price">
+                                    <div class="qty-controls">
+                                        <button class="qty-btn minus">-</button>
+                                        <span class="qty-val">1</span>
+                                        <button class="qty-btn plus">+</button>
+                                    </div>
+                                    <div class="item-price">1.183.000đ</div>
+                                </div>
+                            </div>
+                            <button class="remove-btn"><i class="fa-solid fa-trash remove-btn"></i></button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label style="font-weight: 600; font-size:13px;">Mã Khuyến Mãi</label>
+                        <div class="coupon-box">
+                            <input type="text" placeholder="Nhập mã khuyến mãi">
+                            <button type="button">Áp dụng</button>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 24px;">
+                        <div class="summary-row">
+                            <span>Tổng tiền hàng:</span>
+                            <span id="subtotal">2.366.000đ</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Phí vận chuyển:</span>
+                            <span id="shipping-fee">30.000đ</span>
+                        </div>
+                        <div class="summary-row total">
+                            <span>Tổng thanh toán:</span>
+                            <span id="total-payment" style="color: var(--color-primary);">2.396.000đ</span>
+                        </div>
+                    </div>
+
+                    <button class="btn-order" id="order-submit-btn">Đặt Hàng</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="modal-page" id="gateway-page">
+        <div class="modal-content">
+            <h3>CỔNG THANH TOÁN LADY ROSE</h3>
+            <p style="margin-top: 10px; color: var(--color-secondary); font-size:13px;">Vui lòng quét mã QR bên dưới để thực hiện giao dịch thanh toán an toàn.</p>
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=LadyRosePayment" alt="QR Code" class="qr-code">
+            <div style="font-weight: 700; font-size: 16px; color: var(--color-primary);" id="gateway-amount">Số tiền: 2.396.000đ</div>
+            <button class="btn-payment-submit" id="confirm-payment-btn">Xác Nhận Đã Thanh Toán</button>
+        </div>
+    </div>
+
+    <div class="modal-page" id="success-page">
+        <div class="modal-content">
+            <i class="fa-solid fa-circle-check success-icon"></i>
+            <h3 style="font-size: 22px;">Thanh Toán Thành Công!</h3>
+            <p style="margin: 15px 0; color: var(--color-secondary); font-size:13.5px;">Đơn hàng của bạn đã được hệ thống Lady Rose xác nhận thành công. Shipper sẽ liên hệ bạn sớm nhất.</p>
+            <button class="btn-payment-submit" onclick="window.location.reload();">Tiếp tục mua sắm</button>
+        </div>
+    </div>
+
+    <div id="siteFooter"></div>
+
+    <script src="js/layout.js"></script>
+
+    <script src="js/checkout.js"></script>
+</body>
+</html>
