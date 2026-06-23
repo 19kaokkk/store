@@ -1,30 +1,40 @@
 document.addEventListener('DOMContentLoaded', function() {
-    let baseShippingFee = 30000; // Phí ship gốc mặc định ban đầu
-    let currentShippingFee = 30000; // Phí ship thực tế sau khi tính toán freeship
+    let baseShippingFee = 30000; 
+    let currentShippingFee = 30000; 
 
-    // 1. LẤY DỮ LIỆU GIỎ HÀNG TỪ LOCALSTORAGE (ĐỒNG BỘ TỪ TRANG GIỎ HÀNG)
-    let cart = JSON.parse(localStorage.getItem('cartItems')) || [];
+    // ĐỒNG BỘ AN TOÀN: Kiểm tra đồng thời cả sessionStorage và localStorage để tránh lỗi trình duyệt chặn file:///
+    let cart = [];
+    try {
+        cart = JSON.parse(sessionStorage.getItem('ladyrose_cart')) || JSON.parse(localStorage.getItem('ladyrose_cart')) || [];
+    } catch(e) {
+        cart = [];
+    }
 
-    // Nếu không có dữ liệu từ trang giỏ hàng (bị trống), ta tự tạo dữ liệu mẫu để web không bị lỗi hình ảnh
-    if (cart.length === 0) {
+    // Nếu giỏ hàng trống không có gì, ta lấy tạm dữ liệu sản phẩm từ file products-data.js thực tế trong máy bạn để hiển thị mẫu
+    if (!cart || cart.length === 0) {
         cart = [
-            { id: 1, title: "Túi xách tay LR Lyra Size 24", price: 1183000, qty: 1, img: "images/Túi xách tay LR Lyra - Nâu.png", meta: "Kem / 24" },
-            { id: 2, title: "Túi đeo vai Nova Size 24", price: 1183000, qty: 1, img: "images/Túi đeo vai Nova - Nâu.png", meta: "Kem / 24" }
+            { id: "tui-xach-tay-lr-velvet-xanh", name: "Túi xách tay LR Velvet", price: 799000, qty: 1, image: "images/sanpham/Túi xách tay LR Velvet xanh-799.000đ", color: "Xanh", size: "24" }
         ];
     }
 
-    // Hàm hiển thị danh sách sản phẩm ra màn hình thanh toán
+    // Hàm render sản phẩm ra giao diện cột phải
     function renderCartItems() {
         const cartList = document.getElementById('cart-list');
-        cartList.innerHTML = ''; // Xóa sạch dữ liệu mặc định ban đầu
+        if (!cartList) return;
+        
+        cartList.innerHTML = ''; 
 
         cart.forEach((item, index) => {
+            // Xử lý fallback nếu thiếu ảnh hoặc thiếu tên để giao diện không bị vỡ lỗi
+            const itemImg = item.image || (item.img || '');
+            const itemName = item.name || (item.title || 'Sản phẩm Lady Rose');
+
             cartList.innerHTML += `
                 <div class="cart-item" data-index="${index}" data-price="${item.price}">
-                    <img src="${item.img}" alt="${item.title}" class="item-img">
+                    <img src="${itemImg}" alt="${itemName}" class="item-img" onerror="this.src='images/logo.png';">
                     <div class="item-info">
-                        <div class="item-title">${item.title}</div>
-                        <div class="item-meta">${item.meta || ''}</div>
+                        <div class="item-title">${itemName}</div>
+                        <div class="item-meta">${item.color || ''} ${item.size ? '/ ' + item.size : ''}</div>
                         <div class="item-qty-price">
                             <div class="qty-controls">
                                 <button class="qty-btn minus" data-index="${index}">-</button>
@@ -41,79 +51,98 @@ document.addEventListener('DOMContentLoaded', function() {
         tinhToanGioHang();
     }
 
-    // 2. TĂNG GIẢM SỐ LƯỢNG / XÓA SẢN PHẨM
+    // Xử lý bấm tăng / giảm số lượng sản phẩm trực tiếp tại trang thanh toán
     const cartList = document.getElementById('cart-list');
-    cartList.addEventListener('click', function(e) {
-        const target = e.target;
-        const index = target.getAttribute('data-index');
-        
-        if (index === null) return;
+    if (cartList) {
+        cartList.addEventListener('click', function(e) {
+            const target = e.target;
+            let index = target.getAttribute('data-index');
+            
+            if (index === null && target.parentElement) {
+                index = target.parentElement.getAttribute('data-index');
+            }
+            if (index === null) return;
 
-        if (target.classList.contains('plus')) {
-            cart[index].qty += 1;
-            luuVaCapNhat();
-        } else if (target.classList.contains('minus')) {
-            if (cart[index].qty > 1) {
-                cart[index].qty -= 1;
+            if (target.classList.contains('plus')) {
+                cart[index].qty += 1;
+                luuVaCapNhat();
+            } else if (target.classList.contains('minus')) {
+                if (cart[index].qty > 1) {
+                    cart[index].qty -= 1;
+                    luuVaCapNhat();
+                }
+            } else if (target.classList.contains('remove-btn') || target.closest('.remove-btn')) {
+                cart.splice(index, 1); 
                 luuVaCapNhat();
             }
-        } else if (target.classList.contains('remove-btn') || target.closest('.remove-btn')) {
-            cart.splice(index, 1); // Xóa sản phẩm khỏi mảng
-            luuVaCapNhat();
-        }
-    });
+        });
+    }
 
     function luuVaCapNhat() {
-        localStorage.setItem('cartItems', JSON.stringify(cart));
+        sessionStorage.setItem('ladyrose_cart', JSON.stringify(cart));
+        localStorage.setItem('ladyrose_cart', JSON.stringify(cart));
         renderCartItems();
     }
 
-    // 3. HÀM TÍNH TOÁN HÓA ĐƠN & KHUYẾN MÃI MIỄN PHÍ VẬN CHUYỂN (> 800.000đ)
+    // YÊU CẦU: Tự động miễn phí vận chuyển cho đơn hàng từ 800.000đ trở lên
     function tinhToanGioHang() {
         let tongTienHang = 0;
         cart.forEach(item => {
             tongTienHang += item.price * item.qty;
         });
 
-        // Áp dụng luật TMĐT: Đơn hàng trên 800k được miễn phí vận chuyển
         if (tongTienHang >= 800000) {
             currentShippingFee = 0;
-            document.getElementById('shipping-fee').innerHTML = `<span style="color: #2D6A4F; font-weight: bold;">Miễn phí</span>`;
+            const shippingFeeEl = document.getElementById('shipping-fee');
+            if (shippingFeeEl) {
+                shippingFeeEl.innerHTML = `<span style="color: #2D6A4F; font-weight: bold;"><i class="fa-solid fa-truck-fast"></i> Miễn phí</span>`;
+            }
         } else {
             currentShippingFee = baseShippingFee;
-            document.getElementById('shipping-fee').innerText = currentShippingFee.toLocaleString('vi-VN') + 'đ';
+            const shippingFeeEl = document.getElementById('shipping-fee');
+            if (shippingFeeEl) {
+                shippingFeeEl.innerText = currentShippingFee.toLocaleString('vi-VN') + 'đ';
+            }
         }
 
-        document.getElementById('subtotal').innerText = tongTienHang.toLocaleString('vi-VN') + 'đ';
+        const subtotalEl = document.getElementById('subtotal');
+        if (subtotalEl) subtotalEl.innerText = tongTienHang.toLocaleString('vi-VN') + 'đ';
+
         let tongThanhToan = tongTienHang + currentShippingFee;
-        document.getElementById('total-payment').innerText = tongThanhToan.toLocaleString('vi-VN') + 'đ';
-        document.getElementById('gateway-amount').innerText = "Số tiền: " + tongThanhToan.toLocaleString('vi-VN') + 'đ';
+        
+        const totalPaymentEl = document.getElementById('total-payment');
+        if (totalPaymentEl) totalPaymentEl.innerText = tongThanhToan.toLocaleString('vi-VN') + 'đ';
+        
+        const gatewayAmountEl = document.getElementById('gateway-amount');
+        if (gatewayAmountEl) gatewayAmountEl.innerText = "Số tiền: " + tongThanhToan.toLocaleString('vi-VN') + 'đ';
     }
 
-    // 4. CHỌN PHƯƠNG THỨC VẬN CHUYỂN (CẬP NHẬT LẠI PHÍ GỐC BAN ĐẦU)
+    // Chọn phương thức vận chuyển
     const shippingItems = document.querySelectorAll('#shipping-methods .option-item');
     shippingItems.forEach(item => {
         item.addEventListener('click', function() {
             shippingItems.forEach(i => i.classList.remove('selected'));
             this.classList.add('selected');
-            this.querySelector('input[type="radio"]').checked = true;
+            const radio = this.querySelector('input[type="radio"]');
+            if (radio) radio.checked = true;
 
-            baseShippingFee = parseInt(this.getAttribute('data-fee'));
+            baseShippingFee = parseInt(this.getAttribute('data-fee')) || 30000;
             tinhToanGioHang();
         });
     });
 
-    // 5. CHỌN PHƯƠNG THỨC THANH TOÁN
+    // Chọn phương thức thanh toán
     const paymentItems = document.querySelectorAll('#payment-methods .option-item');
     paymentItems.forEach(item => {
         item.addEventListener('click', function() {
             paymentItems.forEach(i => i.classList.remove('selected'));
             this.classList.add('selected');
-            this.querySelector('input[type="radio"]').checked = true;
+            const radio = this.querySelector('input[type="radio"]');
+            if (radio) radio.checked = true;
         });
     });
 
-    // 6. DỮ LIỆU ĐỊA PHƯƠNG (Tỉnh thành -> Quận huyện -> Phường xã)
+    // Xử lý dữ liệu tỉnh thành đổ xuống
     const locationData = {
         hcm: {
             districts: {
@@ -133,72 +162,90 @@ document.addEventListener('DOMContentLoaded', function() {
     const districtSelect = document.getElementById('district');
     const wardSelect = document.getElementById('ward');
 
-    provinceSelect.addEventListener('change', function() {
-        const province = this.value;
-        districtSelect.innerHTML = '<option value="">Chọn Quận/Huyện</option>';
-        wardSelect.innerHTML = '<option value="">Chọn Phường/Xã</option>';
-        if (province && locationData[province]) {
-            const districts = locationData[province].districts;
-            for (const id in districts) {
-                districtSelect.innerHTML += `<option value="${id}">${districts[id].name}</option>`;
-            }
-        }
-    });
-
-    districtSelect.addEventListener('change', function() {
-        const province = provinceSelect.value;
-        const district = this.value;
-        wardSelect.innerHTML = '<option value="">Chọn Phường/Xã</option>';
-        if (province && district && locationData[province].districts[district]) {
-            const wards = locationData[province].districts[district].wards;
-            wards.forEach(ward => {
-                wardSelect.innerHTML += `<option value="${ward}">${ward}</option>`;
-            });
-        }
-    });
-
-    // 7. XỬ LÝ ĐẶT HÀNG FORM VALIDATION
-    const orderBtn = document.getElementById('order-submit-btn');
-    orderBtn.addEventListener('click', function() {
-        let coLoi = false;
-        const cacOTrong = document.querySelectorAll('.form-group.compulsory');
-
-        cacOTrong.forEach(group => {
-            const field = group.querySelector('input, select');
-            if (!field.value.trim()) {
-                group.classList.add('has-error');
-                coLoi = true;
-            } else {
-                group.classList.remove('has-error');
+    if (provinceSelect && districtSelect && wardSelect) {
+        provinceSelect.addEventListener('change', function() {
+            const province = this.value;
+            districtSelect.innerHTML = '<option value="">Chọn Quận/Huyện</option>';
+            wardSelect.innerHTML = '<option value="">Chọn Phường/Xã</option>';
+            if (province && locationData[province]) {
+                const districts = locationData[province].districts;
+                for (const id in districts) {
+                    districtSelect.innerHTML += `<option value="${id}">${districts[id].name}</option>`;
+                }
             }
         });
 
-        if (coLoi) {
-            window.scrollTo({ top: document.getElementById('province').offsetTop - 120, behavior: 'smooth' });
-            return;
-        }
+        districtSelect.addEventListener('change', function() {
+            const province = provinceSelect.value;
+            const district = this.value;
+            wardSelect.innerHTML = '<option value="">Chọn Phường/Xã</option>';
+            if (province && district && locationData[province].districts[district]) {
+                const wards = locationData[province].districts[district].wards;
+                wards.forEach(ward => {
+                    wardSelect.innerHTML += `<option value="${ward}">${ward}</option>`;
+                });
+            }
+        });
+    }
 
-        document.getElementById('step-shipping').classList.add('active');
-        const loaiThanhToan = document.querySelector('#payment-methods .option-item.selected').getAttribute('data-type');
-        if (loaiThanhToan === 'online') {
-            document.getElementById('gateway-page').style.display = 'flex';
-        } else {
-            document.getElementById('step-complete').classList.add('active');
-            document.getElementById('success-page').style.display = 'flex';
-        }
-    });
+    // Xử lý kiểm tra lỗi khi nhấn đặt hàng (Form Validation)
+    const orderBtn = document.getElementById('order-submit-btn');
+    if (orderBtn) {
+        orderBtn.addEventListener('click', function() {
+            let coLoi = false;
+            const fields = document.querySelectorAll('.form-group.compulsory');
 
-    document.querySelectorAll('.form-group.compulsory input, .form-group.compulsory select').forEach(el => {
-        el.addEventListener('input', function() { this.parentElement.classList.remove('has-error'); });
-        el.addEventListener('change', function() { this.parentElement.classList.remove('has-error'); });
-    });
+            fields.forEach(group => {
+                const input = group.querySelector('input, select');
+                if (input && !input.value.trim()) {
+                    group.classList.add('has-error');
+                    coLoi = true;
+                } else {
+                    group.classList.remove('has-error');
+                }
+            });
 
-    document.getElementById('confirm-payment-btn').addEventListener('click', function() {
-        document.getElementById('gateway-page').style.display = 'none';
-        document.getElementById('step-complete').classList.add('active');
-        document.getElementById('success-page').style.display = 'flex';
-    });
+            if (coLoi) {
+                const prov = document.getElementById('province');
+                if (prov) window.scrollTo({ top: prov.offsetTop - 120, behavior: 'smooth' });
+                return;
+            }
 
-    // Kích hoạt vẽ giỏ hàng ngay khi tải xong trang
+            const stepShipping = document.getElementById('step-shipping');
+            if (stepShipping) stepShipping.classList.add('active');
+
+            const selectedPayment = document.querySelector('#payment-methods .option-item.selected');
+            const loaiThanhToan = selectedPayment ? selectedPayment.getAttribute('data-type') : 'cod';
+            
+            if (loaiThanhToan === 'online') {
+                const gatewayPage = document.getElementById('gateway-page');
+                if (gatewayPage) gatewayPage.style.display = 'flex';
+            } else {
+                hoanTatDonHang();
+            }
+        });
+    }
+
+    function hoanTatDonHang() {
+        const stepComplete = document.getElementById('step-complete');
+        if (stepComplete) stepComplete.classList.add('active');
+        const successPage = document.getElementById('success-page');
+        if (successPage) successPage.style.display = 'flex';
+        
+        // Xóa sạch giỏ hàng sau khi đặt thành công
+        sessionStorage.removeItem('ladyrose_cart');
+        localStorage.removeItem('ladyrose_cart');
+    }
+
+    const confirmPaymentBtn = document.getElementById('confirm-payment-btn');
+    if (confirmPaymentBtn) {
+        confirmPaymentBtn.addEventListener('click', function() {
+            const gatewayPage = document.getElementById('gateway-page');
+            if (gatewayPage) gatewayPage.style.display = 'none';
+            hoanTatDonHang();
+        });
+    }
+
+    // Kích hoạt hàm khởi chạy vẽ dữ liệu lên màn hình
     renderCartItems();
 });
