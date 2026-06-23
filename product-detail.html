@@ -1,110 +1,25 @@
 <!DOCTYPE html>
 <html lang="vi">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Product-detail</title>
-<link rel="stylesheet" href="product-detail.css">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Jost:wght@400;500;600;700&display=swap" rel="stylesheet">
-</head>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product-detail</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Jost:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="layout.css">
+    <link rel="stylesheet" href="product-detail.css">
+  </head>
 <body>
 
-<!-- Top banner -->
-<div class="topbar">
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 7h11v8H3z"/><path d="M14 10h4l3 3v2h-7z"/><circle cx="7" cy="18" r="1.6"/><circle cx="17.5" cy="18" r="1.6"/></svg>
-  <span>Miễn phí vận chuyển cho đơn hàng từ 800.000đ</span>
-</div>
-
-<!-- Header -->
-<header>
-  <div class="header-inner">
-    <button class="burger" id="burgerBtn" aria-label="Menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
-
-    <a class="logo" href="#">
-      <span class="mark">LR</span>
-      <span class="logo-text">
-        <div class="name">LADY ROSE</div>
-        <div class="since">SINCE 2026</div>
-      </span>
-    </a>
-
-    <nav class="main-nav">
-      <a href="#" class="active">Trang chủ</a>
-      <a href="#">Sản phẩm</a>
-      <a href="#">Về chúng tôi</a>
-    </nav>
-
-    <div class="header-icons">
-      <button aria-label="Tìm kiếm" class="icon-btn" id="searchBtn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
-      </button>
-
-      <div class="account-wrap icon-btn" style="position:relative;">
-        <button aria-label="Tài khoản" id="accountBtn">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>
-        </button>
-        <div class="account-dropdown" id="accountDropdown">
-          <a href="#">Đăng nhập</a>
-          <a href="#">Đăng ký</a>
-          <a href="#">Đơn hàng của tôi</a>
-        </div>
-      </div>
-
-      <button aria-label="Yêu thích" class="icon-btn wish-btn" id="headerWishBtn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s-7.5-4.6-10-9C.5 8.4 2.5 4 7 4c2.3 0 4 1.4 5 3 1-1.6 2.7-3 5-3 4.5 0 6.5 4.4 5 8-2.5 4.4-10 9-10 9z"/></svg>
-        <span class="icon-count zero" id="headerWishCount">0</span>
-      </button>
-
-      <button aria-label="Giỏ hàng" class="icon-btn" id="cartBtn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 6h2l2.4 12.2a2 2 0 0 0 2 1.8h8.4a2 2 0 0 0 2-1.6L21.5 9H6"/><circle cx="9.5" cy="21" r="1.2"/><circle cx="18" cy="21" r="1.2"/></svg>
-        <span class="icon-count zero" id="cartCount">0</span>
-      </button>
-
-    </div>
-  </div>
-
-  <div class="search-bar" id="searchBar">
-    <div class="search-bar-inner">
-      <input type="text" id="searchInput" placeholder="Tìm kiếm sản phẩm...">
-      <button id="searchSubmit">Tìm</button>
-      <button class="search-close" id="searchCloseBtn" aria-label="Đóng tìm kiếm">&times;</button>
-    </div>
-  </div>
-</header>
-
-<div class="overlay" id="overlay"></div>
-<nav class="mobile-nav" id="mobileNav">
-  <a href="#">Trang chủ</a>
-  <a href="#">Sản phẩm</a>
-  <a href="#">Về chúng tôi</a>
-
-  <div class="mobile-nav-section-title">TÀI KHOẢN &amp; DỊCH VỤ</div>
-  <div class="mobile-icon-list">
-    <button class="mobile-icon-row" id="mSearchBtn">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
-      <span class="label">Tìm kiếm</span>
-    </button>
-    <button class="mobile-icon-row" id="mAccountBtn">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>
-      <span class="label">Tài khoản</span>
-    </button>
-    <button class="mobile-icon-row" id="mWishBtn">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s-7.5-4.6-10-9C.5 8.4 2.5 4 7 4c2.3 0 4 1.4 5 3 1-1.6 2.7-3 5-3 4.5 0 6.5 4.4 5 8-2.5 4.4-10 9-10 9z"/></svg>
-      <span class="label">Yêu thích</span>
-      <span class="mcount zero" id="mWishCount">0</span>
-    </button>
-    <button class="mobile-icon-row" id="mCartBtn">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 6h2l2.4 12.2a2 2 0 0 0 2 1.8h8.4a2 2 0 0 0 2-1.6L21.5 9H6"/><circle cx="9.5" cy="21" r="1.2"/><circle cx="18" cy="21" r="1.2"/></svg>
-      <span class="label">Giỏ hàng</span>
-      <span class="mcount zero" id="mCartCount">0</span>
-    </button>
-  </div>
-</nav>
+<div id="siteHeader"></div>
 
 <!-- Breadcrumb -->
 <div class="breadcrumb">
   <a href="#">Trang chủ</a><span class="sep">/</span>
-  <span class="cur" id="breadcrumbCategory">Túi Xách Tay</span>
+  <span id="breadcrumbCategory">Túi Xách Tay</span>
 </div>
 
 <!-- Product -->
@@ -234,13 +149,12 @@
 
 <div class="toast" id="toast"></div>
 
-<footer>
-  <div class="fname">LADY ROSE</div>
-  <div>© 2026 Lady Rose. Thiết kế &amp; chăm sóc dành cho bạn.</div>
-</footer>
+<div id="siteFooter"></div>
 
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="layout.js"></script>
 <script src="product-detail.js"></script>
 
 </body>
 </html>
+
