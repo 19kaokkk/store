@@ -261,8 +261,18 @@ h2.page-title {
 @media (max-width: 992px) {
     .checkout-layout { grid-template-columns: 1fr; }
 }
-@media (max-width: 600px) {
+/* ĐỒNG BỘ GIAO DIỆN: Gom 3 ô địa chỉ lên chung một hàng ngang */
+.row-three-columns {
+    grid-column: span 2;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+}
+
+/* Tối ưu hóa hiển thị khi màn hình thu nhỏ lại (Mobile) */
+@media (max-width: 768px) {
     .row-three-columns {
         grid-template-columns: 1fr;
+        gap: 12px;
     }
 }
