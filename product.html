@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sản phẩm - Lady Rose</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<link rel="stylesheet" href="layout.css">
+<link rel="stylesheet" href="css.css">
+</head>
+<body>
+
+<div id="siteHeader"></div>
+
+<main class="container">
+
+  <section class="category-banner">
+    <img src="images/Túi xách tay/banner.png" alt="Bộ sưu tập Lady Rose" class="banner-bg" id="bannerImage">
+    <div class="category-banner-text">
+      <span class="eyebrow" id="bannerEyebrow">Túi xách nữ</span>
+      <h1 id="bannerHeading">Thanh lịch trong từng chi tiết</h1>
+      <p id="bannerDescription">Khám phá bộ sưu tập túi xách tay Lady Róse với thiết kế tinh tế, 
+        chất liệu cao cấp và gam màu trang nhã. Mỗi chiếc túi được tạo nên để tôn vinh vẻ đẹp nữ tính, 
+        hiện đại và sang trọng của người phụ nữ.</p>
+    </div>
+  </section>
+
+  <nav class="breadcrumb-bar" aria-label="breadcrumb">
+    <a href="index.html">Trang chủ</a> / <a href="product.html">Sản phẩm</a> / <span class="current" id="breadcrumbCurrent">Túi xách tay</span>
+  </nav>
+
+  <div class="subcat-row" id="subcatRow"></div>
+
+  <div class="search-sort-bar">
+    <div class="search-box">
+      <input type="text" id="productSearch" placeholder="Bạn cần tìm gì?">
+      <button type="button" aria-label="Tìm kiếm"><i class="ti ti-search"></i></button>
+    </div>
+
+    <!-- Hàng cho Mobile/Tablet: Bộ lọc, Số sản phẩm, Sắp xếp theo -->
+    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 w-100 d-lg-none my-3 search-sort-mobile-row">
+      <!-- Nút Bộ lọc trên mobile/tablet (không phải FAB) -->
+      <button type="button" class="btn btn-filter-mobile" id="openFilterMobileBtn">
+        <i class="ti ti-adjustments-horizontal"></i> Bộ lọc
+      </button>
+      
+      <!-- Số sản phẩm trên mobile/tablet -->
+      <div class="product-count d-md-block d-none" id="productCountMobileAndTablet">0 sản phẩm</div>
+
+      <select class="sort-select flex-grow-1" id="sortSelectMobileAndTablet">
+        <option value="default">Sắp xếp theo</option>
+        <option value="price-asc">Giá: Thấp đến cao</option>
+        <option value="price-desc">Giá: Cao đến thấp</option>
+      </select>
+    </div>
+    
+    <!-- Số sản phẩm chỉ cho Mobile (dưới 768px) -->
+    <div class="product-count d-md-none" id="productCountOnlyMobile">0 sản phẩm</div>
+
+    <!-- Hàng cho Desktop: Số sản phẩm, Sắp xếp theo -->
+    <div class="d-none d-lg-flex align-items-center gap-3 desktop-sort-row">
+      <div class="product-count" id="productCountDesktop">0 sản phẩm</div>
+      <select class="sort-select" id="sortSelectDesktop">
+        <option value="default">Sắp xếp theo</option>
+        <option value="price-asc">Giá: Thấp đến cao</option>
+        <option value="price-desc">Giá: Cao đến thấp</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="row">
+
+    <aside class="col-lg-3 mb-4 product-filter-column">
+      <div class="filter-sidebar">
+        <h6 class="filter-title">Bộ lọc</h6>
+
+        <div class="filter-group">
+          <span class="filter-label">Danh mục</span>
+          <div id="categoryFilterList"></div>
+        </div>
+
+        <div class="filter-group">
+          <span class="filter-label">Màu</span>
+          <div class="color-swatch-list">
+            <span class="color-swatch" data-color="den" style="background:#000" title="Đen"></span>
+            <span class="color-swatch" data-color="nau" style="background:#7A5C3E" title="Nâu"></span>
+            <span class="color-swatch" data-color="hong" style="background:#FBCFC0" title="Hồng"></span>
+            <span class="color-swatch" data-color="xanh" style="background: #4E76A3" title="Xanh"></span>
+            <span class="color-swatch" data-color="trang" style="background:#FFFFFF" title="Trắng"></span>
+            <span class="color-swatch" data-color="be" style="background:#E3D7C7" title="Be"></span>
+            <span class="color-swatch" data-color="do" style="background:#550F14" title="Đỏ"></span>
+            <span class="color-swatch" data-color="kem" style="background:#EDE3D3" title="Kem"></span>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <span class="filter-label">Khoảng giá</span>
+          <input type="range" id="priceRange" min="700000" max="2000000" step="50000" value="2000000">
+          <div class="price-range-inputs">
+            <input type="text" id="priceFrom" value="700.000đ" readonly>
+            <span>—</span>
+            <input type="text" id="priceTo" value="2.000.000đ" readonly>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <span class="filter-label">Chất liệu</span>
+          <label class="filter-check">
+            <input type="checkbox" class="filter-material" value="dapu"> Da PU
+          </label>
+          <label class="filter-check">
+            <input type="checkbox" class="filter-material" value="dathat"> Da thật
+          </label>
+          <label class="filter-check">
+            <input type="checkbox" class="filter-material" value="canvas"> Canvas
+          </label>
+        </div>
+
+        <div class="filter-group">
+          <span class="filter-label">Dịp sử dụng</span>
+          <label class="filter-check">
+            <input type="checkbox" class="filter-occasion" value="ditiec"> Đi tiệc
+          </label>
+          <label class="filter-check">
+            <input type="checkbox" class="filter-occasion" value="dichoi"> Đi chơi
+          </label>
+          <label class="filter-check">
+            <input type="checkbox" class="filter-occasion" value="dilam"> Đi làm
+          </label>
+        </div>
+
+        <button type="button" class="btn-clear-filter" id="clearFilterBtn">Xóa bộ lọc</button>
+      </div>
+    </aside>
+
+    <div class="col-lg-9">
+      <div class="row g-4" id="productGrid">
+      </div>
+
+    </div>
+  </div>
+
+</main>
+
+<div id="siteFooter"></div>
+
+<!-- Filter Drawer (ẩn ban đầu) -->
+<div class="filter-drawer-overlay" id="filterDrawerOverlay"></div>
+<div class="filter-drawer" id="filterDrawer">
+  <div class="filter-drawer-header">
+    <h2>Bộ lọc</h2>
+    <button class="filter-drawer-close" id="filterDrawerClose" aria-label="Đóng">×</button>
+  </div>
+  <div class="filter-drawer-body">
+    <!-- Nội dung bộ lọc sẽ được JS chuyển vào đây -->
+  </div>
+  <div class="filter-drawer-footer">
+    <button class="btn-apply-filter" id="applyFilterBtn">Áp dụng</button>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="js/layout.js"></script>
+<script src="product data.js"></script>
+<script src="js.js"></script>
+</body>
+</html>
