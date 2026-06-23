@@ -143,6 +143,13 @@ h2.page-title {
     border-color: var(--color-accent);
 }
 
+.row-three-columns {
+    grid-column: span 2;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr; /* Chia làm 3 cột bằng nhau */
+    gap: 16px;
+}
+
 /* Báo lỗi form trống */
 .form-group.has-error input, 
 .form-group.has-error select {
@@ -255,6 +262,7 @@ h2.page-title {
     .checkout-layout { grid-template-columns: 1fr; }
 }
 @media (max-width: 600px) {
-    .form-grid { grid-template-columns: 1fr; }
-    .form-group.full-width { grid-column: span 1; }
+    .row-three-columns {
+        grid-template-columns: 1fr;
+    }
 }
