@@ -134,7 +134,7 @@ const PRODUCTS = {
     price: 1435000, oldPrice: null, sold: 0, stock: 45, rating: 0, reviewCount: 0,
     images: [
       "images/Túi xách tay LR Lyra/Túi xách tay LR Lyra - Nâu.jpg",
-      "images/Túi xách tay LR Lyra/Túi xách tay LR Lyra - Đen.jpg",
+      "images/Túi xách tay LR Lyra/Túi xách tay LR Lyra- Đen.jpg",
       "images/Túi xách tay LR Lyra/Đen 1.jpg",
       "images/Túi xách tay LR Lyra/Nâu 1.jpg"
     ],
@@ -165,7 +165,7 @@ const PRODUCTS = {
     images: [
       "images/Ví cầm tay Handle/Ví cầm tay Handle - Xanh.jpg",
       "images/Ví cầm tay Handle/Ví cầm tay Handle - Kem.jpg",
-      "images/Ví cầm tay Handle/Xanh 1.jpg",
+      "images/Ví cầm tay Handle/Kem.jpg",
       "images/Ví cầm tay Handle/Kem 1.jpg"
     ],
     colors: [{ name: 'Xanh', hex: '#4E76A3' }, { name: 'Kem', hex: '#F0DBCD' }],
@@ -317,7 +317,6 @@ function selectProduct(id) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// Event delegation cho sản phẩm đề xuất / đã xem
 document.querySelectorAll('.shelf').forEach(shelf => {
   shelf.addEventListener('click', (e) => {
     const addBtn = e.target.closest('.padd');
@@ -371,7 +370,6 @@ function showThumb(index) {
 
 document.getElementById('mainImg').style.transition = 'opacity .15s ease';
 
-// Option swatches & sizes
 document.getElementById('swatchesContainer').addEventListener('click', (e) => {
   const sw = e.target.closest('.swatch');
   if (!sw) return;
@@ -385,7 +383,6 @@ document.getElementById('sizesContainer').addEventListener('click', (e) => {
   box.classList.add('selected');
 });
 
-// Stepper số lượng
 const qtyInput = document.getElementById('qtyInput');
 document.getElementById('qtyMinus').addEventListener('click', () => {
   qtyInput.value = Math.max(1, parseInt(qtyInput.value || 1) - 1);
@@ -412,7 +409,6 @@ function totalCartQty() { return cart.reduce((sum, item) => sum + item.qty, 0); 
 
 function updateCartBadges() {
   const total = totalCartQty();
-  // Khớp với ID "cartBadge" ở header động mới
   const badge = document.getElementById('cartBadge');
   if (badge) {
     badge.textContent = total;
@@ -447,7 +443,6 @@ function updateWishlistBadges() {
   const mainWishBtn = document.getElementById('wishBtn');
   if (mainWishBtn) mainWishBtn.classList.toggle('active', wishlist.has(currentId));
   
-  // Đồng bộ trạng thái icon trên Header nếu có
   const headerWishIcon = document.querySelector('.header-icons a[aria-label="Yêu thích"] i');
   if (headerWishIcon) {
     headerWishIcon.style.color = wishlist.has(currentId) ? '#E54A5A' : '';
@@ -577,14 +572,9 @@ function setupFooterEvents() {
    10. KHỞI ĐỘNG CHƯƠNG TRÌNH (Tích hợp Render Động)
    ========================================================= */
 document.addEventListener('DOMContentLoaded', async function () {
-  // 1. Render giao diện dùng chung trước
   if (typeof renderHeader === 'function') renderHeader();
   if (typeof renderFooter === 'function') renderFooter();
-
-  // 2. Tải dữ liệu trạng thái từ bộ nhớ
   await loadState();
-
-  // 3. Render thông tin chi tiết sản phẩm và các Slider gắn liền
   renderProduct(currentId);
   updateCartBadges();
 
