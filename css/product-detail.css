@@ -1,4 +1,4 @@
-  /* ===== Breadcrumb ===== */
+/* ===== Breadcrumb ===== */
  .breadcrumb {
     width: 100%;
     margin: 20px auto 0;
@@ -23,11 +23,13 @@
     padding: 25px 25px 10px;
     display: grid;
     grid-template-columns: 80px 600px 1fr; /* SỬA TẠI ĐÂY: Đổi 1fr ở giữa thành 600px */
+    grid-template-areas: "thumbs image info";
     gap: 40px;
     justify-content: center;
   }
 
   .thumbs{
+    grid-area: thumbs;
     display:flex;
     flex-direction:column;
     gap:20px;
@@ -56,11 +58,12 @@
   }
 
   .main-image{
+    grid-area: image;
     background:var(--color-white);
     border:1px solid var(--color-border);
     border-radius:var(--radius);
     overflow:hidden;
-    aspect-ratio:4/3.6;
+    aspect-ratio:6/7;
     display:flex;
     align-items:center;
     justify-content:center;
@@ -70,12 +73,13 @@
   }
   
   .main-image img{
-    width:600px;
-    height:700px;
+    width:100%;
+    height:100%;
     object-fit:cover;
   }
 
   .info{
+    grid-area: info;
     padding-left:10px;
   }
 
@@ -558,12 +562,13 @@
     min-width:0;
   }
 
-  @media(max-width:880px){
+  @media(max-width:992px){
     .carousel .pcard{flex:0 0 calc(50% - 10px);}
   }
   
-  @media(max-width:480px){
-    .carousel .pcard{flex:0 0 calc(80% - 10px);}
+  @media(max-width:600px){
+    .carousel{gap:12px;}
+    .carousel .pcard{flex:0 0 calc(50% - 6px);}
   }
 
   .carousel-dots{
@@ -644,6 +649,7 @@
     color:var(--color-primary);
     margin-bottom:12px;
   }
+
   .pcard .padd{
     display:block;
     width:100%;
@@ -720,4 +726,245 @@
 
   .carousel-nav.next{
     right:-18px;
+  }
+
+  
+  @media (max-width: 1024px){
+    .product-section{
+      grid-template-columns: 90px 1fr;
+      grid-template-areas:
+        "thumbs image"
+        "info   info";
+      gap: 24px;
+      padding: 20px 20px 10px;
+    }
+    .main-image{
+      width: 100%;
+      height: auto;
+    }
+  }
+
+  @media (max-width: 768px){
+
+    /* Breadcrumb */
+    .breadcrumb{
+      margin: 12px auto 0;
+      padding: 0 16px;
+      font-size: 12px;
+    }
+
+    .product-section{
+      grid-template-columns: 1fr;
+      grid-template-areas:
+        "image"
+        "info";
+      gap: 16px;
+      padding: 12px 16px 6px;
+    }
+    .thumbs{
+      display: none;
+    }
+    .main-image{
+      width: 100%;
+      height: auto;
+    }
+    .info{
+      padding-left: 0;
+    }
+    .info h1{
+      font-size: 20px;
+      margin-bottom: 6px;
+    }
+    .sold-stock{
+      font-size: 12px;
+      margin-bottom: 8px;
+    }
+    .price-row{
+      gap: 6px;
+    }
+    .price-now{
+      font-size: 22px;
+    }
+    .price-old{
+      font-size: 13px;
+    }
+    .stars{
+      font-size: 20px;
+    }
+    .rating-num{
+      font-size: 13px;
+      padding-top: 3px;
+    }
+    .review-count{
+      font-size: 13px;
+      margin-bottom: 10px;
+    }
+    hr.divider{
+      margin: 12px 0;
+    }
+    .option-label{
+      font-size: 13px;
+      margin-bottom: 8px;
+    }
+    .swatch{
+      width: 20px;
+      height: 20px;
+    }
+    .sizes{
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .size-box{
+      width: 42px;
+      height: 30px;
+      font-size: 13px;
+    }
+    .qty-row{
+      margin-bottom: 12px;
+    }
+    .qty-stepper button{
+      width: 32px;
+      height: 32px;
+      font-size: 14px;
+    }
+    .qty-stepper input{
+      width: 38px;
+      height: 32px;
+      font-size: 13px;
+    }
+    .cta-row{
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+    .btn{
+      font-size: 13px;
+      padding: 0 14px;
+      height: 44px;
+      letter-spacing: .03em;
+    }
+    .btn-wish{
+      flex: 0 0 44px;
+      width: 44px;
+      height: 44px;
+    }
+    .btn-wish svg{
+      width: 18px;
+      height: 18px;
+    }
+    .perks{
+      gap: 14px 16px;
+    }
+    .perk svg{
+      width: 19px;
+      height: 19px;
+    }
+    .perk .t{
+      font-size: 13px;
+    }
+    .perk .s{
+      font-size: 11px;
+    }
+
+    /* Accordion */
+    .accordion-section{
+      padding: 0 16px 30px;
+    }
+    .accordion-head{
+      font-size: 14px;
+      padding: 14px 2px;
+    }
+    .accordion-head .chev{
+      font-size: 22px;
+    }
+    .accordion-body-inner{
+      padding: 0 2px 14px;
+    }
+
+    .reviews-section{
+      padding: 20px 0;
+    }
+    .reviews-inner{
+      grid-template-columns: 1fr;
+      gap: 14px;
+      padding: 0 16px;
+    }
+    .reviews-title{
+      font-size: 13px;
+    }
+    .reviews-score .stars{
+      font-size: 20px;
+    }
+    .reviews-score .num{
+      font-size: 15px;
+    }
+    .reviews-total{
+      font-size: 12px;
+    }
+    .review-item{
+      padding: 14px 0;
+    }
+    .review-avatar{
+      width: 30px;
+      height: 30px;
+      font-size: 12px;
+    }
+    .review-name{
+      font-size: 14px;
+    }
+    .review-date{
+      font-size: 11px;
+    }
+    .review-text{
+      font-size: 13px;
+    }
+    .review-stars{
+      font-size: 17px;
+    }
+
+    /* Carousel gợi ý / đã xem gần đây: 2 thẻ mỗi dòng */
+    .shelf{
+      padding: 24px 16px 6px;
+    }
+    .shelf h2{
+      font-size: 18px;
+      margin-bottom: 12px;
+    }
+    .carousel{
+      gap: 12px;
+    }
+    .carousel .pcard{
+      flex: 0 0 calc(50% - 6px);
+    }
+    .carousel-nav{
+      width: 28px;
+      height: 28px;
+      font-size: 14px;
+    }
+    .carousel-nav.prev{
+      left: -6px;
+    }
+    .carousel-nav.next{
+      right: -6px;
+    }
+    .pcard .pbody{
+      padding: 10px 12px 12px;
+    }
+    .pcard .pname{
+      font-size: 13px;
+      margin-bottom: 6px;
+    }
+    .pcard .pprice{
+      font-size: 13px;
+      margin-bottom: 8px;
+    }
+    .pcard .padd{
+      font-size: 11px;
+      padding: 7px 0;
+    }
+    .pcard .prating{
+      font-size: 11px;
+    }
+    .pcard .prating-stars{
+      font-size: 14px;
+    }
   }
