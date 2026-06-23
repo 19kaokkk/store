@@ -1,0 +1,299 @@
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giỏ Hàng | Lady Rose</title>
+
+    <link rel="stylesheet" href="Css/layout.css">
+    <link rel="stylesheet" href="Css/cart.css">
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <div id="siteHeader"></div>
+
+    <div class="breadcrumb">
+        <a href="index.html" style="display:inline-block;">Trang chủ</a> / <a href="cart.html" style="color: #3A2E26; display:inline-block;">Giỏ hàng</a>
+    </div>
+
+    <div class="steps-bar">
+        <div class="step active">
+            <span class="step-num">1</span>
+            <span class="step-name">Giỏ Hàng</span>
+        </div>
+        <div class="step">
+            <span class="step-num">2</span>
+            <span class="step-name">Thanh Toán</span>
+        </div>
+        <div class="step">
+            <span class="step-num">3</span>
+            <span class="step-name">Vận Chuyển</span>
+        </div>
+        <div class="step">
+            <span class="step-num">4</span>
+            <span class="step-name">Hoàn Tất</span>
+        </div>
+    </div>
+
+    <h1 class="page-title">GIỎ HÀNG CỦA BẠN</h1>
+    <div class="title-divider"></div>
+
+    <section class="cart-container">
+        <div class="cart-left">
+            <div id="empty-cart" class="empty-cart" style="display:none;">
+                <i class="fa-solid fa-cart-shopping"></i>
+                <p>Giỏ hàng của bạn đang trống</p>
+                <a href="#" class="continue-btn"><span>← Tiếp tục mua sắm</span></a>
+            </div>
+
+            <div class="cart-list">
+                <div class="cart-header">
+                    <span>SẢN PHẨM</span>
+                    <span>SỐ LƯỢNG</span>
+                    <span>THÀNH TIỀN</span>
+                    <span>XÓA</span>
+                </div>
+                <div id="cart-items-wrap"></div>
+            </div>
+
+            <a href="#" class="continue-btn"><span>← Tiếp tục mua sắm</span></a>
+        </div>
+
+        <div class="cart-right">
+            <div class="cart-summary">
+                <h3>TÓM TẮT ĐƠN HÀNG</h3>
+
+                <div class="summary-row">
+                    <span>Giá trị đơn hàng</span>
+                    <span>2,810,000đ</span>
+                </div>
+                <div class="summary-row">
+                    <span>Số lượng</span>
+                    <span>2</span>
+                </div>
+                <div class="summary-row shipping-row">
+                    <span>Phí vận chuyển</span>
+                    <span>0đ</span>
+                </div>
+                <p class="free-ship-note">Miễn phí vận chuyển</p>
+                <div class="summary-row">
+                    <span>Giảm giá</span>
+                    <span>0đ</span>
+                </div>
+
+                <hr>
+
+                <div class="summary-total">
+                    <div>
+                        <span>Thành tiền</span>
+                        <small>(Đã bao gồm VAT)</small>
+                    </div>
+                    <strong>2,810,000đ</strong>
+                </div>
+
+                <div class="coupon-wrap">
+                    <label>MÃ GIẢM GIÁ</label>
+                    <div class="coupon">
+                        <input type="text" placeholder="Nhập mã giảm giá">
+                        <button>ÁP DỤNG</button>
+                    </div>
+                </div>
+
+                <button class="checkout-btn">
+                    <a href="checkout.html" style="color: #ffffff; display:inline-block;">TIẾN HÀNH THANH TOÁN</a>
+                </button>
+
+                <p class="secure-note">
+                    <i class="fa-solid fa-lock"></i> Bảo mật thông tin tuyệt đối
+                </p>
+            </div>
+
+            <div class="commitment-section">
+                <h3 class="commitment-title" style="color: #000;">CAM KẾT TỪ LADY ROSE</h3>
+                <div class="commitment-list">
+                    <div class="commitment-item">
+                        <span class="commit-icon">🛡️</span>
+                        <span>Hàng chính hãng 100%</span>
+                    </div>
+                    <div class="commitment-item">
+                        <span class="commit-icon">📦</span>
+                        <span>Kiểm tra hàng trước khi thanh toán</span>
+                    </div>
+                    <div class="commitment-item">
+                        <span class="commit-icon">🔄</span>
+                        <span>Đổi trả miễn phí nếu sản phẩm lỗi</span>
+                    </div>
+                    <div class="commitment-item">
+                        <span class="commit-icon">💬</span>
+                        <span>Tư vấn tận tâm - Hỗ trợ nhanh chóng</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </section>
+
+    <section class="service-bar">
+        <div class="service-item">
+            <i class="fa-solid fa-truck-fast"></i>
+            <div>
+                <strong>MIỄN PHÍ VẬN CHUYỂN</strong>
+                <p>Cho đơn hàng từ 800,000đ</p>
+            </div>
+        </div>
+        <div class="service-item">
+            <i class="fa-solid fa-shield-halved"></i>
+            <div>
+                <strong>THANH TOÁN AN TOÀN</strong>
+                <p>Bảo mật thông tin tuyệt đối</p>
+            </div>
+        </div>
+        <div class="service-item">
+            <i class="fa-solid fa-box-open"></i>
+            <div>
+                <strong>ĐỔI TRẢ DỄ DÀNG</strong>
+                <p>Trong vòng 7 ngày</p>
+            </div>
+        </div>
+        <div class="service-item">
+            <i class="fa-solid fa-headset"></i>
+            <div>
+                <strong>HỖ TRỢ 24/7</strong>
+                <p>Hotline: 012345678</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="recommend">
+        <h2>LADY ROSE GỢI Ý CHO BẠN</h2>
+
+        <div class="recommend-wrap">
+            <button class="slide-arrow prev" aria-label="Trước"><i class="fa-solid fa-chevron-left"></i></button>
+
+            <div class="recommend-grid">
+
+                <div class="card">
+                    <div class="card-img"><img src="images/sanpham/Túi xách tay LR Bella trắng-1.249.000đ.jpg" alt="Túi xách tay LR Bella"></div>
+                    <h4>Túi xách tay LR Bella</h4>
+                    <div class="card-colors">
+                        <span class="color-dot active" style="background:#000;"></span>
+                        <span class="color-dot active" style="background:hsl(310, 36%, 55%);"></span>
+                    </div>
+                    <p class="card-price">1,249,000đ</p>
+                    <button class="add-cart-btn js-add-to-cart"
+                        data-id="tui-xach-tay-lr-bella-trang"
+                        data-name="Túi xách tay LR Bella"
+                        data-price="1249000"
+                        data-color="Trắng"
+                        data-color-hex="#ffffff"
+                        data-image="images/sanpham/Túi xách tay LR Bella trắng-1.249.000đ.jpg">THÊM VÀO GIỎ</button>
+                </div>
+
+                <div class="card">
+                    <div class="card-img"><img src="images/sanpham/Túi xách tay_Túi đeo chéo LR Florence đỏ-1.245.000đ.png" alt="Túi xách tay LR Florence"></div>
+                    <h4>Túi xách tay LR Florence</h4>
+                    <div class="card-colors">
+                        <span class="color-dot active" style="background:#5c1a22;"></span>
+                        <span class="color-dot active" style="background:#000;"></span>
+                    </div>
+                    <p class="card-price">1,245,000đ</p>
+                    <button class="add-cart-btn js-add-to-cart"
+                        data-id="tui-xach-tay-lr-florence-do"
+                        data-name="Túi xách tay LR Florence"
+                        data-price="1245000"
+                        data-color="Đỏ"
+                        data-color-hex="#5c1a22"
+                        data-image="images/sanpham/Túi xách tay_Túi đeo chéo LR Florence đỏ-1.245.000đ.png">THÊM VÀO GIỎ</button>
+                </div>
+
+                <div class="card">
+                    <div class="card-img"><img src="images/sanpham/Túi đeo vai LR Iris-869.000đ.png" alt="Túi đeo vai LR Iris"></div>
+                    <h4>Túi đeo vai LR Iris</h4>
+                    <div class="card-colors">
+                        <span class="color-dot active" style="background:#000;"></span>
+                        <span class="color-dot active" style="background:#ffffff;"></span>
+                    </div>
+                    <p class="card-price">869,000đ</p>
+                    <button class="add-cart-btn js-add-to-cart"
+                        data-id="tui-deo-vai-lr-iris"
+                        data-name="Túi đeo vai LR Iris"
+                        data-price="869000"
+                        data-color="Đen"
+                        data-color-hex="#000000"
+                        data-image="images/sanpham/Túi đeo vai LR Iris-869.000đ.jpg">THÊM VÀO GIỎ</button>
+                </div>
+
+                <div class="card">
+                    <div class="card-img"><img src="images/sanpham/Túi đeo vai_Túi đeo chéo Celeste-949.000đ.png" alt="Túi đeo chéo Celeste"></div>
+                    <h4>Túi đeo chéo Celeste</h4>
+                    <div class="card-colors">
+                        <span class="color-dot active" style="background:#ffffff;"></span>
+                        <span class="color-dot active" style="background:#000;"></span>
+                    </div>
+                    <p class="card-price">949,000đ</p>
+                    <button class="add-cart-btn js-add-to-cart"
+                        data-id="tui-deo-cheo-celeste"
+                        data-name="Túi đeo chéo Celeste"
+                        data-price="949000"
+                        data-color="Đen"
+                        data-color-hex="#000000"
+                        data-image="images/sanpham/Túi đeo vai_Túi đeo chéo Celeste-949.000đ.png">THÊM VÀO GIỎ</button>
+                </div>
+            </div>
+
+            <button class="slide-arrow next" aria-label="Sau"><i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+
+        <div class="slide-dots">
+            <span class="dot active"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+        </div>
+    </section>
+    <div id="siteFooter"></div>
+
+    <script src="js/cart-data.js"></script>
+
+    <script src="js/cart.js"></script>
+
+    <script src="js/layout.js"></script>
+    <script src="js/responsive.js"></script>
+
+    <script>
+        function refreshCartBadge() {
+            var badge = document.getElementById('cartBadge');
+            if (!badge) return;
+            var qty = CartData.getTotalQuantity();
+            badge.textContent = qty;
+            badge.classList.toggle('show', qty > 0);
+        }
+        document.addEventListener('DOMContentLoaded', refreshCartBadge);
+        window.addEventListener(CartData.EVENT_NAME, refreshCartBadge);
+
+        document.querySelectorAll('.js-add-to-cart').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                CartData.addItem({
+                    id: btn.dataset.id,
+                    name: btn.dataset.name,
+                    price: Number(btn.dataset.price),
+                    image: btn.dataset.image,
+                    color: btn.dataset.color || '',
+                    colorHex: btn.dataset.colorHex || '',
+                    qty: 1
+                });
+
+                var original = btn.textContent;
+                btn.textContent = 'ĐÃ THÊM';
+                btn.disabled = true;
+                setTimeout(function () {
+                    btn.textContent = original;
+                    btn.disabled = false;
+                }, 1200);
+            });
+        });
+    </script>
+</body>
+</html>
