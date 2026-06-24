@@ -154,7 +154,7 @@ PRODUCT_DATA.forEach(function (product) {
 const lyraBlack = PRODUCT_DATA.find(function (product) { return product.id === "lr-lyra"; })
   ?.colors.find(function (color) { return color.key === "den"; });
 if (lyraBlack) {
-  lyraBlack.image = "images/Túi xách tay/Túi xách tay LR Lyra- Đen.jpg";
+  lyraBlack.image = "images/Túi xách tay/Túi xách tay LR Lyra - Đen.jpg";
 }
 
 const CATEGORY_LIST = [
