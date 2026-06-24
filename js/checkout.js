@@ -92,23 +92,54 @@ document.addEventListener('DOMContentLoaded', function() {
             tongTienHang += item.price * item.qty;
         });
 
-        if (tongTienHang >= 800000) {
+        const shippingFeeEl = document.getElementById('shipping-fee');
+        const orderBtn = document.getElementById('order-submit-btn');
+
+        // --- ĐÃ SỬA: Nếu giỏ hàng trống (chưa có đơn hàng) ---
+        if (cart.length === 0 || tongTienHang === 0) {
             currentShippingFee = 0;
-            const shippingFeeEl = document.getElementById('shipping-fee');
+            if (shippingFeeEl) {
+                shippingFeeEl.innerText = '0đ';
+            }
+            // Khóa nút "Đặt Hàng" lại không cho khách nhấn
+            if (orderBtn) {
+                orderBtn.disabled = true;
+                orderBtn.style.opacity = '0.5'; // Làm mờ nút đi để báo hiệu đang bị khóa
+                orderBtn.style.cursor = 'not-allowed'; // Hiện biểu tượng cấm khi di chuột vào
+            }
+        } 
+        // --- Nếu có đơn hàng và tổng tiền từ 800.000đ trở lên ---
+        else if (tongTienHang >= 800000) {
+            currentShippingFee = 0;
             if (shippingFeeEl) {
                 shippingFeeEl.innerHTML = `<span style="color: #2D6A4F; font-weight: bold;"><i class="fa-solid fa-truck-fast"></i> Miễn phí</span>`;
             }
-        } else {
+            // Mở khóa nút Đặt Hàng
+            if (orderBtn) {
+                orderBtn.disabled = false;
+                orderBtn.style.opacity = '1';
+                orderBtn.style.cursor = 'pointer';
+            }
+        } 
+        // --- Nếu có đơn hàng nhưng dưới 800.000đ (Tính phí ship bình thường) ---
+        else {
             currentShippingFee = baseShippingFee;
-            const shippingFeeEl = document.getElementById('shipping-fee');
             if (shippingFeeEl) {
                 shippingFeeEl.innerText = currentShippingFee.toLocaleString('vi-VN') + 'đ';
             }
+            // Mở khóa nút Đặt Hàng
+            if (orderBtn) {
+                orderBtn.disabled = false;
+                orderBtn.style.opacity = '1';
+                orderBtn.style.cursor = 'pointer';
+            }
         }
 
+        // Cập nhật Tổng tiền hàng lên màn hình
         const subtotalEl = document.getElementById('subtotal');
         if (subtotalEl) subtotalEl.innerText = tongTienHang.toLocaleString('vi-VN') + 'đ';
 
+        // Tính tổng thanh toán cuối cùng
         let tongThanhToan = tongTienHang + currentShippingFee;
         
         const totalPaymentEl = document.getElementById('total-payment');
