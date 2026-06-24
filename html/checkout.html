@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thanh Toán - LADY ROSE</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="layout.css">
+    <link rel="stylesheet" href="cart.css">
+    <link rel="stylesheet" href="checkout.css">
+
+</head>
+<body>
+
+    <div id="siteHeader"></div>
+
+    <div class="breadcrumb">
+        <a href="index.html">Trang chủ</a> / <a href="cart.html">Giỏ hàng</a> / <a href="checkout.html" style="color: var(--color-primary); font-weight:600;">Thanh toán</a>
+    </div>
+
+    <div class="container">
+        <h2 class="page-title">Thanh Toán</h2>
+
+        <div class="steps-bar">
+            <div class="step active"><span class="step-num">1</span><span class="step-name">Giỏ Hàng</span></div>
+            <div class="step active-main" id="step-checkout"><span class="step-num">2</span><span class="step-name">Thanh Toán</span></div>
+            <div class="step" id="step-shipping"><span class="step-num">3</span><span class="step-name">Vận Chuyển</span></div>
+            <div class="step" id="step-complete"><span class="step-num">4</span><span class="step-name">Hoàn Tất</span></div>
+        </div>
+
+        <div class="checkout-layout">
+            
+            <div class="left-column">
+                <div class="section-card">
+                    <div class="section-title">Thông Tin Giao Hàng</div>
+                    <div class="form-grid" id="shipping-form">
+                        <div class="form-group compulsory">
+                            <label>Họ Và Tên</label>
+                            <input type="text" id="fullname" placeholder="Nhập họ và tên">
+                            <span class="error-message">* Vui lòng điền họ và tên</span>
+                        </div>
+                        <div class="form-group compulsory">
+                            <label>Số Điện Thoại</label>
+                            <input type="tel" id="phone" placeholder="Nhập số điện thoại">
+                            <span class="error-message">* Vui lòng nhập số điện thoại</span>
+                        </div>
+                        <div class="form-group full-width compulsory">
+                            <label>Địa Chỉ Cụ Thể</label>
+                            <input type="text" id="address" placeholder="Số nhà, tên đường...">
+                            <span class="error-message">* Vui lòng nhập địa chỉ cụ thể</span>
+                        </div>
+                        
+                        <div class="row-three-columns">
+                            <div class="form-group compulsory">
+                                <label>Tỉnh/Thành Phố</label>
+                                <select id="province">
+                                    <option value="">Chọn Tỉnh/Thành</option>
+                                    <option value="hcm">Hồ Chí Minh</option>
+                                    <option value="hn">Hà Nội</option>
+                                </select>
+                                <span class="error-message">* Chọn Tỉnh/Thành</span>
+                            </div>
+                            <div class="form-group compulsory">
+                                <label>Quận/Huyện</label>
+                                <select id="district">
+                                    <option value="">Chọn Quận/Huyện</option>
+                                </select>
+                                <span class="error-message">* Chọn Quận/Huyện</span>
+                            </div>
+                            <div class="form-group compulsory">
+                                <label>Phường/Xã</label>
+                                <select id="ward">
+                                    <option value="">Chọn Phường/Xã</option>
+                                </select>
+                                <span class="error-message">* Chọn Phường/Xã</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label>Ghi Chú Đơn Hàng (Không Bắt Buộc)</label>
+                            <textarea rows="2" placeholder="Ghi chú thêm về đơn hàng..."></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-title">Phương Thức Vận Chuyển</div>
+                    <div class="option-list" id="shipping-methods">
+                        <div class="option-item selected" data-fee="30000">
+                            <input type="radio" name="shipping" checked>
+                            <div class="option-content">
+                                <div class="option-details">
+                                    <strong>Giao hàng nhanh (Mặc định)</strong>
+                                    <span class="sub-text">Dự kiến nhận hàng sau 1-2 ngày</span>
+                                </div>
+                            </div>
+                            <span class="price">30.000đ</span>
+                        </div>
+                        <div class="option-item" data-fee="25000">
+                            <input type="radio" name="shipping">
+                            <div class="option-content">
+                                <div class="option-details">
+                                    <strong>Giao hàng tiết kiệm</strong>
+                                    <span class="sub-text">Dự kiến nhận hàng sau 2-4 ngày</span>
+                                </div>
+                            </div>
+                            <span class="price">25.000đ</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-title">Phương Thức Thanh Toán</div>
+                    <div class="option-list" id="payment-methods">
+                        <div class="option-item selected" data-type="online">
+                            <input type="radio" name="payment" checked>
+                            <div class="option-content">
+                                <img src="https://img.icons8.com/color/48/000000/visa.png" alt="Visa" class="payment-logo">
+                                <div class="option-details"><strong>Thẻ tín dụng / Thẻ ghi nợ quốc tế</strong></div>
+                            </div>
+                        </div>
+                        <div class="option-item" data-type="cod">
+                            <input type="radio" name="payment">
+                            <div class="option-content">
+                                <img src="https://img.icons8.com/fluency/48/000000/delivery.png" alt="COD" class="payment-logo">
+                                <div class="option-details"><strong>Thanh toán tiền mặt khi nhận hàng (COD)</strong></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="right-column">
+                <div class="section-card">
+                    <div class="section-title">Đơn Hàng Của Bạn</div>
+                    
+                    <div class="cart-items" id="cart-list"></div>
+
+                    <div style="margin-top: 15px;">
+                        <label style="font-weight: 600; font-size:12.5px;">Mã Giảm Giá / Voucher</label>
+                        <div class="coupon-box">
+                            <input type="text" placeholder="Nhập mã ưu đãi">
+                            <button type="button">Áp dụng</button>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 24px;">
+                        <div class="summary-row">
+                            <span>Tổng tiền hàng:</span>
+                            <span id="subtotal">0đ</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Phí vận chuyển:</span>
+                            <span id="shipping-fee">30.000đ</span>
+                        </div>
+                        <div class="summary-row total">
+                            <span>Tổng thanh toán:</span>
+                            <span id="total-payment" style="color: var(--color-primary); font-size:18px;">0đ</span>
+                        </div>
+                    </div>
+
+                    <button class="btn-order" id="order-submit-btn">Đặt Hàng</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="modal-page" id="gateway-page">
+        <div class="modal-content">
+            <h3>CỔNG THANH TOÁN LADY ROSE</h3>
+            <p style="margin-top: 10px; color: var(--color-secondary); font-size:13px;">Vui lòng quét mã QR bên dưới để thực hiện giao dịch thanh toán an toàn.</p>
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=LadyRosePayment" alt="QR Code" class="qr-code">
+            <div style="font-weight: 700; font-size: 16px; color: var(--color-primary);" id="gateway-amount">Số tiền: 0đ</div>
+            <button class="btn-payment-submit" id="confirm-payment-btn">Xác Nhận Đã Thanh Toán</button>
+        </div>
+    </div>
+
+    <div class="modal-page" id="success-page">
+        <div class="modal-content">
+            <i class="fa-solid fa-circle-check success-icon"></i>
+            <h3 style="font-size: 22px;">Thanh Toán Thành Công!</h3>
+            <p style="margin: 15px 0; color: var(--color-secondary); font-size:13.5px;">Đơn hàng của bạn đã được tiếp nhận thành công.</p>
+            <button class="btn-payment-submit" onclick="window.location.reload();">Tiếp tục mua hàng</button>
+        </div>
+    </div>
+
+    <div id="siteFooter"></div>
+
+
+    <script src="js/cart.js"></script>
+
+    <script src="js/layout.js"></script>
+    <script src="js/checkout.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product-detail</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Jost:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="layout.css">
+    <link rel="stylesheet" href="product-detail.css">
+  </head>
+<body>
+
+<div id="siteHeader"></div>
+
+<!-- Breadcrumb -->
+<div class="breadcrumb">
+  <a href="#">Trang chủ</a><span class="sep">/</span>
+  <span id="breadcrumbCategory">Túi Xách Tay</span>
+</div>
+
+<!-- Product -->
+<section class="product-section">
+  <div class="thumbs" id="thumbs"></div>
+
+  <div class="main-image">
+    <img id="mainImg" src="" alt="">
+  </div>
+  <div class="info">
+    <h1 id="pTitle"></h1>
+    <div class="sold-stock">Đã bán <strong id="pSold"></strong> &nbsp;|&nbsp; Còn <strong id="pStock"></strong> sản phẩm</div>
+
+    <div class="price-row">
+      <span class="price-now" id="pPriceNow"></span>
+      <span class="price-old" id="pPriceOld"></span>
+    </div>
+
+    <div class="rating-row">
+      <span class="stars" id="pStars"></span>
+      <span class="rating-num" id="pRatingNum"></span>
+    </div>
+    <div class="review-count" id="pReviewCount"></div>
+
+    <hr class="divider">
+
+    <div class="option-label">Màu sắc:</div>
+    <div class="swatches" id="swatchesContainer"></div>
+
+    <div class="option-label">Size:</div>
+    <div class="sizes" id="sizesContainer"></div>
+
+    <div class="option-label">Số lượng:</div>
+    <div class="qty-row">
+      <div class="qty-stepper">
+        <button id="qtyMinus" aria-label="Giảm">−</button>
+        <input type="number" id="qtyInput" value="1" min="1">
+        <button id="qtyPlus" aria-label="Tăng">+</button>
+      </div>
+    </div>
+
+    <div class="cta-row">
+      <button class="btn btn-primary" id="buyNow">MUA NGAY</button>
+      <button class="btn btn-outline" id="addCart">THÊM VÀO GIỎ</button>
+      <button class="btn-wish" id="wishBtn" aria-label="Yêu thích">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s-7.5-4.6-10-9C.5 8.4 2.5 4 7 4c2.3 0 4 1.4 5 3 1-1.6 2.7-3 5-3 4.5 0 6.5 4.4 5 8-2.5 4.4-10 9-10 9z"/></svg>
+      </button>
+    </div>
+
+    <hr class="divider">
+
+    <div class="perks" id="service-bar">
+      <div class="perk">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 7h11v8H3z"/><path d="M14 10h4l3 3v2h-7z"/><circle cx="7" cy="18" r="1.6"/><circle cx="17.5" cy="18" r="1.6"/></svg>
+        <div><div class="t">Giao hàng miễn phí</div><div class="s">Đơn hàng trên 500,000đ</div></div>
+      </div>
+      <div class="perk">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l7 3v6c0 4.5-3 7.7-7 9-4-1.3-7-4.5-7-9V6l7-3z"/></svg>
+        <div><div class="t">Bảo hành 12 tháng</div><div class="s">Da &amp; phụ kiện</div></div>
+      </div>
+      <div class="perk">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 12a9 9 0 1 1 3 6.7"/><path d="M3 16v-4h4"/></svg>
+        <div><div class="t">Đổi trả 7 ngày</div><div class="s">Miễn phí toàn quốc</div></div>
+      </div>
+      <div class="perk">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20 12v8H4v-8"/><path d="M2 7h20v5H2z"/><path d="M12 7v13M12 7C9 7 8 4 9.5 3 11 2 12 5 12 7zM12 7c3 0 4-3 2.5-4C13 2 12 5 12 7z"/></svg>
+        <div><div class="t">Đóng gói cao cấp</div><div class="s">Hộp &amp; dust bag</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Accordions -->
+<section class="accordion-section">
+  <div class="accordion-item" data-acc>
+    <button class="accordion-head">
+      <span>Thông tin chi tiết sản phẩm</span><span class="chev">▸</span>
+    </button>
+    <div class="accordion-body"><div class="accordion-body-inner" id="accDescText"></div></div>
+  </div>
+  <hr class="divider">
+  <div class="accordion-item" data-acc>
+    <button class="accordion-head">
+      <span>Chính sách bảo hành</span><span class="chev">▸</span>
+    </button>
+    <div class="accordion-body"><div class="accordion-body-inner" id="accWarrantyText"></div></div>
+  </div>
+</section>
+
+<!-- Reviews -->
+<section class="reviews-section">
+  <div class="reviews-inner">
+    <div>
+      <div class="reviews-title">ĐÁNH GIÁ KHÁCH HÀNG</div>
+      <div class="reviews-score">
+        <span class="stars" id="reviewsStars"></span>
+        <span class="num" id="reviewsScoreNum"></span>
+      </div>
+      <div class="reviews-total" id="reviewsTotal"></div>
+    </div>
+
+    <div class="reviews-list" id="reviewsList"></div>
+  </div>
+</section>
+
+<!-- Suggested products -->
+<section class="shelf">
+  <h2>LADY ROSE GỢI Ý CHO BẠN</h2>
+  <div class="carousel-wrap">
+    <div class="carousel-nav prev" id="navPrev">‹</div>
+    <div class="carousel" id="suggestCarousel"></div>
+    <div class="carousel-nav next" id="navNext">›</div>
+  </div>
+  <div class="carousel-dots" id="suggestDots"></div>
+</section>
+
+<!-- Recently viewed -->
+<section class="shelf" id="recentSection">
+  <h2 style="font-size:22px;">Sản phẩm đã xem gần đây</h2>
+  <div class="carousel-wrap">
+    <div class="carousel-nav prev" id="recentPrev">‹</div>
+    <div class="carousel" id="recentCarousel"></div>
+    <div class="carousel-nav next" id="recentNext">›</div>
+  </div>
+  <div class="carousel-dots" id="recentDots"></div>
+</section>
+
+<div class="toast" id="toast"></div>
+
+<div id="siteFooter"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="product data.js"></script>
+<script src="js/cart.js"></script>
+<script src="product-detail.js"></script>
+<script src="js/layout.js"></script>
+
+</body>
+</html>
+
