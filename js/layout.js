@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
   renderHeader();
   renderFooter();
-
+  // Các hàm init cần chờ DOM được render xong
   setTimeout(function () {
     initMobileMenu();
     initHeaderModals();
@@ -283,9 +283,6 @@ function renderHeader() {
   `;
 }
 
-/* =====================================================
-   MOBILE MENU
-   ===================================================== */
 function initMobileMenu() {
   const hamburgerBtn        = document.getElementById('hamburgerBtn');
   const mobileNav           = document.getElementById('mobileNav');
@@ -320,11 +317,7 @@ function initMobileMenu() {
   }
 }
 
-/* =====================================================
-   HEADER MODALS / SEARCH
-   ===================================================== */
 function initHeaderModals() {
-  // Search: bấm Enter hoặc nút tìm kiếm → chuyển sang product.html?search=...
   const searchInput = document.getElementById('headerSearchInput');
   const searchBtn   = document.getElementById('headerSearchBtn');
 
@@ -342,13 +335,7 @@ function initHeaderModals() {
   }
 }
 
-/* =====================================================
-   BADGE SYNC
-   Các trang con gọi window.updateCartBadge(n)
-   hoặc window.updateWishlistBadge(n) để cập nhật số
-   ===================================================== */
 function syncBadges() {
-  // Đọc từ localStorage nếu có
   var cartCount     = parseInt(localStorage.getItem('lr_cart_count') || '0', 10);
   var wishlistCount = parseInt(localStorage.getItem('lr_wishlist_count') || '0', 10);
   setBadge('cartBadge', cartCount);
@@ -362,27 +349,16 @@ function setBadge(id, count) {
   el.style.display = count > 0 ? 'flex' : 'none';
 }
 
-/**
- * Gọi từ bất kỳ trang nào để cập nhật badge giỏ hàng.
- * Ví dụ: window.updateCartBadge(3);
- */
 window.updateCartBadge = function (count) {
   localStorage.setItem('lr_cart_count', count);
   setBadge('cartBadge', count);
 };
 
-/**
- * Gọi từ bất kỳ trang nào để cập nhật badge yêu thích.
- * Ví dụ: window.updateWishlistBadge(2);
- */
 window.updateWishlistBadge = function (count) {
   localStorage.setItem('lr_wishlist_count', count);
   setBadge('wishlistBadge', count);
 };
 
-/* =====================================================
-   FOOTER — HTML
-   ===================================================== */
 function renderFooter() {
   const footerRoot = document.getElementById('siteFooter');
   if (!footerRoot) return;
@@ -501,9 +477,6 @@ function initNewsletter() {
   });
 }
 
-/* =====================================================
-   FOOTER ACCORDION (tablet + mobile)
-   ===================================================== */
 function initFooterAccordion() {
   document.querySelectorAll('.footer-accordion .footer-toggle').forEach(function (toggle) {
     toggle.addEventListener('click', function () {
@@ -512,16 +485,7 @@ function initFooterAccordion() {
   });
 }
 
-/* =====================================================
-   FOOTER — Liên kết "Chính sách đổi trả / Hướng dẫn mua
-   hàng / Thanh toán & Vận chuyển" → cuộn tới khối cam kết
-   dịch vụ (#service-bar) NGAY TRÊN TRANG HIỆN TẠI.
-   Nếu trang hiện tại không có khối đó (ví dụ checkout.html),
-   tự động chuyển sang index.html#service-bar.
-   LƯU Ý: mỗi trang (index, product, product-detail, cart...)
-   cần đặt id="service-bar" vào đúng section cam kết dịch vụ
-   của trang đó để link này hoạt động.
-   ===================================================== */
+
 function initServiceLinks() {
   document.querySelectorAll('.js-service-link').forEach(function (link) {
     link.addEventListener('click', function (e) {
@@ -537,9 +501,6 @@ function initServiceLinks() {
   });
 }
 
-/* =========================================================
-   ÉP ICON GIỎ HÀNG CHUYỂN THẲNG SANG TRANG CART.HTML
-   ========================================================= */
 document.addEventListener('DOMContentLoaded', function() {
     // Đợi 800ms để đảm bảo giao diện Header đã được load xong hoàn toàn
     setTimeout(function() {
@@ -564,14 +525,10 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }, 800);
 });
-/* =========================================================
-   TỔNG ĐÀI ĐỒNG BỘ HUY HIỆU (BADGE) GIỎ HÀNG & YÊU THÍCH
-   ========================================================= */
+
 function syncGlobalBadges() {
-    // --- 1. DỌN DẸP & ĐỒNG BỘ YÊU THÍCH (WISHLIST) ---
     let wishlist = JSON.parse(localStorage.getItem('ladyrose_wishlist') || '[]');
     
-    // Thuật toán quét rác: Tìm và xóa các ID cũ không còn tồn tại trong data mới
     if (typeof PRODUCT_DATA !== 'undefined') {
         const validIds = PRODUCT_DATA.map(p => p.id);
         const originalLength = wishlist.length;
