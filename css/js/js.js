@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', function () {
   if (!CATEGORY_LIST.some(function (cat) { return cat.key === currentCategory; })) {
     currentCategory = 'tui-xach-tay';
   }
+
   function renderSubcatRow() {
     const row = document.getElementById('subcatRow');
     if (!row) return;
@@ -20,53 +21,50 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function renderCategoryFilter() {
-  const wrap = document.getElementById('categoryFilterList');
-  if (!wrap) return;
+    const wrap = document.getElementById('categoryFilterList');
+    if (!wrap) return;
 
-  const VISIBLE_COUNT = 3;   // Hiện 3 cái đầu tiên
+    const VISIBLE_COUNT = 3;   // Hiện 3 cái đầu tiên
+    let html = '';
 
-  let html = '';
-
-  CATEGORY_LIST.forEach(function (cat, index) {
-    const count = PRODUCT_DATA.filter(function (p) { return p.category === cat.key; }).length;
-    const checkedAttr = cat.key === currentCategory ? ' checked' : '';
-    const hiddenClass = index >= VISIBLE_COUNT ? ' is-hidden-category' : '';
-    
-    html += 
-      '<label class="filter-check' + hiddenClass + '" style="display:' + (index >= VISIBLE_COUNT ? 'none' : 'flex') + '">' +
-        '<input type="checkbox" class="filter-category" value="' + cat.key + '"' + checkedAttr + '> ' +
-        cat.label + ' <span class="count">(' + count + ')</span>' +
-      '</label>';
-  });
-
-  html += '<button type="button" class="btn-toggle-category" id="toggleCategoryBtn">Xem thêm</button>';
-
-  wrap.innerHTML = html;
-
-  // Bind checkbox chuyển danh mục
-  wrap.querySelectorAll('.filter-category').forEach(function (cb) {
-    cb.addEventListener('change', function () {
-      if (this.checked) {
-        window.location.href = 'product.html?cat=' + this.value;
-      }
+    CATEGORY_LIST.forEach(function (cat, index) {
+      const count = PRODUCT_DATA.filter(function (p) { return p.category === cat.key; }).length;
+      const checkedAttr = cat.key === currentCategory ? ' checked' : '';
+      const hiddenClass = index >= VISIBLE_COUNT ? ' is-hidden-category' : '';
+      
+      html += 
+        '<label class="filter-check' + hiddenClass + '" style="display:' + (index >= VISIBLE_COUNT ? 'none' : 'flex') + '">' +
+          '<input type="checkbox" class="filter-category" value="' + cat.key + '"' + checkedAttr + '> ' +
+          cat.label + ' <span class="count">(' + count + ')</span>' +
+        '</label>';
     });
-  });
 
-  // Toggle Xem thêm / Thu gọn
-  const toggleBtn = document.getElementById('toggleCategoryBtn');
-  if (toggleBtn) {
-    toggleBtn.addEventListener('click', function () {
-      const isExpanding = this.textContent.trim() === 'Xem thêm';
-      const hiddenItems = wrap.querySelectorAll('.is-hidden-category');
+    html += '<button type="button" class="btn-toggle-category" id="toggleCategoryBtn">Xem thêm</button>';
+    wrap.innerHTML = html;
 
-      hiddenItems.forEach(function (item) {
-        item.style.display = isExpanding ? 'flex' : 'none';
+    wrap.querySelectorAll('.filter-category').forEach(function (cb) {
+      cb.addEventListener('change', function () {
+        if (this.checked) {
+          window.location.href = 'product.html?cat=' + this.value;
+        }
       });
-
-      this.textContent = isExpanding ? 'Thu gọn' : 'Xem thêm';
     });
+
+    const toggleBtn = document.getElementById('toggleCategoryBtn');
+    if (toggleBtn) {
+      toggleBtn.addEventListener('click', function () {
+        const isExpanding = this.textContent.trim() === 'Xem thêm';
+        const hiddenItems = wrap.querySelectorAll('.is-hidden-category');
+
+        hiddenItems.forEach(function (item) {
+          item.style.display = isExpanding ? 'flex' : 'none';
+        });
+
+        this.textContent = isExpanding ? 'Thu gọn' : 'Xem thêm';
+      });
+    }
   }
-}
+
   function updateBannerAndBreadcrumb() {
     const currentCat = CATEGORY_LIST.find(function (c) { return c.key === currentCategory; });
     if (!currentCat) return;
@@ -93,7 +91,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const list = PRODUCT_DATA.filter(function (p) { return p.category === currentCategory; });
 
     grid.innerHTML = list.map(function (product) {
-      return buildProductCard(product);
+      return buildProductCard(product, list);
     }).join('');
 
     updateProductCount(list.length);
@@ -104,7 +102,7 @@ document.addEventListener('DOMContentLoaded', function () {
     return num.toLocaleString('vi-VN') + 'đ';
   }
 
-  function buildProductCard(product) {
+  function buildProductCard(product, totalCount) {
     const defaultColor = product.colors[0];
     const productColorKeys = product.colors.map(function (c) { return c.key; }).join(',');
     const wishlistActive = isWishlisted(product.id);
@@ -156,39 +154,32 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function bindCardEvents() {
-
     document.querySelectorAll('.product-colors .color-dot').forEach(function (dot) {
       dot.addEventListener('click', function () {
         const card = this.closest('.product-item');
         const defaultImg = card.querySelector('.img-default');
         const lifestyleImg = card.querySelector('.img-lifestyle');
 
-        const newImage = this.dataset.image;          // Đây là ảnh sản phẩm (không model)
-        const newImageModel = this.dataset.imageModel; // Đây là ảnh model
+        const newImage = this.dataset.image;          
+        const newImageModel = this.dataset.imageModel; 
 
-        // 1. Cập nhật ảnh sản phẩm chính (hiện luôn sau khi click)
         if (defaultImg) {
           defaultImg.src = newImage;
-          defaultImg.alt = card.dataset.name + ' màu ' + this.title; // Cập nhật alt text
+          defaultImg.alt = card.dataset.name + ' màu ' + this.title; 
         }
         
-        // 2. Cập nhật ảnh lifestyle (để khi hover sau này sẽ đúng)
         if (lifestyleImg) {
-          lifestyleImg.src = newImageModel || newImage; // Nếu không có model thì dùng ảnh default
+          lifestyleImg.src = newImageModel || newImage; 
           lifestyleImg.alt = 'Người mẫu mang ' + card.dataset.name + ' màu ' + this.title;
-          
-          // Đặt lại onerror, phòng trường hợp ảnh model mới cũng lỗi
           lifestyleImg.onerror = function() {
-            this.onerror = null; // Xóa hàm onerror để tránh lặp vô hạn
-            this.src = newImage; // Fallback về ảnh default
+            this.onerror = null; 
+            this.src = newImage; 
           };
         }
 
-        // 3. Xử lý class active cho chấm màu
         card.querySelectorAll('.color-dot').forEach(function (d) { d.classList.remove('active'); });
         this.classList.add('active');
 
-        // 4. Cập nhật data-color trên card và link chi tiết sản phẩm
         card.dataset.color = this.dataset.color;
         const detailLink = card.querySelector('.btn-view-detail');
         if (detailLink) {
@@ -230,18 +221,34 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     });
 
+    // --- BƯỚC 1: ĐÃ CẬP NHẬT Ở ĐÂY ---
     document.querySelectorAll('.btn-quick-add').forEach(function (btn) {
       btn.addEventListener('click', function (e) {
         e.preventDefault();
         const card = this.closest('.product-item');
-        addToCart(card.dataset.name, card.dataset.color);
+        
+        // Gọi hàm thêm vào giỏ hàng
+        addToCart(card.dataset.id, card.dataset.color);
+        
+        // Hiệu ứng UX đổi màu nút báo thành công
+        const originalText = this.textContent;
+        this.textContent = 'ĐÃ THÊM ✓';
+        this.style.background = '#2e8b3a';
+        this.style.color = '#fff';
+        this.style.borderColor = '#2e8b3a';
+        
+        setTimeout(() => {
+            this.textContent = originalText;
+            this.style.background = '';
+            this.style.color = '';
+            this.style.borderColor = '';
+        }, 1200);
       });
     });
   }
 
   function filterProducts() {
     const productCards = document.querySelectorAll('.product-item');
-
     const activeMaterials = getCheckedValues('filter-material');
     const activeOccasions = getCheckedValues('filter-occasion');
     const activeColors = Array.from(document.querySelectorAll('.filter-sidebar .color-swatch.active'))
@@ -371,18 +378,24 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
-  function addToCart(productName, colorKey) {
-    let cart = JSON.parse(localStorage.getItem('ladyrose_cart') || '[]');
-    cart.push({ name: productName, color: colorKey, qty: 1 });
-    localStorage.setItem('ladyrose_cart', JSON.stringify(cart));
-    updateCartBadge();
-    showToast(productName + ' đã được thêm vào giỏ hàng');
+  // --- BƯỚC 2: ĐÃ CẬP NHẬT Ở ĐÂY ---
+  function addToCart(productId, colorKey) {
+    if (typeof CartManager !== 'undefined') {
+      CartManager.addFromCatalog(productId, colorKey, 1);
+      showToast('Đã thêm sản phẩm vào giỏ hàng');
+      
+      if (document.getElementById('cartOffcanvas') && document.getElementById('cartOffcanvas').classList.contains('show')) {
+        renderCartOffcanvas();
+      }
+    } else {
+      console.error("Chưa tải file cart.js");
+    }
   }
 
   function updateCartBadge() {
-    const cart = JSON.parse(localStorage.getItem('ladyrose_cart') || '[]');
-    const badge = document.getElementById('cartBadge');
-    if (badge) badge.textContent = cart.length;
+    if (typeof refreshCartBadge === 'function') {
+      refreshCartBadge();
+    }
   }
 
   function getWishlist() {
@@ -414,8 +427,13 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function updateWishlistBadge() {
-    const badge = document.getElementById('wishlistBadge');
-    if (badge) badge.textContent = getWishlist().length;
+    const count = getWishlist().length;
+    if (typeof window.updateWishlistBadge === 'function') {
+      window.updateWishlistBadge(count);
+    } else {
+      const badge = document.getElementById('wishlistBadge');
+      if (badge) badge.textContent = count;
+    }
   }
 
   function showToast(message) {
@@ -464,7 +482,101 @@ document.addEventListener('DOMContentLoaded', function () {
   updateCartBadge();
   updateWishlistBadge();
 
-// ==================== FILTER DRAWER (MOBILE/TABLET) ====================
+  // --- BƯỚC 3: ĐÃ CẬP NHẬT Ở ĐÂY ---
+  function renderCartOffcanvas() {
+    if (typeof CartManager === 'undefined') return;
+    
+    const cart = CartManager.getCart(); 
+    const cartItemsEl = document.getElementById('cartItems');
+    const cartEmptyEl = document.getElementById('cartEmpty');
+    const cartFooterEl = document.getElementById('cartFooter');
+    const cartTotalEl = document.getElementById('cartTotal');
+
+    if (!cartItemsEl) return;
+
+    if (cart.length === 0) {
+      cartItemsEl.style.display = 'none';
+      cartItemsEl.innerHTML = '';
+      if (cartEmptyEl) cartEmptyEl.style.display = 'flex';
+      if (cartFooterEl) cartFooterEl.style.display = 'none';
+      return;
+    }
+
+    let total = 0;
+    let html = '';
+    
+    cart.forEach(function (item) {
+      const itemTotal = item.price * item.qty;
+      total += itemTotal;
+
+      html += `
+        <div class="cart-offcanvas-item" style="
+          display:flex; gap:12px; background:#fff;
+          border:1px solid #E3D7C7; border-radius:10px;
+          padding:12px; margin-bottom:10px;
+        ">
+          <img src="${item.image}" alt="${item.name}"
+               style="width:72px; height:80px; object-fit:cover; border-radius:6px; flex-shrink:0; background:#F5EFE6;">
+          <div style="flex:1; min-width:0;">
+            <div style="font-size:13px; font-weight:600; color:#2D231B; line-height:1.3; margin-bottom:4px;">${item.name}</div>
+            <div style="font-size:12px; color:#9C8E7E; margin-bottom:6px;">Màu: ${item.colorLabel}</div>
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
+              <div style="display:flex; align-items:center; border:1px solid #E3D7C7; border-radius:6px; overflow:hidden;">
+                <button class="cart-qty-btn" data-action="minus" data-cart-id="${item.cartItemId}"
+                        style="width:28px; height:28px; background:none; border:none; cursor:pointer; font-size:16px; color:#3A2E26; display:flex; align-items:center; justify-content:center;">−</button>
+                <span style="width:28px; text-align:center; font-size:13px; font-weight:600;">${item.qty}</span>
+                <button class="cart-qty-btn" data-action="plus" data-cart-id="${item.cartItemId}"
+                        style="width:28px; height:28px; background:none; border:none; cursor:pointer; font-size:16px; color:#3A2E26; display:flex; align-items:center; justify-content:center;">+</button>
+              </div>
+              <div style="font-size:14px; font-weight:700; color:#413125;">${formatVND(itemTotal)}</div>
+            </div>
+          </div>
+          <button class="cart-remove-btn" data-cart-id="${item.cartItemId}"
+                  style="background:none; border:none; cursor:pointer; color:#C0A898; font-size:18px; padding:0; align-self:flex-start;"
+                  title="Xóa">×</button>
+        </div>
+      `;
+    });
+
+    cartItemsEl.innerHTML = html;
+    cartItemsEl.style.display = 'block';
+    if (cartEmptyEl) cartEmptyEl.style.display = 'none';
+    if (cartFooterEl) cartFooterEl.style.display = 'block';
+    if (cartTotalEl) cartTotalEl.textContent = formatVND(total);
+
+    cartItemsEl.querySelectorAll('.cart-qty-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        const cartItemId = this.dataset.cartId;
+        const action = this.dataset.action;
+        const currentItem = CartManager.getCart().find(i => i.cartItemId === cartItemId);
+        
+        if (currentItem) {
+            const newQty = action === 'plus' ? currentItem.qty + 1 : currentItem.qty - 1;
+            CartManager.updateQty(cartItemId, newQty); 
+            renderCartOffcanvas(); 
+        }
+      });
+    });
+
+    cartItemsEl.querySelectorAll('.cart-remove-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        CartManager.removeItem(this.dataset.cartId); 
+        renderCartOffcanvas(); 
+      });
+    });
+  }
+
+  function bindCartOffcanvas() {
+    setTimeout(function () {
+      const cartOffcanvas = document.getElementById('cartOffcanvas');
+      if (cartOffcanvas) {
+        cartOffcanvas.addEventListener('show.bs.offcanvas', function () {
+          renderCartOffcanvas();
+        });
+      }
+    }, 800);
+  }
+
   function initFilterDrawer() {
     const openFilterMobileBtn = document.getElementById('openFilterMobileBtn'); 
     const filterDrawerOverlay = document.getElementById('filterDrawerOverlay');
@@ -525,7 +637,6 @@ document.addEventListener('DOMContentLoaded', function () {
     moveFilterForViewport();
   }
 
-// ==================== WISHLIST MODAL FROM HEADER ====================
   function showWishlistModal() {
     const wishlistIds = getWishlist();
     let contentHTML = '';
@@ -615,7 +726,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }, 800);
   }
 
-// ==================== GỌI CÁC HÀM ====================
   initFilterDrawer();
   bindHeaderWishlistClick();
+  bindCartOffcanvas();
 });
