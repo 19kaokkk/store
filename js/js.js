@@ -141,7 +141,10 @@ document.addEventListener('DOMContentLoaded', function () {
           '<div class="product-info">' +
             '<div class="product-name">' + product.name + '</div>' +
             '<div class="product-colors">' + colorDotsHtml + '</div>' +
-            '<div class="price-row"><span class="price-current">' + formatVND(price) + '</span></div>' +
+            '<div class="price-row">' +
+              '<span class="price-current">' + formatVND(price) + '</span>' +
+              (product.priceOld ? '<span class="price-old">' + formatVND(product.priceOld) + '</span>' : '') +
+            '</div>' +
             '<div class="rating-row"><span class="stars">★★★★★</span><span>' + ratingText + '</span></div>' +
           '</div>' +
           '<div class="product-actions">' +
