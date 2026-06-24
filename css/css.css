@@ -682,7 +682,7 @@ input[type="range"] {
     height: 260px;
   }
   .category-banner-text {
-    padding: 0 28px;
+    padding: 0 24px;
     max-width: 70%;
   }
   .category-banner h1 {
@@ -751,16 +751,33 @@ input[type="range"] {
   #productGrid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
-}
+.service-bar {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0;
+    padding: 24px 24px 0;
+    margin-top: 40px;
+  }
 
+  .service-item {
+    padding: 16px 14px;
+    border-right: none;
+    border-bottom: 1px solid #e3dccb;
+  }
+
+  .service-item:nth-child(3),
+  .service-item:nth-child(4) {
+    border-bottom: none;
+  }
+
+  .service-item:nth-child(odd) {
+    border-right: 1px solid #e3dccb;
+  }
+}
 
 /* ======================================= */
 /* BREAKPOINT: MOBILE (dưới 768px) */
 /* ======================================= */
 @media (max-width: 767px) {
-  .main-nav {
-    display: none;
-  }
   .category-banner {
     height: 220px;
   }
@@ -770,8 +787,16 @@ input[type="range"] {
   .category-banner .eyebrow {
     font-size: 18px;
   }
-  .category-banner p {
-    font-size: 13.5px;
+  .category-banner-text {
+    padding: 0 20px;   /* Giảm từ 56px xuống 20px */
+    max-width: 75%;    /* Giới hạn để không che ảnh hoàn toàn */
+  }
+   .category-banner p {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;   /* Giới hạn 3 dòng trên mobile */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    font-size: 13px;
   }
   
   .subcat-row {
@@ -835,7 +860,6 @@ input[type="range"] {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 16px;
   }
-}
 
 /* Style chung cho nút Bộ lọc mobile/tablet và select sort */
 .btn-filter-mobile {
@@ -870,7 +894,47 @@ input[type="range"] {
   min-width: 170px; /* Giữ min-width cho cả desktop và tablet */
   cursor: pointer;
 }
+.service-bar {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0;
+    padding: 20px 16px 0;
+    margin-top: 32px;
+  }
 
+  .service-item {
+    padding: 14px 12px;
+    border-right: none;
+    border-bottom: 1px solid #e3dccb;
+    gap: 10px;
+  }
+
+  /* Xóa border-bottom ở 2 item cuối */
+  .service-item:nth-child(3),
+  .service-item:nth-child(4) {
+    border-bottom: none;
+  }
+
+  /* Thêm border-right cho cột trái */
+  .service-item:nth-child(odd) {
+    border-right: 1px solid #e3dccb;
+  }
+
+  .service-item i {
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+
+  .service-item strong {
+    font-size: 11.5px;
+    line-height: 1.3;
+  }
+
+  .service-item p {
+    font-size: 11px;
+    line-height: 1.4;
+    margin: 0;
+  }
+}
 
 /* ===== RESPONSIVE HEADER: logo giữa, hamburger trái ≤576px ===== */
 @media (max-width: 576px) {
