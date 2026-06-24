@@ -1,14 +1,19 @@
+<!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Giỏ Hàng | Lady Rose</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="layout.css">
+    <link rel="stylesheet" href="cart.css">
 
-    <link rel="stylesheet" href="Css/layout.css">
-    <link rel="stylesheet" href="Css/cart.css">
-
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
     <div id="siteHeader"></div>
@@ -183,12 +188,9 @@
                     </div>
                     <p class="card-price">1,249,000đ</p>
                     <button class="add-cart-btn js-add-to-cart"
-                        data-id="tui-xach-tay-lr-bella-trang"
-                        data-name="Túi xách tay LR Bella"
-                        data-price="1249000"
-                        data-color="Trắng"
-                        data-color-hex="#ffffff"
-                        data-image="images/sanpham/Túi xách tay LR Bella trắng-1.249.000đ.jpg">THÊM VÀO GIỎ</button>
+                        data-base-id="lr-bella-tay"
+                        data-color-key="trang"
+                        >THÊM VÀO GIỎ</button>
                 </div>
 
                 <div class="card">
@@ -200,46 +202,30 @@
                     </div>
                     <p class="card-price">1,245,000đ</p>
                     <button class="add-cart-btn js-add-to-cart"
-                        data-id="tui-xach-tay-lr-florence-do"
-                        data-name="Túi xách tay LR Florence"
-                        data-price="1245000"
-                        data-color="Đỏ"
-                        data-color-hex="#5c1a22"
-                        data-image="images/sanpham/Túi xách tay_Túi đeo chéo LR Florence đỏ-1.245.000đ.png">THÊM VÀO GIỎ</button>
+                        data-base-id="lr-florence"
+                        data-color-key="do">THÊM VÀO GIỎ</button>
                 </div>
 
                 <div class="card">
-                    <div class="card-img"><img src="images/sanpham/Túi đeo vai LR Iris-869.000đ.png" alt="Túi đeo vai LR Iris"></div>
-                    <h4>Túi đeo vai LR Iris</h4>
+                    <div class="card-img"><img src="images/sanpham/Túi đeo vai Nova nâu-1.085.000đ .png" alt="Túi đeo vai Nova"></div>
+                    <h4>Túi đeo vai Nova</h4>
                     <div class="card-colors">
-                        <span class="color-dot active" style="background:#000;"></span>
-                        <span class="color-dot active" style="background:#ffffff;"></span>
-                    </div>
-                    <p class="card-price">869,000đ</p>
+                        <span class="color-dot active" style="background:#000;"></span> <span class="color-dot active" style="background:#7A5C3E;"></span> </div>
+                    <p class="card-price">1,085,000đ</p>
                     <button class="add-cart-btn js-add-to-cart"
-                        data-id="tui-deo-vai-lr-iris"
-                        data-name="Túi đeo vai LR Iris"
-                        data-price="869000"
-                        data-color="Đen"
-                        data-color-hex="#000000"
-                        data-image="images/sanpham/Túi đeo vai LR Iris-869.000đ.jpg">THÊM VÀO GIỎ</button>
+                        data-base-id="nova"
+                        data-color-key="den">THÊM VÀO GIỎ</button>
                 </div>
 
                 <div class="card">
-                    <div class="card-img"><img src="images/sanpham/Túi đeo vai_Túi đeo chéo Celeste-949.000đ.png" alt="Túi đeo chéo Celeste"></div>
-                    <h4>Túi đeo chéo Celeste</h4>
+                    <div class="card-img"><img src="images/sanpham/Túi đeo vai_Túi đeo chéo LR Elysia-1.355.000đ.jpg" alt="Túi đeo chéo LR Elysia"></div>
+                    <h4>Túi đeo chéo LR Elysia</h4>
                     <div class="card-colors">
-                        <span class="color-dot active" style="background:#ffffff;"></span>
-                        <span class="color-dot active" style="background:#000;"></span>
-                    </div>
-                    <p class="card-price">949,000đ</p>
+                        <span class="color-dot active" style="background:#000;"></span> <span class="color-dot active" style="background:#550F14;"></span> </div>
+                    <p class="card-price">1,355,000đ</p>
                     <button class="add-cart-btn js-add-to-cart"
-                        data-id="tui-deo-cheo-celeste"
-                        data-name="Túi đeo chéo Celeste"
-                        data-price="949000"
-                        data-color="Đen"
-                        data-color-hex="#000000"
-                        data-image="images/sanpham/Túi đeo vai_Túi đeo chéo Celeste-949.000đ.png">THÊM VÀO GIỎ</button>
+                        data-base-id="lr-elysia-cheo"
+                        data-color-key="den">THÊM VÀO GIỎ</button>
                 </div>
             </div>
 
@@ -255,45 +241,34 @@
     </section>
     <div id="siteFooter"></div>
 
-    <script src="js/cart-data.js"></script>
-
+    <script src="product data.js"></script>
     <script src="js/cart.js"></script>
 
-    <script src="js/layout.js"></script>
+    <script src="js/layout.js"></script>    
     <script src="js/responsive.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-    <script>
-        function refreshCartBadge() {
-            var badge = document.getElementById('cartBadge');
-            if (!badge) return;
-            var qty = CartData.getTotalQuantity();
-            badge.textContent = qty;
-            badge.classList.toggle('show', qty > 0);
-        }
-        document.addEventListener('DOMContentLoaded', refreshCartBadge);
-        window.addEventListener(CartData.EVENT_NAME, refreshCartBadge);
+<script>
+    document.querySelectorAll('.js-add-to-cart').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            // Lấy id gốc và mã màu từ thuộc tính ta vừa sửa ở trên
+            const baseId = btn.dataset.baseId; 
+            const colorKey = btn.dataset.colorKey;
+            
+            // Gọi hàm thêm vào giỏ hàng
+            CartManager.addFromCatalog(baseId, colorKey, 1);
 
-        document.querySelectorAll('.js-add-to-cart').forEach(function (btn) {
-            btn.addEventListener('click', function () {
-                CartData.addItem({
-                    id: btn.dataset.id,
-                    name: btn.dataset.name,
-                    price: Number(btn.dataset.price),
-                    image: btn.dataset.image,
-                    color: btn.dataset.color || '',
-                    colorHex: btn.dataset.colorHex || '',
-                    qty: 1
-                });
-
-                var original = btn.textContent;
-                btn.textContent = 'ĐÃ THÊM';
-                btn.disabled = true;
-                setTimeout(function () {
-                    btn.textContent = original;
-                    btn.disabled = false;
-                }, 1200);
-            });
+            // Hiệu ứng đổi chữ
+            var original = btn.textContent;
+            btn.textContent = 'ĐÃ THÊM ✓';
+            btn.disabled = true;
+            
+            setTimeout(function () {
+                btn.textContent = original;
+                btn.disabled = false;
+            }, 1200);
         });
-    </script>
+    });
+</script>
 </body>
 </html>
