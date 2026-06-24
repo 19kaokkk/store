@@ -1,31 +1,17 @@
-/* =====================================================
-   LADY ROSE — SHARED LAYOUT
-   Dùng chung cho tất cả các trang (index, product, cart, checkout…)
-   Mỗi trang chỉ cần:
-     <div id="siteHeader"></div>
-     <div id="siteFooter"></div>
-     <script src="../layout.js"></script>
-   ===================================================== */
-
 document.addEventListener('DOMContentLoaded', function () {
   renderHeader();
   renderFooter();
-  // Các hàm init cần chờ DOM được render xong
+
   setTimeout(function () {
     initMobileMenu();
     initHeaderModals();
     initFooterAccordion();
+    initServiceLinks();
     initNewsletter();
     syncBadges();
   }, 0);
 });
 
-/* =====================================================
-   HEADER — HTML
-   Bao gồm: top-bar, main-header, mobile drawer,
-             Search modal, Account modal,
-             Wishlist offcanvas, Cart offcanvas
-   ===================================================== */
 function renderHeader() {
   const headerRoot = document.getElementById('siteHeader');
   if (!headerRoot) return;
@@ -441,9 +427,9 @@ function renderFooter() {
           </div>
           <div class="footer-panel">
             <ul>
-              <li><a href="#">Chính sách đổi trả</a></li>
-              <li><a href="#">Hướng dẫn mua hàng</a></li>
-              <li><a href="#">Thanh toán &amp; Vận chuyển</a></li>
+              <li><a href="#service-bar" class="js-service-link">Chính sách đổi trả</a></li>
+              <li><a href="#service-bar" class="js-service-link">Hướng dẫn mua hàng</a></li>
+              <li><a href="#service-bar" class="js-service-link">Thanh toán &amp; Vận chuyển</a></li>
               <li><a href="#">Câu hỏi thường gặp</a></li>
             </ul>
           </div>
@@ -522,6 +508,31 @@ function initFooterAccordion() {
   document.querySelectorAll('.footer-accordion .footer-toggle').forEach(function (toggle) {
     toggle.addEventListener('click', function () {
       this.closest('.footer-accordion').classList.toggle('open');
+    });
+  });
+}
+
+/* =====================================================
+   FOOTER — Liên kết "Chính sách đổi trả / Hướng dẫn mua
+   hàng / Thanh toán & Vận chuyển" → cuộn tới khối cam kết
+   dịch vụ (#service-bar) NGAY TRÊN TRANG HIỆN TẠI.
+   Nếu trang hiện tại không có khối đó (ví dụ checkout.html),
+   tự động chuyển sang index.html#service-bar.
+   LƯU Ý: mỗi trang (index, product, product-detail, cart...)
+   cần đặt id="service-bar" vào đúng section cam kết dịch vụ
+   của trang đó để link này hoạt động.
+   ===================================================== */
+function initServiceLinks() {
+  document.querySelectorAll('.js-service-link').forEach(function (link) {
+    link.addEventListener('click', function (e) {
+      var target = document.getElementById('service-bar');
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else {
+        e.preventDefault();
+        window.location.href = 'index.html#service-bar';
+      }
     });
   });
 }
