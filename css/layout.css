@@ -64,7 +64,7 @@ ul { list-style: none; margin: 0; padding: 0; }
 }
 
 .brand-logo img {
-  height: 60px;
+  height: 170px;
   width: auto;
   object-fit: contain;
 }
@@ -122,6 +122,9 @@ ul { list-style: none; margin: 0; padding: 0; }
 .product-dropdown a:hover {
   background-color: var(--color-bg-soft);
   color: var(--color-accent);
+}
+html {
+  scroll-behavior: smooth;
 }
 
 /* Icons */
@@ -187,7 +190,8 @@ ul { list-style: none; margin: 0; padding: 0; }
 
 .mobile-nav {
   position: fixed;
-  top: 0; right: 0;
+  top: 0;
+  left: 0;
   width: 280px;
   max-width: 85vw;
   height: 100%;
@@ -195,9 +199,9 @@ ul { list-style: none; margin: 0; padding: 0; }
   z-index: 400;
   padding: 24px 0 32px;
   overflow-y: auto;
-  transform: translateX(100%);
+  transform: translateX(-100%);
   transition: transform 0.3s ease;
-  box-shadow: -4px 0 24px rgba(58,46,38,0.14);
+  box-shadow: 4px 0 24px rgba(58,46,38,0.14);
 }
 .mobile-nav.open {
   transform: translateX(0);
@@ -386,7 +390,7 @@ ul { list-style: none; margin: 0; padding: 0; }
    Footer: brand luôn mở, 4 mục còn lại là accordion
    ========================================================== */
 @media (max-width: 991px) {
-  .brand-logo img { height: 52px; }
+  .brand-logo img { height: 90px; }
 
   /* Footer: chuyển sang block, xóa grid */
   .footer { padding: 0; }
@@ -449,8 +453,54 @@ ul { list-style: none; margin: 0; padding: 0; }
    TẤT CẢ 5 mục đều là accordion (kể cả brand)
    ========================================================== */
 @media (max-width: 576px) {
-  .brand-logo img { height: 44px; }
+  .brand-logo img { height: 70px; }
   .header-icons a { margin-left: 10px; font-size: 16px; }
+
+  /* ── Logo ra giữa, hamburger về trái ── */
+  .main-header .container > .row {
+    position: relative;
+    min-height: 52px;
+  }
+  .main-header .col-4 {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    max-width: 100%;
+    padding: 0;
+    visibility: visible;
+    pointer-events: none;
+  }
+  .main-header .brand-logo {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    visibility: visible;
+    z-index: 2;
+    pointer-events: auto;
+  }
+  .main-header .col-8 {
+    position: relative;
+    z-index: 3;
+    flex: 0 0 100%;
+    width: 100%;
+    max-width: 100%;
+  }
+  .main-header .header-icons {
+    display: flex !important;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    width: 100%;
+  }
+  /* Hamburger ra trước nhờ order */
+  .main-header .hamburger-btn {
+    order: -1;
+    margin-left: 0 !important;
+    margin-right: auto;
+    position: relative;
+    z-index: 4;
+  }
 
   /* Brand cũng thành accordion */
   .footer-column.brand {
