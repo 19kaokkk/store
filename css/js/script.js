@@ -1,4 +1,3 @@
-// --- JAVASCRIPT GỌI HEADER, FOOTER VÀ FORM VALIDATION ---
 document.addEventListener('DOMContentLoaded', function () {
     renderHeader();
     renderFooter();
