@@ -65,6 +65,7 @@ const PRODUCT_DATA = [
     material: "dathat",
     occasion: "dichoi",
     price: 1245000,
+    priceOld: 1390000,
     colors: [
       { key: "do",  label: "Đỏ",  hex: "#550F14" },
       { key: "den", label: "Đen", hex: "#000" }
@@ -136,6 +137,7 @@ const PRODUCT_DATA = [
     material: "dathat",
     occasion: "dilam",
     price: 1355000,
+    priceOld: 1499000,
     rating: "4.8/5",
     colors: [
       { key: "den", label: "Đen", hex: "#000" },
