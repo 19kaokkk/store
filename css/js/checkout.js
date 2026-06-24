@@ -4,18 +4,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // ĐỒNG BỘ AN TOÀN: Kiểm tra đồng thời cả sessionStorage và localStorage để tránh lỗi trình duyệt chặn file:///
     let cart = [];
+    const STORAGE_KEY = "ladyrose_cart_local"; // Đồng nhất Key với file cart.js mới
+
     try {
-        cart = JSON.parse(sessionStorage.getItem('ladyrose_cart')) || JSON.parse(localStorage.getItem('ladyrose_cart')) || [];
+        cart = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
     } catch(e) {
+        console.error("Checkout: Lỗi đọc dữ liệu từ CartManager", e);
         cart = [];
     }
 
-    // Nếu giỏ hàng trống không có gì, ta lấy tạm dữ liệu sản phẩm từ file products-data.js thực tế trong máy bạn để hiển thị mẫu
-    if (!cart || cart.length === 0) {
-        cart = [
-            { id: "tui-xach-tay-lr-velvet-xanh", name: "Túi xách tay LR Velvet", price: 799000, qty: 1, image: "images/sanpham/Túi xách tay LR Velvet xanh-799.000đ", color: "Xanh", size: "24" }
-        ];
-    }
+   
 
     // Hàm render sản phẩm ra giao diện cột phải
     function renderCartItems() {
@@ -78,10 +76,13 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+   // THÀNH HÀM ĐỒNG BỘ MỚI:
     function luuVaCapNhat() {
-        sessionStorage.setItem('ladyrose_cart', JSON.stringify(cart));
-        localStorage.setItem('ladyrose_cart', JSON.stringify(cart));
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(cart));
         renderCartItems();
+        
+        // Phát tín hiệu sự kiện để nếu có component nào dùng chung link sẽ cập nhật ngay lập tức
+        window.dispatchEvent(new CustomEvent("cart:updated", { detail: { items: cart } }));
     }
 
     // YÊU CẦU: Tự động miễn phí vận chuyển cho đơn hàng từ 800.000đ trở lên
@@ -226,15 +227,14 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    function hoanTatDonHang() {
+   function hoanTatDonHang() {
         const stepComplete = document.getElementById('step-complete');
         if (stepComplete) stepComplete.classList.add('active');
         const successPage = document.getElementById('success-page');
         if (successPage) successPage.style.display = 'flex';
         
-        // Xóa sạch giỏ hàng sau khi đặt thành công
-        sessionStorage.removeItem('ladyrose_cart');
-        localStorage.removeItem('ladyrose_cart');
+        // ĐÃ SỬA: Xóa sạch kho dữ liệu mới sau khi đặt hàng thành công
+        localStorage.removeItem(STORAGE_KEY);
     }
 
     const confirmPaymentBtn = document.getElementById('confirm-payment-btn');
