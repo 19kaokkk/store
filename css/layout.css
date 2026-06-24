@@ -1,0 +1,544 @@
+@import url('https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400;0,500;0,700;1,400&family=Moderustic:wght@400;500;600;700&family=Roboto:wght@400;500;700&display=swap');
+
+/* ===== LADY ROSE - GLOBAL STYLE ===== */
+:root {
+  --color-bg: #FFFFF3;
+  --color-bg-soft: #F5EFE6;
+  --color-primary: #3A2E26;
+  --color-secondary: #7A5C3E;
+  --color-accent: #C9A876;
+  --color-accent-soft: #E8C9C9;
+  --color-border: #E3D7C7;
+  --color-text-muted: #9C8E7E;
+  --color-white: #FFFFFF;
+  --color-star: #E0B84B;
+
+  --promo-bar-color: #C6A27A;
+  --filter-bg: #FBF0E8;
+  --filter-border: #B2947E;
+  --banner-eyebrow-color: #BA8C42;
+  --banner-heading-color: #5B4032;
+  --product-name-color: #2D231B;
+  --product-price-color: #413125;
+
+  --shadow-card: 0 2px 10px rgba(58, 46, 38, 0.06);
+  --shadow-hover: 0 8px 24px rgba(58, 46, 38, 0.12);
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: 'Segoe UI', Roboto, -apple-system, sans-serif;
+  background-color: var(--color-bg);
+  color: var(--color-primary);
+}
+
+a { text-decoration: none; color: inherit; }
+ul { list-style: none; margin: 0; padding: 0; }
+
+/* ===== TOP BAR ===== */
+.top-bar {
+  background-color: rgba(198, 162, 122, 0.2);
+  color: var(--color-primary);
+  text-align: center;
+  font-size: 13px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  letter-spacing: 0.3px;
+}
+.top-bar i { margin-right: 6px; color: var(--color-secondary); }
+
+/* ===== HEADER ===== */
+.main-header {
+  background-color: var(--color-bg);
+  border-bottom: 1px solid var(--color-border);
+  height: 100px;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.brand-logo img {
+  height: 170px;
+  width: auto;
+  object-fit: contain;
+}
+
+/* Desktop Nav */
+.main-nav .nav-link {
+  color: var(--color-primary);
+  font-weight: 500;
+  font-size: 15px;
+  padding: 8px 16px !important;
+  transition: color 0.2s;
+}
+.main-nav .nav-link:hover,
+.main-nav .nav-link.active { color: var(--color-accent); }
+
+/* Desktop dropdown */
+.main-nav .product-menu { position: relative; }
+
+.product-dropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 50%;
+  z-index: 200;
+  min-width: 190px;
+  padding: 10px 0;
+  background-color: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-hover);
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(-50%, 8px);
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
+}
+.product-dropdown::before {
+  content: "";
+  position: absolute;
+  top: -12px; left: 0;
+  width: 100%; height: 12px;
+}
+.product-menu:hover .product-dropdown,
+.product-menu:focus-within .product-dropdown {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, 0);
+}
+.product-dropdown a {
+  display: block;
+  padding: 9px 16px;
+  font-size: 14px;
+  color: var(--color-primary);
+  white-space: nowrap;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+.product-dropdown a:hover {
+  background-color: var(--color-bg-soft);
+  color: var(--color-accent);
+}
+html {
+  scroll-behavior: smooth;
+}
+
+/* Icons */
+.header-icons a {
+  color: var(--color-primary);
+  font-size: 18px;
+  margin-left: 16px;
+  position: relative;
+  transition: color 0.2s;
+}
+.header-icons a:hover { color: var(--color-accent); }
+.header-icons .badge-count {
+  position: absolute;
+  top: -8px; right: -10px;
+  background-color: var(--color-accent);
+  color: var(--color-white);
+  font-size: 10px;
+  font-weight: 600;
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ===== HAMBURGER BUTTON ===== */
+.hamburger-btn {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  background: none;
+  border: none;
+  padding: 6px;
+  margin-left: 14px;
+  cursor: pointer;
+  width: 34px;
+  height: 34px;
+}
+.hamburger-btn span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background-color: var(--color-primary);
+  border-radius: 2px;
+  transition: 0.25s;
+}
+
+/* ===== MOBILE NAV DRAWER ===== */
+.mobile-nav-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 300;
+  opacity: 0;
+  transition: opacity 0.25s;
+}
+.mobile-nav-overlay.open {
+  display: block;
+  opacity: 1;
+}
+
+.mobile-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 280px;
+  max-width: 85vw;
+  height: 100%;
+  background-color: var(--color-white);
+  z-index: 400;
+  padding: 24px 0 32px;
+  overflow-y: auto;
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+  box-shadow: 4px 0 24px rgba(58,46,38,0.14);
+}
+.mobile-nav.open {
+  transform: translateX(0);
+}
+
+.mobile-nav-close {
+  background: none;
+  border: none;
+  font-size: 22px;
+  color: var(--color-primary);
+  cursor: pointer;
+  padding: 0 20px 16px;
+  display: block;
+  margin-left: auto;
+}
+
+.mobile-nav > ul { padding: 0; }
+.mobile-nav > ul > li {
+  border-bottom: 1px solid var(--color-border);
+}
+.mobile-nav > ul > li > a,
+.mobile-nav-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 15px 20px;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--color-primary);
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+}
+.mobile-nav > ul > li > a:hover,
+.mobile-nav-toggle:hover { color: var(--color-accent); }
+
+.mobile-nav-toggle i {
+  transition: transform 0.25s;
+  font-size: 14px;
+  color: var(--color-text-muted);
+}
+
+/* Sub-menu sản phẩm trong mobile nav */
+.mobile-sub-menu {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+  background-color: var(--color-bg-soft);
+}
+.mobile-sub-menu.open {
+  max-height: 300px;
+}
+.mobile-sub-menu li a {
+  display: block;
+  padding: 12px 20px 12px 32px;
+  font-size: 14px;
+  color: var(--color-secondary);
+  border-bottom: 1px solid var(--color-border);
+}
+.mobile-sub-menu li:last-child a { border-bottom: none; }
+.mobile-sub-menu li a:hover { color: var(--color-accent); }
+
+/* ==========================================================
+   FOOTER
+   ========================================================== */
+.footer {
+  background-color: var(--color-bg-soft);
+  border-top: 1px solid var(--color-border);
+  padding: 44px 0 0;
+}
+
+.footer-container {
+  width: min(1140px, calc(100% - 32px));
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.35fr 0.85fr 1.15fr 1.15fr 1.15fr;
+  gap: 28px;
+}
+
+/* Ẩn icon chevron ở desktop */
+.footer-toggle i { display: none; }
+
+.footer-column h2,
+.footer-column h3 {
+  color: var(--color-primary);
+  margin-bottom: 14px;
+}
+.footer-column h2 {
+  font-family: Georgia, serif;
+  font-size: 22px;
+  letter-spacing: 2px;
+}
+.footer-column h3 {
+  font-size: 15px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.footer-column p,
+.footer-column li,
+.footer-column a {
+  font-size: 13.5px;
+  color: var(--color-secondary);
+  line-height: 1.8;
+}
+.footer-column a:hover { color: var(--color-accent); }
+
+.social-icons {
+  display: flex;
+  gap: 10px;
+  margin-top: 18px;
+}
+.social-icons a {
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  background-color: var(--color-white);
+  border: 1px solid var(--color-border);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-primary);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+.social-icons a:hover {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+}
+
+.footer-column.contact li {
+  display: flex;
+  gap: 9px;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+.footer-column.contact i {
+  width: 16px;
+  color: var(--color-accent);
+  line-height: 1.8;
+  flex-shrink: 0;
+}
+
+.subscribe-form input {
+  width: 100%;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  font-size: 13px;
+  outline: none;
+  background: var(--color-white);
+}
+.subscribe-form input:focus { border-color: var(--color-accent); }
+.subscribe-form button {
+  width: 100%;
+  margin-top: 10px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  padding: 10px 12px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.subscribe-form button:hover { background-color: var(--color-secondary); }
+
+.error-message {
+  margin-top: 7px;
+  color: #9B2C2C;
+  font-size: 12.5px;
+}
+
+.footer .footer-bottom {
+  width: min(1140px, calc(100% - 32px));
+  margin: 34px auto 0;
+  padding: 18px 0;
+  border-top: 1px solid var(--color-border);
+  text-align: center;
+  font-size: 12.5px;
+  color: var(--color-text-muted);
+}
+
+/* ==========================================================
+   TABLET — 577px đến 991px
+   Header: nav ẩn → hamburger drawer
+   Footer: brand luôn mở, 4 mục còn lại là accordion
+   ========================================================== */
+@media (max-width: 991px) {
+  .brand-logo img { height: 90px; }
+
+  /* Footer: chuyển sang block, xóa grid */
+  .footer { padding: 0; }
+  .footer-container {
+    display: block;
+    max-width: 100%;
+  }
+
+  /* Brand: luôn mở ở tablet, ẩn chevron */
+  .footer-column.brand {
+    padding: 28px 5% 20px;
+  }
+  .footer-column.brand .footer-toggle {
+    cursor: default;
+    pointer-events: none;
+  }
+  .footer-column.brand .footer-toggle i { display: none; }
+  .footer-column.brand .footer-panel {
+    max-height: none !important;
+    overflow: visible;
+    padding: 0;
+  }
+  .footer-column.brand p { max-width: 480px; }
+
+  /* 4 mục còn lại: accordion */
+  .footer-accordion:not(.brand) {
+    border-top: 1px solid var(--color-border);
+  }
+  .footer-accordion:not(.brand) .footer-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    padding: 16px 5%;
+  }
+  .footer-accordion:not(.brand) .footer-toggle h3 { margin: 0; font-size: 14.5px; }
+  .footer-accordion:not(.brand) .footer-toggle i {
+    display: inline-block;
+    font-size: 14px;
+    color: var(--color-text-muted);
+    transition: transform 0.25s ease;
+  }
+  .footer-accordion:not(.brand) .footer-panel {
+    max-height: 0;
+    overflow: hidden;
+    padding: 0 5%;
+    transition: max-height 0.3s ease, padding 0.25s ease;
+  }
+  .footer-accordion:not(.brand).open .footer-toggle i { transform: rotate(180deg); }
+  .footer-accordion:not(.brand).open .footer-panel {
+    max-height: 400px;
+    padding: 0 5% 18px;
+  }
+
+  .footer .footer-bottom { padding: 16px 5%; margin-top: 0; width: 100%; }
+}
+
+/* ==========================================================
+   MOBILE — ≤576px
+   TẤT CẢ 5 mục đều là accordion (kể cả brand)
+   ========================================================== */
+@media (max-width: 576px) {
+  .brand-logo img { height: 70px; }
+  .header-icons a { margin-left: 10px; font-size: 16px; }
+
+  /* ── Logo ra giữa, hamburger về trái ── */
+  .main-header .container > .row {
+    position: relative;
+    min-height: 52px;
+  }
+  .main-header .col-4 {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    max-width: 100%;
+    padding: 0;
+    visibility: visible;
+    pointer-events: none;
+  }
+  .main-header .brand-logo {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    visibility: visible;
+    z-index: 2;
+    pointer-events: auto;
+  }
+  .main-header .col-8 {
+    position: relative;
+    z-index: 3;
+    flex: 0 0 100%;
+    width: 100%;
+    max-width: 100%;
+  }
+  .main-header .header-icons {
+    display: flex !important;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    width: 100%;
+  }
+  /* Hamburger ra trước nhờ order */
+  .main-header .hamburger-btn {
+    order: -1;
+    margin-left: 0 !important;
+    margin-right: auto;
+    position: relative;
+    z-index: 4;
+  }
+
+  /* Brand cũng thành accordion */
+  .footer-column.brand {
+    padding: 0;
+    border-top: 1px solid var(--color-border);
+  }
+  .footer-column.brand .footer-toggle {
+    display: flex !important;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer !important;
+    pointer-events: auto !important;
+    padding: 16px 6%;
+  }
+  .footer-column.brand .footer-toggle h2 { font-size: 15px; margin: 0; }
+  .footer-column.brand .footer-toggle i {
+    display: inline-block !important;
+    font-size: 14px;
+    color: var(--color-text-muted);
+    transition: transform 0.25s ease;
+  }
+  .footer-column.brand .footer-panel {
+    max-height: 0 !important;
+    overflow: hidden !important;
+    padding: 0 6% !important;
+    transition: max-height 0.3s ease, padding 0.25s ease;
+  }
+  .footer-column.brand.open .footer-toggle i { transform: rotate(180deg); }
+  .footer-column.brand.open .footer-panel {
+    max-height: 400px !important;
+    padding: 0 6% 20px !important;
+  }
+  .footer-column.brand p { max-width: 100%; }
+
+  /* Padding các mục khác dùng 6% trên mobile */
+  .footer-accordion:not(.brand) .footer-toggle,
+  .footer-accordion:not(.brand) .footer-panel { padding-left: 6%; padding-right: 6%; }
+  .footer-accordion:not(.brand).open .footer-panel { padding-bottom: 18px; }
+
+  .footer .footer-bottom { padding: 14px 6%; }
+}
