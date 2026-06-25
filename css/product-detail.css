@@ -22,7 +22,7 @@
     margin: 0 auto;
     padding: 25px 25px 10px;
     display: grid;
-    grid-template-columns: 80px 600px 1fr; /* SỬA TẠI ĐÂY: Đổi 1fr ở giữa thành 600px */
+    grid-template-columns: 80px 600px 1fr; 
     grid-template-areas: "thumbs image info";
     gap: 40px;
     justify-content: center;
