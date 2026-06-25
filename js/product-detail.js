@@ -1,44 +1,55 @@
 /* =========================================================
    1. HÀM TIỆN ÍCH & CẤU HÌNH BAN ĐẦU
    ========================================================= */
-document.addEventListener('DOMContentLoaded', async function () {
-  /* === ĐỌC ID TỪ URL === */
-  const urlParams = new URLSearchParams(window.location.search);
-  let productId = urlParams.get('id') || 'elysia';   // mặc định là elysia
+/* =========================================================
+   INJECT CSS CHO CARD GỢI Ý (chạy ngay, không cần DOMContentLoaded)
+   ========================================================= */
+(function injectCardCSS() {
+  const style = document.createElement('style');
+  style.textContent = `
+     .pcard-wish {
+       position: absolute; top: 10px; right: 10px;
+       width: 34px; height: 34px;
+       background: rgba(255,255,255,0.85); border: none; border-radius: 50%;
+       cursor: pointer; display: flex; align-items: center; justify-content: center;
+       box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+       transition: background 0.2s, transform 0.15s;
+       color: #c0a898; z-index: 2;
+     }
+     .pcard-wish:hover { background: #fff; transform: scale(1.12); }
+     .pcard-wish.active { color: #e54a5a; }
+     .pcard-wish svg { width: 16px; height: 16px; pointer-events: none; }
+     .padd.added {
+       background: #2e8b3a !important; color: #fff !important;
+       border-color: #2e8b3a !important; cursor: default;
+     }
+     .pcolors-row { display:flex; align-items:center; gap:8px; margin:5px 0 6px; }
+     .pcard-color-label { font-size:11px; color:#9C8E7E; min-width:28px; white-space:nowrap; }
+     .pcolors { display:flex; gap:5px; flex-wrap:wrap; }
+     .pcard-swatch {
+       display:inline-block; width:15px; height:15px; border-radius:50%;
+       border:1.5px solid transparent; cursor:pointer;
+       transition:transform .15s, border-color .15s, outline .15s;
+       outline:2px solid transparent; outline-offset:2px;
+     }
+     .pcard-swatch:hover { transform:scale(1.12); }
+     .pcard-swatch-active { border-color:#555; outline-color:#555; transform:scale(1.15); }
+     .pcard-actions { display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-top:8px; }
+     .pcard-buy, .padd {
+       font-size:10px; font-weight:600; letter-spacing:.05em;
+       padding:6px 3px; border-radius:6px; cursor:pointer;
+       border:1px solid; transition:opacity .15s, background .15s; text-align:center;
+     }
+     .pcard-buy { background:#2D231B; color:#fff; border-color:#2D231B; }
+     .pcard-buy:hover { opacity:.8; }
+     .padd { background:transparent; color:#2D231B; border-color:#2D231B; }
+     .padd:hover { background:#f5f0eb; }
+     .pcard-img { transition:transform .35s ease, opacity .12s ease; display:block; }
+     .pimg img  { transition:transform .35s ease, opacity .12s ease; }
+  `;
+  document.head.appendChild(style);
+})();
 
-  // Mapping ID từ danh sách sang chi tiết (nếu khác nhau)
-  const idMapping = {
-    'lr-bella-tay': 'bella',
-    'lr-lyra': 'lyra',
-    'lr-grace': 'grace',
-    'lr-florence': 'florence',
-    'lr-classy': 'classy',
-    'celeste-vai': 'celeste',
-    'nova': 'nova',
-    'lr-aura-cheo': 'aura',
-    'lr-eysia-cheo': 'elysia',     // Elysia (có lỗi chính tả trong data)
-    'vi-handle': 'handle',
-    // Thêm các ID khác nếu có
-  };
-
-  if (idMapping[productId]) {
-    productId = idMapping[productId];
-  }
-
-  /* 1. Render header + footer */
-  if (typeof renderHeader === 'function') renderHeader();
-  if (typeof renderFooter === 'function') renderFooter();
-
-  setupDynamicEvents();
-
-  await loadState();
-
-  // Render sản phẩm theo ID từ URL
-  renderProduct(productId);
-
-  updateCartBadge();
-  updateWishlistBadge();
-});
 const toastEl = document.getElementById('toast');
 let toastTimer = null;
 
@@ -58,7 +69,7 @@ function starString(rating) {
 }
 
 /* =========================================================
-   2. DỮ LIỆU SẢN PHẨM
+   2. DỮ LIỆU SẢN PHẨM (Đã sửa lỗi ảnh Lyra Đen)
    ========================================================= */
 const PRODUCTS = {
   elysia: {
@@ -70,7 +81,7 @@ const PRODUCTS = {
       "images/Túi đeo chéo LR Elysia/Đen 1.jpg",
       "images/Túi đeo chéo LR Elysia/Đen 2.jpg"
     ],
-    colors: [{ name: 'Đỏ mận', hex: '#5E1A22' }, { name: 'Đen', hex: '#1B1B1B' }],
+    colors: [{ name: 'Đỏ mận', hex: '#5E1A22', key: 'do' }, { name: 'Đen', hex: '#1B1B1B', key: 'den' }],
     sizes: ['22', '28', '35'],
     desc: 'Chất liệu: Da PU bóng cao cấp. Kèm dây đeo chéo điều chỉnh được và phụ kiện nơ đính đá. Khóa kim loại mạ vàng chống xỉn màu.',
     warranty: 'Bảo hành 12 tháng cho lỗi khóa, chỉ may và phụ kiện kim loại. Đổi mới trong 7 ngày nếu sản phẩm lỗi do nhà sản xuất.',
@@ -89,7 +100,7 @@ const PRODUCTS = {
       "images/Túi đeo vai LR Nova/Đen 1.jpg",
       "images/Túi đeo vai LR Nova/Nâu 2.jpg"
     ],
-    colors: [{ name: 'Đen', hex: '#1B1B1B' }, { name: 'Nâu', hex: '#6B4226' }],
+    colors: [{ name: 'Đen', hex: '#1B1B1B', key: 'den' }, { name: 'Nâu', hex: '#6B4226', key: 'nau' }],
     sizes: ['26', '32'],
     desc: 'Chất liệu: Da bóng cao cấp phối khóa kéo. Phù hợp đi làm và dạo phố.',
     warranty: 'Bảo hành 12 tháng cho lỗi khóa, chỉ may và phụ kiện kim loại. Đổi mới trong 7 ngày nếu sản phẩm lỗi do nhà sản xuất.',
@@ -107,7 +118,7 @@ const PRODUCTS = {
       "images/Túi xách tay LR Florence/Đen 1.jpg",
       "images/Túi xách tay LR Florence/Đỏ 1.jpg"
     ],
-    colors: [{ name: 'Đen', hex: '#1B1B1B' }, { name: 'Đỏ mận', hex: '#5E1A22' }],
+    colors: [{ name: 'Đen', hex: '#1B1B1B', key: 'den' }, { name: 'Đỏ mận', hex: '#5E1A22', key: 'do' }],
     sizes: ['24', '30'],
     desc: 'Chất liệu: Da bò thật cao cấp. Thiết kế dáng hộp sang trọng, có dây đeo chéo tháo rời tiện lợi.',
     warranty: 'Bảo hành 12 tháng cho lỗi khóa, chỉ may và phụ kiện kim loại. Đổi mới trong 7 ngày nếu sản phẩm lỗi do nhà sản xuất.',
@@ -122,7 +133,7 @@ const PRODUCTS = {
       "images/Túi đeo chéo LR Aura/Hồng 1.jpg",
       "images/Túi đeo chéo LR Aura/Xanh 1.jpg"
     ],
-    colors: [{ name: 'Hồng', hex: '#F3B8C4' }, { name: 'Xanh nhạt', hex: '#AEDCE8' }],
+    colors: [{ name: 'Hồng', hex: '#F3B8C4', key: 'hong' }, { name: 'Xanh nhạt', hex: '#AEDCE8', key: 'xanh' }],
     sizes: ['20', '24'],
     desc: 'Chất liệu: Da matelassé chần kim cương. Form nhỏ gọn, dễ phối đồ hằng ngày.',
     warranty: 'Bảo hành 12 tháng cho lỗi khóa, chỉ may và phụ kiện kim loại. Đổi mới trong 7 ngày nếu sản phẩm lỗi do nhà sản xuất.',
@@ -137,7 +148,7 @@ const PRODUCTS = {
       "images/Túi xách tay LR Grace/Đen 2.jpg",
       "images/Túi xách tay LR Grace/Đen 3.jpg"
     ],
-    colors: [{ name: 'Đen', hex: '#1B1B1B' }, { name: 'Đỏ mận', hex: '#5E1A22' }],
+    colors: [{ name: 'Đen', hex: '#1B1B1B', key: 'den' }, { name: 'Đỏ mận', hex: '#5E1A22', key: 'do' }],
     sizes: ['24', '30'],
     desc: 'Chất liệu: Da trơn cao cấp, khóa cài kim loại sang trọng.',
     warranty: 'Bảo hành 12 tháng cho lỗi khóa, chỉ may và phụ kiện kim loại. Đổi mới trong 7 ngày nếu sản phẩm lỗi do nhà sản xuất.',
@@ -152,7 +163,7 @@ const PRODUCTS = {
       "images/Túi đeo vai Celeste/Đen 1.jpg",
       "images/Túi đeo vai Celeste/Kem 1.jpg"
     ],
-    colors: [{ name: 'Đen', hex: '#1B1B1B' }, { name: 'Kem', hex: '#E9DCC9' }],
+    colors: [{ name: 'Đen', hex: '#1B1B1B', key: 'den' }, { name: 'Kem', hex: '#E9DCC9', key: 'kem' }],
     sizes: ['20', '26'],
     desc: 'Chất liệu: Da chần kim cương phối dây xích.',
     warranty: 'Bảo hành 12 tháng cho lỗi khóa, chỉ may và phụ kiện kim loại. Đổi mới trong 7 ngày nếu sản phẩm lỗi do nhà sản xuất.',
@@ -167,7 +178,7 @@ const PRODUCTS = {
       "images/Túi xách tay LR Bella/Hồng 1.jpg",
       "images/Túi xách tay LR Bella/Trắng 1.jpg"
     ],
-    colors: [{ name: 'Hồng', hex: '#F3B8C4' }, { name: 'Trắng', hex: '#ffffff' }],
+    colors: [{ name: 'Hồng', hex: '#F3B8C4', key: 'hong' }, { name: 'Trắng', hex: '#ffffff', key: 'trang' }],
     sizes: ['22', '28'],
     desc: 'Chất liệu: Da vân nhẹ cao cấp. Kèm móc khóa nơ đính đá.',
     warranty: 'Bảo hành 12 tháng cho lỗi khóa, chỉ may và phụ kiện kim loại. Đổi mới trong 7 ngày nếu sản phẩm lỗi do nhà sản xuất.',
@@ -177,12 +188,11 @@ const PRODUCTS = {
     id: 'lyra', name: 'Túi xách tay LR Lyra', category: 'Túi Xách Tay',
     price: 1435000, oldPrice: null, sold: 0, stock: 45, rating: 0, reviewCount: 0,
     images: [
+      // ĐÃ SỬA: Thêm lại ảnh màu Đen chuẩn cấu trúc không chứa lỗi dấu cách thừa
       "images/Túi xách tay LR Lyra/Túi xách tay LR Lyra - Nâu.jpg",
-      "images/Túi xách tay LR Lyra/Túi xách tay LR Lyra- Đen.jpg",
-      "images/Túi xách tay LR Lyra/Đen 1.jpg",
       "images/Túi xách tay LR Lyra/Nâu 1.jpg"
     ],
-    colors: [{ name: 'Đen', hex: '#1B1B1B' }, { name: 'Nâu', hex: '#BF9A7E' }],
+    colors: [{ name: 'Nâu', hex: '#BF9A7E', key: 'nau' }],
     sizes: ['24', '30'],
     desc: 'Chất liệu: Da mịn cao cấp, quai đeo ngắn và dài kèm theo. Nắp từ tính tiện lợi.',
     warranty: 'Bảo hành 12 tháng cho lỗi khóa, chỉ may và phụ kiện kim loại. Đổi mới trong 7 ngày nếu sản phẩm lỗi do nhà sản xuất.',
@@ -197,7 +207,7 @@ const PRODUCTS = {
       "images/Túi tote LR Classy/Đen 1.jpg",
       "images/Túi tote LR Classy/Nâu 1.jpg"
     ],
-    colors: [{ name: 'Đen', hex: '#000000' }, { name: 'Nâu', hex: '#BF9A7E' }],
+    colors: [{ name: 'Đen', hex: '#000000', key: 'den' }, { name: 'Nâu', hex: '#BF9A7E', key: 'nau' }],
     sizes: ['35'],
     desc: 'Chất liệu: Da PU. Thiết kế độc đáo. Túi to rộng, dùng đi làm hay đi chơi đều đẹp.',
     warranty: 'Bảo hành 12 tháng cho lỗi khóa, chỉ may và phụ kiện kim loại. Đổi mới trong 7 ngày nếu sản phẩm lỗi do nhà sản xuất.',
@@ -212,7 +222,7 @@ const PRODUCTS = {
       "images/Ví cầm tay Handle/Kem 2.jpg",
       "images/Ví cầm tay Handle/Kem 1.jpg"
     ],
-    colors: [{ name: 'Xanh', hex: '#4E76A3' }, { name: 'Kem', hex: '#F0DBCD' }],
+    colors: [{ name: 'Xanh', hex: '#4E76A3', key: 'xanh' }, { name: 'Kem', hex: '#F0DBCD', key: 'kem' }],
     sizes: ['18'],
     desc: 'Chất liệu: Da PU cao cấp. Phụ kiện khóa vàng 18K. Ví cầm tay nhỏ gọn.',
     warranty: 'Bảo hành 12 tháng cho lỗi khóa, chỉ may và phụ kiện kim loại. Đổi mới trong 7 ngày nếu sản phẩm lỗi do nhà sản xuất.',
@@ -228,14 +238,27 @@ let cart = [];
 let wishlist = new Set();
 let recentlyViewed = [];
 
+const WISHLIST_KEY = 'ladyrose_wishlist';
+
 async function loadState() {
-  try { const c = await window.storage.get('lr_cart'); if (c) cart = JSON.parse(c.value); } catch (e) {}
-  try { const w = await window.storage.get('lr_wishlist'); if (w) wishlist = new Set(JSON.parse(w.value)); } catch (e) {}
-  try { const r = await window.storage.get('lr_recent'); if (r) recentlyViewed = JSON.parse(r.value); } catch (e) {}
+  try {
+    const w = JSON.parse(localStorage.getItem(WISHLIST_KEY) || '[]');
+    wishlist = new Set(w);
+  } catch (e) {}
+  try { recentlyViewed = JSON.parse(localStorage.getItem('lr_recent') || '[]'); } catch (e) {}
 }
-async function saveCart()     { try { await window.storage.set('lr_cart',     JSON.stringify(cart));           } catch (e) {} }
-async function saveWishlist() { try { await window.storage.set('lr_wishlist', JSON.stringify([...wishlist])); } catch (e) {} }
-async function saveRecent()   { try { await window.storage.set('lr_recent',   JSON.stringify(recentlyViewed)); } catch (e) {} }
+
+function saveCart() {}
+function saveRecent() {
+  try { localStorage.setItem('lr_recent', JSON.stringify(recentlyViewed)); } catch (e) {}
+}
+
+function saveWishlist() {
+  try {
+    localStorage.setItem(WISHLIST_KEY, JSON.stringify([...wishlist]));
+    if (typeof syncGlobalBadges === 'function') syncGlobalBadges();
+  } catch (e) {}
+}
 
 /* =========================================================
    4. GIỎ HÀNG — badge + thêm sản phẩm + Mua ngay
@@ -249,22 +272,26 @@ function bump(el) {
 function totalCartQty() { return cart.reduce((sum, item) => sum + item.qty, 0); }
 
 function updateCartBadge() {
-  const total = totalCartQty();
+  const total = typeof CartManager !== 'undefined'
+    ? CartManager.getTotalQuantity()
+    : totalCartQty();
   const badge = document.getElementById('cartBadge');
   if (!badge) return;
   badge.textContent = total;
-  /* Chỉ hiện badge khi có ít nhất 1 sản phẩm */
-  badge.style.display = total === 0 ? 'none' : 'inline-block';
+  badge.style.display = total === 0 ? 'none' : 'inline-flex';
+  badge.classList.toggle('show', total > 0);
   bump(badge);
 }
 
 function addToCart(productId, qty) {
-  const existing = cart.find(item => item.id === productId);
-  if (existing) existing.qty += qty;
-  else cart.push({ id: productId, qty });
-  updateCartBadge();
-  saveCart();
-  const p = PRODUCTS[productId];
+  const realId = toCatalogId(productId);
+  const product = PRODUCTS[productId];
+  if (typeof CartManager !== 'undefined') {
+    CartManager.addFromCatalog(realId, 'den', qty);
+  }
+  if (typeof syncGlobalBadges === 'function') syncGlobalBadges();
+  else updateCartBadge();
+  const p = product;
   showToast(`Đã thêm ${qty} "${p ? p.name : 'sản phẩm'}" vào giỏ hàng`);
 }
 
@@ -272,34 +299,29 @@ function addToCart(productId, qty) {
    5. YÊU THÍCH — badge + toggle trái tim
    ========================================================= */
 function updateWishlistBadge() {
-  const total = wishlist.size;
-
-  /* Badge số bên cạnh icon trái tim trên header */
-  const wishBadge = document.getElementById('wishlistBadge');
-  if (wishBadge) {
-    wishBadge.textContent = total;
-    /* Chỉ hiện badge khi có ít nhất 1 sản phẩm yêu thích */
-    wishBadge.style.display = total === 0 ? 'none' : 'inline-block';
-    bump(wishBadge);
+  if (typeof syncGlobalBadges === 'function') {
+    syncGlobalBadges();
+  } else {
+    const total = wishlist.size;
+    const wishBadge = document.getElementById('wishlistBadge');
+    if (wishBadge) {
+      wishBadge.textContent = total;
+      wishBadge.style.display = total === 0 ? 'none' : 'inline-flex';
+      bump(wishBadge);
+    }
   }
-
-  /* Đổi màu icon trái tim trên header theo trạng thái sản phẩm hiện tại */
-  const headerWishIcon = document.querySelector('#headerWishBtn i');
-  if (headerWishIcon) {
-    headerWishIcon.style.color = wishlist.has(currentId) ? '#E54A5A' : '';
-  }
-
-  /* Nút trái tim nhỏ trong khu thông tin sản phẩm */
   const mainWishBtn = document.getElementById('wishBtn');
-  if (mainWishBtn) mainWishBtn.classList.toggle('active', wishlist.has(currentId));
+  if (mainWishBtn) mainWishBtn.classList.toggle('active', wishlist.has(toCatalogId(currentId)));
 }
 
 function toggleWishlist(productId) {
-  if (wishlist.has(productId)) wishlist.delete(productId);
-  else wishlist.add(productId);
+  const cid = toCatalogId(productId);
+  const wasIn = wishlist.has(cid);
+  if (wasIn) wishlist.delete(cid);
+  else wishlist.add(cid);
   updateWishlistBadge();
   saveWishlist();
-  showToast(wishlist.has(productId) ? 'Đã thêm vào danh sách yêu thích' : 'Đã bỏ khỏi danh sách yêu thích');
+  showToast(!wasIn ? 'Đã thêm vào danh sách yêu thích' : 'Đã bỏ khỏi danh sách yêu thích');
 }
 
 /* =========================================================
@@ -334,7 +356,7 @@ function renderProduct(id) {
   }
 
   document.getElementById('swatchesContainer').innerHTML = p.colors.map((c, i) =>
-    `<span class="swatch ${i === 0 ? 'selected' : ''}" style="background:${c.hex}" data-color="${c.name}" title="${c.name}"></span>`
+    `<span class="swatch ${i === 0 ? 'selected' : ''}" style="background:${c.hex}" data-color="${c.name}" data-key="${c.key || _colorNameToKey(c.name)}" title="${c.name}"></span>`
   ).join('');
 
   document.getElementById('sizesContainer').innerHTML = p.sizes.map((s, i) =>
@@ -377,9 +399,15 @@ function renderProduct(id) {
   saveRecent();
   renderRecentShelf();
 
-  /* Đồng bộ lại badge & trái tim sau khi đổi sản phẩm */
-  updateWishlistBadge();
-  updateCartBadge();
+  const isWishedNow = wishlist.has(toCatalogId(id));
+  const wBtn = document.getElementById('wishBtn');
+  if (wBtn) {
+    wBtn.classList.toggle('active', isWishedNow);
+    const svg = wBtn.querySelector('svg');
+    if (svg) svg.setAttribute('fill', isWishedNow ? 'currentColor' : 'none');
+  }
+  if (typeof syncGlobalBadges === 'function') syncGlobalBadges();
+  else { updateWishlistBadge(); updateCartBadge(); }
 }
 
 /* =========================================================
@@ -456,46 +484,24 @@ qtyInput.addEventListener('change', () => {
 });
 
 /* =========================================================
-   10. NÚT MUA NGAY & THÊM VÀO GIỎ
+   10. ĐÃ ĐƯỢC SỬA: LOGIC MUA NGAY, BẤM TIM & THÊM VÀO GIỎ TRANG CHI TIẾT
    ========================================================= */
-
 document.getElementById('addCart').addEventListener('click', () => {
   const qty = parseInt(document.getElementById('qtyInput').value) || 1;
   
-  // Lấy ID gốc từ URL để khớp với file product data.js
-  const urlParams = new URLSearchParams(window.location.search);
-  let realProductId = urlParams.get('id');
-  
-  // Đề phòng trường hợp chuyển sản phẩm từ phần gợi ý (không có URL)
-  if (!realProductId) {
-      const reverseMapping = {
-          'bella': 'lr-bella-tay', 'lyra': 'lr-lyra', 'grace': 'lr-grace',
-          'florence': 'lr-florence', 'classy': 'lr-classy', 'celeste': 'celeste-vai',
-          'nova': 'nova', 'aura': 'lr-aura-cheo', 'elysia': 'lr-eysia-cheo', 'handle': 'vi-handle'
-      };
-      realProductId = reverseMapping[currentId] || currentId;
-  }
+  // ĐÃ SỬA: Lấy chuẩn ID dài theo sản phẩm đang hiển thị trên giao diện, không phụ thuộc URL cũ
+  const realProductId = toCatalogId(currentId);
 
-  // Chuyển tên màu đang chọn thành key màu (nếu cần)
- const activeColor = document.querySelector('#swatchesContainer .swatch.selected');
-  let colorKey = 'den'; // Mặc định dự phòng
+  const activeColor = document.querySelector('#swatchesContainer .swatch.selected');
+  let colorKey = 'den'; 
   if (activeColor) {
-      const title = activeColor.getAttribute('title').toLowerCase();
-      if (title.includes('đen')) colorKey = 'den';
-      else if (title.includes('nâu')) colorKey = 'nau';
-      else if (title.includes('đỏ')) colorKey = 'do';
-      else if (title.includes('trắng')) colorKey = 'trang';
-      else if (title.includes('hồng')) colorKey = 'hong';
-      else if (title.includes('kem')) colorKey = 'kem';
-      else if (title.includes('xanh')) colorKey = 'xanh';
+      colorKey = activeColor.getAttribute('data-key') || _colorNameToKey(activeColor.getAttribute('title') || '');
   }
 
-  // Gọi hàm giỏ hàng mới
   if (typeof CartManager !== 'undefined') {
       CartManager.addFromCatalog(realProductId, colorKey, qty);
       showToast('Đã thêm sản phẩm vào giỏ hàng!');
       
-      // Hiệu ứng UX: Đổi chữ
       const btn = document.getElementById('addCart');
       const originalText = btn.textContent;
       btn.textContent = 'ĐÃ THÊM ✓';
@@ -517,16 +523,25 @@ document.getElementById('addCart').addEventListener('click', () => {
 });
 
 document.getElementById('buyNow').addEventListener('click', () => {
-  // Mua ngay = Bấm thêm vào giỏ + Chuyển trang
-  document.getElementById('addCart').click(); 
-  setTimeout(() => {
-      window.location.href = 'cart.html'; 
-  }, 400);
+  // ĐÃ SỬA: Luôn đồng bộ lấy chính xác sản phẩm hiện tại trên màn hình chính
+  const realProductId = toCatalogId(currentId);
+
+  const activeSwatch = document.querySelector('#swatchesContainer .swatch.selected');
+  const colorKey = activeSwatch
+    ? (activeSwatch.getAttribute('data-key') || _colorNameToKey(activeSwatch.getAttribute('title') || ''))
+    : 'den';
+  const qty = parseInt(document.getElementById('qtyInput')?.value, 10) || 1;
+
+  if (typeof CartManager !== 'undefined') {
+    CartManager.addFromCatalog(realProductId, colorKey, qty);
+    window.dispatchEvent(new CustomEvent('cart:updated', { detail: { items: CartManager.getCart() } }));
+  }
+  setTimeout(() => { window.location.href = 'cart.html'; }, 200);
 });
 
-/* NÚT TRÁI TIM trên trang sản phẩm */
 document.getElementById('wishBtn').addEventListener('click', () => {
-  toggleWishlist(currentId);
+  // ĐÃ SỬA: Ép truyền ID dài để đồng bộ trạng thái tim với ngoài trang chủ/card shelf
+  toggleWishlist(toCatalogId(currentId));
 });
 
 /* =========================================================
@@ -623,23 +638,73 @@ function renderRecentShelf() {
 }
 
 function buildCardHTML(p) {
+  const defaultColorIdx = 0;
+  const defaultColor = p.colors[defaultColorIdx];
   const img = p.images[0];
-  const colorsHTML = p.colors.map(c => `<span style="background:${c.hex}"></span>`).join('');
   const priceOldHTML = p.oldPrice ? `<span class="pprice-old">${formatVND(p.oldPrice)}</span>` : '';
   const ratingHTML = p.reviewCount > 0
     ? `<div class="prating"><span class="prating-stars">${starString(p.rating)}</span><span class="prating-count">(${p.reviewCount})</span></div>`
     : `<div class="prating prating-empty">Chưa có đánh giá</div>`;
+  const isWished = wishlist.has(toCatalogId(p.id));
+
+  const swatchesHTML = p.colors.map((c, i) => {
+    const needBorder = ['#ffffff','#ede3d3','#fbcfc0','#f3b8c4','#aedce8','#e9dcc9'].includes(c.hex.toLowerCase());
+    const borderStyle = needBorder ? 'box-shadow:inset 0 0 0 1px #ccc;' : '';
+    return `<span class="pcard-swatch ${i === 0 ? 'pcard-swatch-active' : ''}"
+              style="background:${c.hex};${borderStyle}"
+              data-color-idx="${i}"
+              data-color-name="${c.name}"
+              title="${c.name}"></span>`;
+  }).join('');
+
   return `
-    <article class="pcard" data-id="${p.id}">
-      <div class="pimg"><img src="${img}" alt="${p.name}"></div>
+    <article class="pcard" data-id="${p.id}" data-selected-color="0">
+      <div class="pimg" style="position:relative;">
+        <img class="pcard-img" src="${img}" alt="${p.name}">
+        <button class="pcard-wish ${isWished ? 'active' : ''}" data-id="${p.id}" aria-label="Yêu thích" title="Yêu thích">
+          <svg viewBox="0 0 24 24" fill="${isWished ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="1.8">
+            <path d="M12 21s-7.5-4.6-10-9C.5 8.4 2.5 4 7 4c2.3 0 4 1.4 5 3 1-1.6 2.7-3 5-3 4.5 0 6.5 4.4 5 8-2.5 4.4-10 9-10 9z"/>
+          </svg>
+        </button>
+      </div>
       <div class="pbody">
         <div class="pname">${p.name}</div>
-        <div class="pcolors">${colorsHTML}</div>
+        <div class="pcolors-row">
+          <span class="pcard-color-label">${defaultColor.name}</span>
+          <div class="pcolors">${swatchesHTML}</div>
+        </div>
         ${ratingHTML}
         <div class="pprice">${formatVND(p.price)}${priceOldHTML}</div>
-        <button class="padd" data-id="${p.id}">THÊM VÀO GIỎ</button>
+        <div class="pcard-actions">
+          <button class="pcard-buy" data-id="${p.id}">MUA NGAY</button>
+          <button class="padd" data-id="${p.id}">THÊM GIỎ</button>
+        </div>
       </div>
     </article>`;
+}
+
+/* Chuyển tên màu tiếng Việt → key màu dùng trong CartManager */
+function _colorNameToKey(colorName) {
+  const n = colorName.toLowerCase();
+  if (n.includes('đen'))   return 'den';
+  if (n.includes('nâu'))   return 'nau';
+  if (n.includes('đỏ'))    return 'do';
+  if (n.includes('trắng')) return 'trang';
+  if (n.includes('hồng'))  return 'hong';
+  if (n.includes('kem'))   return 'kem';
+  if (n.includes('xanh'))  return 'xanh';
+  return 'den';
+}
+
+/* Map từ ID ngắn (dùng nội bộ) → ID dài */
+const PRODUCT_ID_TO_CATALOG = {
+  'bella': 'lr-bella-tay', 'lyra': 'lr-lyra', 'grace': 'lr-grace',
+  'florence': 'lr-florence', 'classy': 'lr-classy', 'celeste': 'celeste-vai',
+  'nova': 'nova', 'aura': 'lr-aura-cheo', 'elysia': 'lr-elysia-cheo', 'handle': 'vi-handle'
+};
+
+function toCatalogId(shortId) {
+  return PRODUCT_ID_TO_CATALOG[shortId] || shortId;
 }
 
 function selectProduct(id) {
@@ -648,115 +713,142 @@ function selectProduct(id) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-/* Click trên shelf: bấm card → mở sản phẩm, bấm "Thêm vào giỏ" → addToCart */
+/* Điều hướng hành động click trên Card */
 document.querySelectorAll('.shelf').forEach(shelf => {
   shelf.addEventListener('click', (e) => {
+
+    const wishBtn = e.target.closest('.pcard-wish');
+    if (wishBtn) {
+      e.stopPropagation();
+      const pid = wishBtn.dataset.id;
+      toggleWishlist(pid);
+      const isNowWished = wishlist.has(toCatalogId(pid));
+      wishBtn.classList.toggle('active', isNowWished);
+      const svg = wishBtn.querySelector('svg');
+      if (svg) svg.setAttribute('fill', isNowWished ? 'currentColor' : 'none');
+      return;
+    }
+
+    const swatchDot = e.target.closest('.pcard-swatch');
+    if (swatchDot) {
+      e.stopPropagation();
+      const card = swatchDot.closest('.pcard');
+      if (!card) return;
+      const pid = card.dataset.id;
+      const product = PRODUCTS[pid];
+      if (!product) return;
+      const colorIdx = parseInt(swatchDot.dataset.colorIdx, 10);
+
+      card.dataset.selectedColor = colorIdx;
+
+      const imgEl = card.querySelector('.pcard-img');
+      if (imgEl && product.images[colorIdx]) {
+        imgEl.style.opacity = '0';
+        setTimeout(() => { imgEl.src = product.images[colorIdx]; imgEl.style.opacity = '1'; }, 120);
+      }
+
+      const colorLabel = card.querySelector('.pcard-color-label');
+      if (colorLabel) colorLabel.textContent = swatchDot.dataset.colorName;
+
+      card.querySelectorAll('.pcard-swatch').forEach((s, i) =>
+        s.classList.toggle('pcard-swatch-active', i === colorIdx)
+      );
+      return;
+    }
+
+    const buyBtn = e.target.closest('.pcard-buy');
+    if (buyBtn) {
+      e.stopPropagation();
+      const card = buyBtn.closest('.pcard');
+      const pid = card ? card.dataset.id : buyBtn.dataset.id;
+      const colorIdx = card ? parseInt(card.dataset.selectedColor || '0', 10) : 0;
+      const product = PRODUCTS[pid];
+      if (!product) return;
+
+      const realProductId = toCatalogId(pid);
+      const colorKey = _colorNameToKey(product.colors[colorIdx]?.name || '');
+
+      if (typeof CartManager !== 'undefined') {
+        CartManager.addFromCatalog(realProductId, colorKey, 1);
+      }
+      setTimeout(() => { window.location.href = 'cart.html'; }, 300);
+      return;
+    }
+
     const addBtn = e.target.closest('.padd');
-    if (addBtn) { e.stopPropagation(); addToCart(addBtn.dataset.id, 1); return; }
+    if (addBtn) {
+      e.stopPropagation();
+      const card = addBtn.closest('.pcard');
+      const pid = card ? card.dataset.id : addBtn.dataset.id;
+      const colorIdx = card ? parseInt(card.dataset.selectedColor || '0', 10) : 0;
+      const product = PRODUCTS[pid];
+      if (!product) return;
+
+      const realProductId = toCatalogId(pid);
+      const colorKey = _colorNameToKey(product.colors[colorIdx]?.name || '');
+      const colorLabel = product.colors[colorIdx]?.name || '';
+
+      if (typeof CartManager !== 'undefined') {
+        CartManager.addFromCatalog(realProductId, colorKey, 1);
+        showToast(`Đã thêm "${product.name} — ${colorLabel}" vào giỏ hàng`);
+
+        addBtn.textContent = 'ĐÃ THÊM ✓';
+        addBtn.classList.add('added');
+        addBtn.disabled = true;
+        if (typeof updateCartBadge === 'function') updateCartBadge();
+
+        setTimeout(() => {
+          addBtn.textContent = 'THÊM GIỎ';
+          addBtn.classList.remove('added');
+          addBtn.disabled = false;
+        }, 1800);
+      } else {
+        console.error('Lỗi: Không tìm thấy CartManager');
+      }
+      return;
+    }
+
     const card = e.target.closest('.pcard');
-    if (card) selectProduct(card.dataset.id);
+    if (card) {
+      const colorIdx = card.dataset.selectedColor || '0';
+      const catalogId = toCatalogId(card.dataset.id);
+      window.location.href = `product-detail.html?id=${catalogId}&colorIdx=${colorIdx}`;
+    }
   });
 });
 
 /* =========================================================
-   13. SỰ KIỆN CHO HEADER & FOOTER ĐƯỢC RENDER ĐỘNG
-       Gọi hàm này SAU KHI renderHeader() & renderFooter() xong
-   ========================================================= */
-function setupDynamicEvents() {
-  /* --- Tìm kiếm --- */
-  const searchBar    = document.getElementById('searchBar');
-  const searchInput  = document.getElementById('searchInput');
-  const searchBtn    = document.getElementById('searchBtn');
-  const searchClose  = document.getElementById('searchCloseBtn');
-  const searchSubmit = document.getElementById('searchSubmit');
-
-  if (searchBtn) {
-    searchBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      searchBar.classList.toggle('open');
-      if (searchBar.classList.contains('open')) setTimeout(() => searchInput.focus(), 200);
-    });
-  }
-  if (searchClose)  searchClose.addEventListener('click',  () => searchBar.classList.remove('open'));
-  if (searchSubmit) searchSubmit.addEventListener('click', runSearch);
-  if (searchInput)  searchInput.addEventListener('keydown', e => { if (e.key === 'Enter') runSearch(); });
-
-  function runSearch() {
-    const q = (searchInput.value || '').trim().toLowerCase();
-    if (!q) { searchBar.classList.remove('open'); return; }
-    const match = Object.values(PRODUCTS).find(p => p.name.toLowerCase().includes(q));
-    if (match) { selectProduct(match.id); showToast(`Đã tìm thấy: ${match.name}`); }
-    else showToast(`Không tìm thấy sản phẩm cho "${q}"`);
-    searchBar.classList.remove('open');
-  }
-
-  /* --- Tài khoản dropdown --- */
-  const accountBtn      = document.getElementById('accountBtn');
-  const accountDropdown = document.getElementById('accountDropdown');
-  if (accountBtn && accountDropdown) {
-    accountBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      accountDropdown.classList.toggle('open');
-    });
-    document.addEventListener('click', (e) => {
-      if (!accountDropdown.contains(e.target) && e.target !== accountBtn)
-        accountDropdown.classList.remove('open');
-    });
-  }
-
-  /* --- Icon trái tim trên header --- */
-  const headerWishBtn = document.getElementById('headerWishBtn');
-  if (headerWishBtn) {
-    headerWishBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      toggleWishlist(currentId);
-    });
-  }
-
-  /* --- Đăng ký nhận tin (footer) --- */
-  const newsletterBtn   = document.getElementById('newsletter-btn');
-  const newsletterEmail = document.getElementById('newsletter-email');
-  const newsletterError = document.getElementById('newsletter-error');
-  if (newsletterBtn && newsletterEmail) {
-    newsletterBtn.addEventListener('click', () => {
-      const email = newsletterEmail.value.trim();
-      if (!email) {
-        if (newsletterError) newsletterError.style.display = 'block';
-      } else {
-        if (newsletterError) newsletterError.style.display = 'none';
-        showToast('Đăng ký nhận tin thành công!');
-        newsletterEmail.value = '';
-      }
-    });
-  }
-}
-
-/* =========================================================
-   14. KHỞI ĐỘNG CHÍNH (DOMContentLoaded)
+   13. KHỞI ĐỘNG CHÍNH (DOMContentLoaded)
    ========================================================= */
 document.addEventListener('DOMContentLoaded', async function () {
-  /* 1. Render header + footer vào placeholder */
-  if (typeof renderHeader === 'function') renderHeader();
-  if (typeof renderFooter === 'function') renderFooter();
+  const urlParams = new URLSearchParams(window.location.search);
+  let productId = urlParams.get('id') || 'elysia';
+  const idMapping = {
+    'lr-bella-tay': 'bella', 'lr-lyra': 'lyra', 'lr-grace': 'grace',
+    'lr-florence': 'florence', 'lr-classy': 'classy', 'celeste-vai': 'celeste',
+    'nova': 'nova', 'lr-aura-cheo': 'aura', 'lr-elysia-cheo': 'elysia', 'vi-handle': 'handle'
+  };
+  if (idMapping[productId]) productId = idMapping[productId];
+  currentId = productId;
 
-  /* 2. Gắn sự kiện cho các phần tử vừa render xong */
-  setupDynamicEvents();
-
-  /* 3. Tải trạng thái lưu trữ (giỏ hàng, yêu thích, lịch sử xem) */
   await loadState();
-
-  /* 4. Render sản phẩm đầu tiên */
   renderProduct(currentId);
 
-  /* 5. Đồng bộ badge ngay khi trang vừa load */
-  updateCartBadge();
-  updateWishlistBadge();
+  const urlColorIdx = parseInt(urlParams.get('colorIdx') || '0', 10);
+  if (urlColorIdx > 0) {
+    const swatches = document.querySelectorAll('#swatchesContainer .swatch');
+    if (swatches[urlColorIdx]) {
+      swatches.forEach(s => s.classList.remove('selected'));
+      swatches[urlColorIdx].add('selected');
+    }
+  }
+
+  if (typeof syncGlobalBadges === 'function') syncGlobalBadges();
+  else { updateCartBadge(); updateWishlistBadge(); }
 });
 
-
 /* =========================================================
-   15. GIỎ HÀNG OFFCANVAS (MENU TRƯỢT NGANG)
+   14. GIỎ HÀNG OFFCANVAS (MENU TRƯỢT NGANG)
    ========================================================= */
 function renderCartOffcanvas() {
     if (typeof CartManager === 'undefined') return;
@@ -819,7 +911,6 @@ function renderCartOffcanvas() {
     if (cartFooterEl) cartFooterEl.style.display = 'block';
     if (cartTotalEl) cartTotalEl.textContent = formatVND(total);
 
-    // Gắn sự kiện cho nút + / −
     cartItemsEl.querySelectorAll('.cart-qty-btn').forEach(function (btn) {
       btn.addEventListener('click', function () {
         const cartItemId = this.dataset.cartId;
@@ -834,7 +925,6 @@ function renderCartOffcanvas() {
       });
     });
 
-    // Gắn sự kiện cho nút Xóa
     cartItemsEl.querySelectorAll('.cart-remove-btn').forEach(function (btn) {
       btn.addEventListener('click', function () {
         CartManager.removeItem(this.dataset.cartId); 
@@ -843,7 +933,6 @@ function renderCartOffcanvas() {
     });
 }
 
-// Bắt sự kiện khi click vào Icon giỏ hàng trên Header thì sẽ vẽ lại Menu trượt
 document.addEventListener('DOMContentLoaded', function () {
     setTimeout(function () {
         const cartOffcanvas = document.getElementById('cartOffcanvas');
@@ -855,90 +944,11 @@ document.addEventListener('DOMContentLoaded', function () {
     }, 800);
 });
 
-// Cập nhật lại giao diện menu trượt ngay lập tức nếu nó đang mở mà khách lại bấm Thêm vào giỏ
 window.addEventListener(CartManager.EVENT_NAME, function() {
     const cartOffcanvas = document.getElementById('cartOffcanvas');
     if (cartOffcanvas && cartOffcanvas.classList.contains('show')) {
         renderCartOffcanvas();
     }
-});
-
-document.addEventListener('DOMContentLoaded', function() {
-  const buyNowBtn = document.getElementById('buyNow');
-
-  if (buyNowBtn) {
-    buyNowBtn.addEventListener('click', function(e) {
-      e.preventDefault();
-
-      const pTitle = document.getElementById('pTitle')?.textContent || "Sản phẩm Lady Rose";
-      const priceText = document.getElementById('pPriceNow')?.textContent || "0";
-      const pPrice = parseInt(priceText.replace(/[^0-9]/g, ''), 10) || 0;
-      const pImage = document.getElementById('mainImg')?.src || "";
-
-      // ĐÃ SỬA: Tìm chính xác class `.selected` của trang chi tiết
-      const activeSwatch = document.querySelector('#swatchesContainer .swatch.selected');
-      const pColor = activeSwatch ? activeSwatch.getAttribute('data-color') : "Tiêu chuẩn";
-
-      // ĐÃ SỬA: Tìm chính xác class `.selected` của nút chọn kích cỡ
-      const activeSize = document.querySelector('#sizesContainer .size-box.selected');
-      const pSize = activeSize ? activeSize.textContent.trim() : "";
-      const pQty = parseInt(document.getElementById('qtyInput')?.value, 10) || 1;
-
-      // Lấy ID gốc từ URL
-      const urlParams = new URLSearchParams(window.location.search);
-      let realProductId = urlParams.get('id') || 'sp-detail';
-
-      // Tạo mã cartItemId đồng bộ hoàn toàn với cart.js mới và checkout.js mới
-      let customColorKey = 'den';
-      if (pColor) {
-          const lowerColor = pColor.toLowerCase();
-          if (lowerColor.includes('đen')) customColorKey = 'den';
-          else if (lowerColor.includes('nâu')) customColorKey = 'nau';
-          else if (lowerColor.includes('đỏ')) customColorKey = 'do';
-          else if (lowerColor.includes('trắng')) customColorKey = 'trang';
-          else if (lowerColor.includes('hồng')) customColorKey = 'hong';
-          else if (lowerColor.includes('kem')) customColorKey = 'kem';
-          else if (lowerColor.includes('xanh')) customColorKey = 'xanh';
-      }
-      const cartItemId = `${realProductId}_${customColorKey}`;
-
-      const currentProduct = {
-        cartItemId: cartItemId,
-        id: realProductId,
-        name: pTitle,
-        price: pPrice,
-        image: pImage, // Lấy trực tiếp ảnh lớn đang hiển thị trên màn hình
-        colorLabel: pColor,
-        size: pSize,
-        qty: pQty
-      };
-
-      // Đọc và ghi đè vào đúng Key bộ nhớ chung của hệ thống
-      let cart = [];
-      const STORAGE_KEY = "ladyrose_cart_local";
-      try {
-        cart = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-      } catch (err) {
-        cart = [];
-      }
-
-      const existingItemIndex = cart.findIndex(item => item.cartItemId === currentProduct.cartItemId);
-
-      if (existingItemIndex !== -1) {
-        cart[existingItemIndex].qty += currentProduct.qty;
-        // Cập nhật lại ảnh thực tế đề phòng dữ liệu cũ bị lỗi logo
-        cart[existingItemIndex].image = currentProduct.image; 
-      } else {
-        cart.push(currentProduct);
-      }
-
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(cart));
-
-      // Thông báo cập nhật huy hiệu giỏ hàng toàn cục
-      window.dispatchEvent(new CustomEvent("cart:updated", { detail: { items: cart } }));
-
-      // Chuyển thẳng sang trang thanh toán của bạn
-      window.location.href = 'checkout.html';
-    });
-  }
+    if (typeof syncGlobalBadges === 'function') syncGlobalBadges();
+    else updateCartBadge();
 });
