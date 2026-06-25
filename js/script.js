@@ -1,8 +1,39 @@
 document.addEventListener('DOMContentLoaded', function () {
     renderHeader();
     renderFooter();
-    setupNewsletterValidation(); 
+    setupNewsletterValidation();
+    handleHeaderSearch(); 
 });
+// 2. Kéo xuống DƯỚI CÙNG của file script.js, dán thêm toàn bộ đoạn code hàm này vào:
+function handleHeaderSearch() {
+    // Đảm bảo ID này trùng khớp với ID của thẻ <input> và <button> tìm kiếm trong chuỗi HTML của bạn
+    const searchInput = document.getElementById('modalSearchInput'); 
+    const searchBtn = document.getElementById('modalSearchBtn');
+
+    if (searchInput && searchBtn) {
+        // Xử lý khi người dùng Click chuột vào nút TÌM KIẾM
+        searchBtn.addEventListener('click', function (e) {
+            e.preventDefault();
+            const keyword = searchInput.value.trim();
+            if (keyword !== "") {
+                window.location.href = `product.html?search=${encodeURIComponent(keyword)}`;
+            } else {
+                alert("Vui lòng nhập từ khóa cần tìm kiếm!");
+            }
+        });
+
+        // Xử lý khi người dùng gõ từ khóa và nhấn phím Enter trên bàn phím
+        searchInput.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                const keyword = searchInput.value.trim();
+                if (keyword !== "") {
+                    window.location.href = `product.html?search=${encodeURIComponent(keyword)}`;
+                }
+            }
+        });
+    }
+}
 
 // 1. Hàm Render Header Nhóm (Đã cấu trúc lại khu vực logo dạng Chữ sang trọng)
 function renderHeader() {
@@ -47,6 +78,11 @@ function renderHeader() {
                 <i class="ti ti-shopping-bag"></i>
                 <span class="badge-count" id="cartBadge">0</span>
               </a>
+            </div>
+            <div class="popular-keywords">
+              <a href="product.html?search=Túi đeo chéo">Túi xách tay LR Bella</a>
+              <a href="product.html?search=Ví">Túi đeo chéo Celeste</a>
+              <a href="product.html?search=Túi xách tay">Túi đeo vai LR Nova</a>
             </div>
           </div>
         </div>
@@ -140,4 +176,35 @@ function setupNewsletterValidation() {
             emailInput.value = "";
         }
     });
+}
+// Hàm xử lý sự kiện khi bấm nút Tìm kiếm hoặc bấm Enter
+function handleHeaderSearch() {
+    // Lấy ô input nhập từ khóa và nút bấm kính lúp
+    const searchInput = document.getElementById('modalSearchInput'); 
+    const searchBtn = document.getElementById('modalSearchBtn');
+
+    if (searchInput && searchBtn) {
+        // 1. Lắng nghe sự kiện người dùng CLICK vào nút kính lúp tìm kiếm
+        searchBtn.addEventListener('click', function (e) {
+            e.preventDefault();
+            const keyword = searchInput.value.trim();
+            if (keyword !== "") {
+                // Chuyển hướng sang trang sản phẩm kèm từ khóa tìm kiếm trên URL
+                window.location.href = `product.html?search=${encodeURIComponent(keyword)}`;
+            } else {
+                alert("Vui lòng nhập từ khóa cần tìm kiếm!");
+            }
+        });
+
+        // 2. Lắng nghe sự kiện người dùng nhấn nút ENTER trên bàn phím khi đang gõ
+        searchInput.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                const keyword = searchInput.value.trim();
+                if (keyword !== "") {
+                    window.location.href = `product.html?search=${encodeURIComponent(keyword)}`;
+                }
+            }
+        });
+    }
 }
