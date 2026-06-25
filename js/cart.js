@@ -1,13 +1,9 @@
-// =========================================================
-// 1. QUẢN LÝ DỮ LIỆU GIỎ HÀNG (LOCAL STORAGE)
-// =========================================================
 const CartManager = (function() {
-    const STORAGE_KEY = "ladyrose_cart_local"; // Dùng key mới để tránh đụng độ dữ liệu cũ
+    const STORAGE_KEY = "ladyrose_cart_local";
     const EVENT_NAME = "cart:updated";
 
     function readCart() {
         try {
-            // Dùng localStorage để giữ dữ liệu ngay cả khi đóng tab/trình duyệt
             const raw = localStorage.getItem(STORAGE_KEY);
             return raw ? JSON.parse(raw) : [];
         } catch (err) {
@@ -22,7 +18,6 @@ const CartManager = (function() {
         } catch (err) {
             console.error("Lỗi lưu giỏ hàng", err);
         }
-        // Phát sự kiện toàn cục để các trang khác biết giỏ hàng vừa thay đổi
         window.dispatchEvent(new CustomEvent(EVENT_NAME, { detail: { items: items } }));
     }
 
@@ -31,7 +26,6 @@ const CartManager = (function() {
             return readCart();
         },
 
-        // Lấy dữ liệu trực tiếp từ PRODUCT_DATA (cần file product data.js)
         addFromCatalog: function(productId, colorKey, qtyToAdd = 1) {
             if (typeof PRODUCT_DATA === 'undefined') {
                 console.error("Chưa tải file product data.js");
@@ -41,10 +35,8 @@ const CartManager = (function() {
             const product = PRODUCT_DATA.find(p => p.id === productId);
             if (!product) return;
 
-            // Tìm màu tương ứng, nếu không truyền màu thì lấy màu đầu tiên
             const colorObj = product.colors.find(c => c.key === colorKey) || product.colors[0];
-            
-            // Tạo ID duy nhất cho giỏ hàng (sản phẩm + màu sắc)
+
             const cartItemId = `${product.id}_${colorObj.key}`;
             const items = readCart();
             const existing = items.find(it => it.cartItemId === cartItemId);
@@ -91,10 +83,6 @@ const CartManager = (function() {
     };
 })();
 
-// =========================================================
-// 2. LOGIC GIAO DIỆN & TÍNH TOÁN (DÀNH CHO TRANG CART.HTML)
-// =========================================================
-
 function formatPrice(price) {
     return Math.round(price).toLocaleString('vi-VN') + 'đ';
 }
@@ -137,7 +125,7 @@ function renderCartItemHTML(item) {
 
 function renderCart() {
     const cartItemsWrap = document.getElementById('cart-items-wrap');
-    if (!cartItemsWrap) return; // Nếu không ở trang cart.html thì bỏ qua hàm này
+    if (!cartItemsWrap) return; 
 
     const items = CartManager.getCart();
     const cartList = document.querySelector('.cart-list');
@@ -187,16 +175,14 @@ function updateSummary(items) {
     if (checkoutBtn) {
         checkoutBtn.disabled = items.length === 0;
 
-        // Xóa sự kiện cũ (nếu có) và gắn sự kiện click an toàn chặn lỗi chập chờn
         checkoutBtn.onclick = null;
         checkoutBtn.onclick = function(e) {
             e.preventDefault();
             e.stopPropagation();
 
-            // Đọc lại dữ liệu thực tế tại thời điểm bấm nút
             const currentCart = CartManager.getCart();
             if (currentCart.length > 0) {
-                // Chuyển hướng ngay lập tức sang trang thanh toán của bạn
+
                 window.location.href = 'checkout.html';
             } else {
                 alert('Giỏ hàng trống, không thể tiến hành thanh toán!');
@@ -229,24 +215,20 @@ function bindCartItemEvents() {
     });
 }
 
-// =========================================================
-// 3. ĐỒNG BỘ HUY HIỆU GIỎ HÀNG (SỐ LƯỢNG) TRÊN MỌI TRANG
-// =========================================================
 function refreshCartBadge() {
-    const badge = document.getElementById('cartBadge'); // Đảm bảo header có id này
+    const badge = document.getElementById('cartBadge');
     if (!badge) return;
     const qty = CartManager.getTotalQuantity();
     badge.textContent = qty;
     badge.classList.toggle('show', qty > 0);
 }
 
-// Khởi chạy khi load xong DOM
 document.addEventListener('DOMContentLoaded', () => {
-    renderCart(); // Gọi ở cart.html
-    refreshCartBadge(); // Gọi ở mọi trang
+    renderCart();
+    refreshCartBadge(); 
 });
 
-// Lắng nghe sự thay đổi để update real-time
+
 window.addEventListener(CartManager.EVENT_NAME, () => {
     renderCart();
     refreshCartBadge();
