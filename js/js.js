@@ -1,8 +1,13 @@
 document.addEventListener('DOMContentLoaded', function () {
 
   const urlParams = new URLSearchParams(window.location.search);
-  let currentCategory = urlParams.get('cat') || 'tui-xach-tay'; 
-  if (!CATEGORY_LIST.some(function (cat) { return cat.key === currentCategory; })) {
+  
+  // TẠO BIẾN LẤY TỪ KHÓA TÌM KIẾM TỪ THANH ĐỊA CHỈ URL
+  const searchQuery = urlParams.get('search') ? urlParams.get('search').trim() : null;
+
+  let currentCategory = urlParams.get('cat'); 
+  // Chỉ khi người dùng KHÔNG tìm kiếm và KHÔNG chọn danh mục cụ thể thì mới lấy mặc định là túi xách tay
+  if (!currentCategory && !searchQuery) {
     currentCategory = 'tui-xach-tay';
   }
 
@@ -66,6 +71,22 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function updateBannerAndBreadcrumb() {
+    // ---- ĐOẠN XỬ LÝ KHI NGƯỜI DÙNG TÌM KIẾM ----
+    if (typeof searchQuery !== 'undefined' && searchQuery) {
+      const eyebrowEl = document.getElementById('bannerEyebrow');
+      const headingEl = document.getElementById('bannerHeading');
+      const descriptionEl = document.getElementById('bannerDescription');
+      const breadcrumbEl = document.getElementById('breadcrumbCurrent');
+
+      if (eyebrowEl) eyebrowEl.textContent = "Tìm kiếm";
+      if (headingEl) headingEl.textContent = `Kết quả cho: "${searchQuery}"`;
+      if (descriptionEl) descriptionEl.textContent = `Hiển thị các sản phẩm phù hợp với từ khóa tìm kiếm của bạn.`;
+      if (breadcrumbEl) breadcrumbEl.textContent = "Tìm kiếm";
+      document.title = "Tìm kiếm sản phẩm - Lady Rose";
+      return; // Dừng hàm tại đây, không chạy tiếp đoạn code xử lý danh mục ở dưới
+    }
+
+    // ---- ĐOẠN XỬ LÝ THEO DANH MỤC (NHƯ CŨ) ----
     const currentCat = CATEGORY_LIST.find(function (c) { return c.key === currentCategory; });
     if (!currentCat) return;
 
@@ -88,7 +109,17 @@ document.addEventListener('DOMContentLoaded', function () {
     const grid = document.getElementById('productGrid');
     if (!grid) return;
 
-    const list = PRODUCT_DATA.filter(function (p) { return p.category === currentCategory; });
+    let list = [];
+    
+    if (typeof searchQuery !== 'undefined' && searchQuery) {
+      // NẾU CÓ TỪ KHÓA TÌM KIẾM: Lọc sản phẩm có tên chứa từ khóa (không phân biệt chữ hoa/thường)
+      list = PRODUCT_DATA.filter(function (p) { 
+        return p.name.toLowerCase().includes(searchQuery.toLowerCase()); 
+      });
+    } else {
+      // NẾU KHÔNG TÌM KIẾM: Lọc theo danh mục như bình thường (Như cũ)
+      list = PRODUCT_DATA.filter(function (p) { return p.category === currentCategory; });
+    }
 
     grid.innerHTML = list.map(function (product) {
       return buildProductCard(product, list);
@@ -141,10 +172,7 @@ document.addEventListener('DOMContentLoaded', function () {
           '<div class="product-info">' +
             '<div class="product-name">' + product.name + '</div>' +
             '<div class="product-colors">' + colorDotsHtml + '</div>' +
-            '<div class="price-row">' +
-              '<span class="price-current">' + formatVND(price) + '</span>' +
-              (product.priceOld ? '<span class="price-old">' + formatVND(product.priceOld) + '</span>' : '') +
-            '</div>' +
+            '<div class="price-row"><span class="price-current">' + formatVND(price) + '</span></div>' +
             '<div class="rating-row"><span class="stars">★★★★★</span><span>' + ratingText + '</span></div>' +
           '</div>' +
           '<div class="product-actions">' +
