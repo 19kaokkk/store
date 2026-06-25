@@ -406,7 +406,6 @@ function renderFooter() {
               <li><a href="#service-bar" class="js-service-link">Chính sách đổi trả</a></li>
               <li><a href="#service-bar" class="js-service-link">Hướng dẫn mua hàng</a></li>
               <li><a href="#service-bar" class="js-service-link">Thanh toán &amp; Vận chuyển</a></li>
-              <li><a href="#">Câu hỏi thường gặp</a></li>
             </ul>
           </div>
         </div>
