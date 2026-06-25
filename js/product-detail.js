@@ -1,9 +1,4 @@
-/* =========================================================
-   1. HÀM TIỆN ÍCH & CẤU HÌNH BAN ĐẦU
-   ========================================================= */
-/* =========================================================
-   INJECT CSS CHO CARD GỢI Ý (chạy ngay, không cần DOMContentLoaded)
-   ========================================================= */
+
 (function injectCardCSS() {
   const style = document.createElement('style');
   style.textContent = `
@@ -68,9 +63,7 @@ function starString(rating) {
   return '★'.repeat(full) + '☆'.repeat(5 - full);
 }
 
-/* =========================================================
-   2. DỮ LIỆU SẢN PHẨM (Đã sửa lỗi ảnh Lyra Đen)
-   ========================================================= */
+
 const PRODUCTS = {
   elysia: {
     id: 'elysia', name: 'Túi đeo chéo LR Elysia', category: 'Túi Đeo Chéo',
@@ -230,9 +223,7 @@ const PRODUCTS = {
   }
 };
 
-/* =========================================================
-   3. TRẠNG THÁI ỨNG DỤNG (BỘ NHỚ STORAGE)
-   ========================================================= */
+
 let currentId = 'elysia';
 let cart = [];
 let wishlist = new Set();
@@ -260,9 +251,7 @@ function saveWishlist() {
   } catch (e) {}
 }
 
-/* =========================================================
-   4. GIỎ HÀNG — badge + thêm sản phẩm + Mua ngay
-   ========================================================= */
+
 function bump(el) {
   if (!el) return;
   el.style.transform = 'scale(1.3)';
@@ -295,9 +284,7 @@ function addToCart(productId, qty) {
   showToast(`Đã thêm ${qty} "${p ? p.name : 'sản phẩm'}" vào giỏ hàng`);
 }
 
-/* =========================================================
-   5. YÊU THÍCH — badge + toggle trái tim
-   ========================================================= */
+
 function updateWishlistBadge() {
   if (typeof syncGlobalBadges === 'function') {
     syncGlobalBadges();
@@ -324,9 +311,7 @@ function toggleWishlist(productId) {
   showToast(!wasIn ? 'Đã thêm vào danh sách yêu thích' : 'Đã bỏ khỏi danh sách yêu thích');
 }
 
-/* =========================================================
-   6. RENDER CHI TIẾT SẢN PHẨM
-   ========================================================= */
+
 function renderProduct(id) {
   const p = PRODUCTS[id];
   if (!p) return;
@@ -410,9 +395,7 @@ function renderProduct(id) {
   else { updateWishlistBadge(); updateCartBadge(); }
 }
 
-/* =========================================================
-   7. GALLERY ẢNH & THUMBNAILS
-   ========================================================= */
+
 let galleryImages = [];
 let activeIndex = 0;
 
@@ -449,9 +432,7 @@ function showThumb(index) {
 
 document.getElementById('mainImg').style.transition = 'opacity .15s ease';
 
-/* =========================================================
-   8. CHỌN MÀU SẮC & SIZE
-   ========================================================= */
+
 document.getElementById('swatchesContainer').addEventListener('click', (e) => {
   const sw = e.target.closest('.swatch');
   if (!sw) return;
@@ -466,9 +447,7 @@ document.getElementById('sizesContainer').addEventListener('click', (e) => {
   box.classList.add('selected');
 });
 
-/* =========================================================
-   9. STEPPER SỐ LƯỢNG
-   ========================================================= */
+
 const qtyInput = document.getElementById('qtyInput');
 
 document.getElementById('qtyMinus').addEventListener('click', () => {
@@ -483,13 +462,10 @@ qtyInput.addEventListener('change', () => {
   qtyInput.value = Math.min(max, Math.max(1, parseInt(qtyInput.value) || 1));
 });
 
-/* =========================================================
-   10. ĐÃ ĐƯỢC SỬA: LOGIC MUA NGAY, BẤM TIM & THÊM VÀO GIỎ TRANG CHI TIẾT
-   ========================================================= */
+
 document.getElementById('addCart').addEventListener('click', () => {
   const qty = parseInt(document.getElementById('qtyInput').value) || 1;
   
-  // ĐÃ SỬA: Lấy chuẩn ID dài theo sản phẩm đang hiển thị trên giao diện, không phụ thuộc URL cũ
   const realProductId = toCatalogId(currentId);
 
   const activeColor = document.querySelector('#swatchesContainer .swatch.selected');
@@ -523,7 +499,6 @@ document.getElementById('addCart').addEventListener('click', () => {
 });
 
 document.getElementById('buyNow').addEventListener('click', () => {
-  // ĐÃ SỬA: Luôn đồng bộ lấy chính xác sản phẩm hiện tại trên màn hình chính
   const realProductId = toCatalogId(currentId);
 
   const activeSwatch = document.querySelector('#swatchesContainer .swatch.selected');
@@ -540,22 +515,16 @@ document.getElementById('buyNow').addEventListener('click', () => {
 });
 
 document.getElementById('wishBtn').addEventListener('click', () => {
-  // ĐÃ SỬA: Ép truyền ID dài để đồng bộ trạng thái tim với ngoài trang chủ/card shelf
   toggleWishlist(toCatalogId(currentId));
 });
 
-/* =========================================================
-   11. ACCORDION MÔ TẢ & BẢO HÀNH
-   ========================================================= */
+
 document.querySelectorAll('[data-acc]').forEach(item => {
   item.querySelector('.accordion-head').addEventListener('click', () => {
     item.classList.toggle('open');
   });
 });
 
-/* =========================================================
-   12. SLIDER CAROUSEL (GỢI Ý + ĐÃ XEM GẦN ĐÂY)
-   ========================================================= */
 function getVisible() {
   if (window.innerWidth <= 480) return 1;
   if (window.innerWidth <= 880) return 2;
@@ -683,7 +652,6 @@ function buildCardHTML(p) {
     </article>`;
 }
 
-/* Chuyển tên màu tiếng Việt → key màu dùng trong CartManager */
 function _colorNameToKey(colorName) {
   const n = colorName.toLowerCase();
   if (n.includes('đen'))   return 'den';
@@ -696,7 +664,6 @@ function _colorNameToKey(colorName) {
   return 'den';
 }
 
-/* Map từ ID ngắn (dùng nội bộ) → ID dài */
 const PRODUCT_ID_TO_CATALOG = {
   'bella': 'lr-bella-tay', 'lyra': 'lr-lyra', 'grace': 'lr-grace',
   'florence': 'lr-florence', 'classy': 'lr-classy', 'celeste': 'celeste-vai',
@@ -817,9 +784,6 @@ document.querySelectorAll('.shelf').forEach(shelf => {
   });
 });
 
-/* =========================================================
-   13. KHỞI ĐỘNG CHÍNH (DOMContentLoaded)
-   ========================================================= */
 document.addEventListener('DOMContentLoaded', async function () {
   const urlParams = new URLSearchParams(window.location.search);
   let productId = urlParams.get('id') || 'elysia';
@@ -847,9 +811,7 @@ document.addEventListener('DOMContentLoaded', async function () {
   else { updateCartBadge(); updateWishlistBadge(); }
 });
 
-/* =========================================================
-   14. GIỎ HÀNG OFFCANVAS (MENU TRƯỢT NGANG)
-   ========================================================= */
+
 function renderCartOffcanvas() {
     if (typeof CartManager === 'undefined') return;
     
