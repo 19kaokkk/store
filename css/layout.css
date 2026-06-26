@@ -384,11 +384,6 @@ html {
   color: var(--color-text-muted);
 }
 
-/* ==========================================================
-   TABLET — 577px đến 991px
-   Header: nav ẩn → hamburger drawer
-   Footer: brand luôn mở, 4 mục còn lại là accordion
-   ========================================================== */
 @media (max-width: 991px) {
   .brand-logo img { height: 90px; }
 
@@ -399,7 +394,6 @@ html {
     max-width: 100%;
   }
 
-  /* Brand: luôn mở ở tablet, ẩn chevron */
   .footer-column.brand {
     padding: 28px 5% 20px;
   }
@@ -415,7 +409,6 @@ html {
   }
   .footer-column.brand p { max-width: 480px; }
 
-  /* 4 mục còn lại: accordion */
   .footer-accordion:not(.brand) {
     border-top: 1px solid var(--color-border);
   }
@@ -448,15 +441,11 @@ html {
   .footer .footer-bottom { padding: 16px 5%; margin-top: 0; width: 100%; }
 }
 
-/* ==========================================================
-   MOBILE — ≤576px
-   TẤT CẢ 5 mục đều là accordion (kể cả brand)
-   ========================================================== */
+
 @media (max-width: 576px) {
   .brand-logo img { height: 70px; }
   .header-icons a { margin-left: 10px; font-size: 16px; }
 
-  /* ── Logo ra giữa, hamburger về trái ── */
   .main-header .container > .row {
     position: relative;
     min-height: 52px;
@@ -493,7 +482,6 @@ html {
     justify-content: flex-end;
     width: 100%;
   }
-  /* Hamburger ra trước nhờ order */
   .main-header .hamburger-btn {
     order: -1;
     margin-left: 0 !important;
@@ -502,7 +490,6 @@ html {
     z-index: 4;
   }
 
-  /* Brand cũng thành accordion */
   .footer-column.brand {
     padding: 0;
     border-top: 1px solid var(--color-border);
@@ -535,7 +522,6 @@ html {
   }
   .footer-column.brand p { max-width: 100%; }
 
-  /* Padding các mục khác dùng 6% trên mobile */
   .footer-accordion:not(.brand) .footer-toggle,
   .footer-accordion:not(.brand) .footer-panel { padding-left: 6%; padding-right: 6%; }
   .footer-accordion:not(.brand).open .footer-panel { padding-bottom: 18px; }
