@@ -47,9 +47,9 @@
 const toastEl = document.getElementById('toast');
 let toastTimer = null;
 
-function showToast(msg) {
+function showToast(msg, icon = '') {
   if (!toastEl) return;
-  toastEl.textContent = msg;
+  toastEl.innerHTML = icon ? `<span style="margin-right:6px">${icon}</span>${msg}` : msg;
   toastEl.classList.add('show');
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => toastEl.classList.remove('show'), 2200);
@@ -199,7 +199,7 @@ const PRODUCTS = {
     ],
     colors: [{ name: 'Đen', hex: '#000000', key: 'den' }, { name: 'Nâu', hex: '#BF9A7E', key: 'nau' }],
     sizes: ['35'],
-    desc: 'Chất liệu: Da PU. Thiết kế độc đáo. Túi to rộng, dùng đi làm hay đi chơi đều đẹp.',
+    desc: 'Chất liệu: Da PU. Thiết Design độc đáo. Túi to rộng, dùng đi làm hay đi chơi đều đẹp.',
     warranty: 'Bảo hành 12 tháng cho lỗi khóa, chỉ may và phụ kiện kim loại. Đổi mới trong 7 ngày nếu sản phẩm lỗi do nhà sản xuất.',
     reviews: []
   },
@@ -247,7 +247,6 @@ function saveWishlist() {
   } catch (e) {}
 }
 
-
 function bump(el) {
   if (!el) return;
   el.style.transform = 'scale(1.3)';
@@ -280,7 +279,6 @@ function addToCart(productId, qty) {
   showToast(`Đã thêm ${qty} "${p ? p.name : 'sản phẩm'}" vào giỏ hàng`);
 }
 
-
 function updateWishlistBadge() {
   if (typeof syncGlobalBadges === 'function') {
     syncGlobalBadges();
@@ -304,9 +302,9 @@ function toggleWishlist(productId) {
   else wishlist.add(cid);
   updateWishlistBadge();
   saveWishlist();
-  showToast(!wasIn ? 'Đã thêm vào danh sách yêu thích' : 'Đã bỏ khỏi danh sách yêu thích');
+  const pName = PRODUCTS[productId]?.name || 'Sản phẩm';
+  showToast(!wasIn ? `${pName} đã được thêm vào yêu thích` : `${pName} đã bỏ khỏi yêu thích`, !wasIn ? '❤️' : '🤍');
 }
-
 
 function renderProduct(id) {
   const p = PRODUCTS[id];
@@ -391,7 +389,6 @@ function renderProduct(id) {
   else { updateWishlistBadge(); updateCartBadge(); }
 }
 
-
 let galleryImages = [];
 let activeIndex = 0;
 
@@ -428,7 +425,6 @@ function showThumb(index) {
 
 document.getElementById('mainImg').style.transition = 'opacity .15s ease';
 
-
 document.getElementById('swatchesContainer').addEventListener('click', (e) => {
   const sw = e.target.closest('.swatch');
   if (!sw) return;
@@ -442,8 +438,6 @@ document.getElementById('sizesContainer').addEventListener('click', (e) => {
   document.querySelectorAll('#sizesContainer .size-box').forEach(b => b.classList.remove('selected'));
   box.classList.add('selected');
 });
-
-
 
 const qtyInput = document.getElementById('qtyInput');
 
@@ -459,10 +453,8 @@ qtyInput.addEventListener('change', () => {
   qtyInput.value = Math.min(max, Math.max(1, parseInt(qtyInput.value) || 1));
 });
 
-
 document.getElementById('addCart').addEventListener('click', () => {
   const qty = parseInt(document.getElementById('qtyInput').value) || 1;
-  
   const realProductId = toCatalogId(currentId);
 
   const activeColor = document.querySelector('#swatchesContainer .swatch.selected');
@@ -471,9 +463,16 @@ document.getElementById('addCart').addEventListener('click', () => {
       colorKey = activeColor.getAttribute('data-key') || _colorNameToKey(activeColor.getAttribute('title') || '');
   }
 
+  const activeSize = document.querySelector('#sizesContainer .size-box.selected');
+  const sizeValue = activeSize ? activeSize.dataset.size : null;
+
   if (typeof CartManager !== 'undefined') {
-      CartManager.addFromCatalog(realProductId, colorKey, qty);
-      showToast('Đã thêm sản phẩm vào giỏ hàng!');
+      CartManager.addFromCatalog(realProductId, colorKey, qty, sizeValue);
+
+      const sizeLabel = activeSize ? ` — Size ${activeSize.dataset.size}` : '';
+      const colorLabel2 = activeColor ? ` — ${activeColor.getAttribute('title')}` : '';
+      const p = PRODUCTS[currentId];
+      showToast(`${p ? p.name : 'Sản phẩm'}${colorLabel2}${sizeLabel} đã được thêm vào giỏ hàng`, '🛒');
       
       const btn = document.getElementById('addCart');
       const originalText = btn.textContent;
@@ -502,10 +501,14 @@ document.getElementById('buyNow').addEventListener('click', () => {
   const colorKey = activeSwatch
     ? (activeSwatch.getAttribute('data-key') || _colorNameToKey(activeSwatch.getAttribute('title') || ''))
     : 'den';
+
+  const activeSize = document.querySelector('#sizesContainer .size-box.selected');
+  const sizeValue = activeSize ? activeSize.dataset.size : null;
+
   const qty = parseInt(document.getElementById('qtyInput')?.value, 10) || 1;
 
   if (typeof CartManager !== 'undefined') {
-    CartManager.addFromCatalog(realProductId, colorKey, qty);
+    CartManager.addFromCatalog(realProductId, colorKey, qty, sizeValue);
     window.dispatchEvent(new CustomEvent('cart:updated', { detail: { items: CartManager.getCart() } }));
   }
   setTimeout(() => { window.location.href = 'cart.html'; }, 200);
@@ -515,13 +518,11 @@ document.getElementById('wishBtn').addEventListener('click', () => {
   toggleWishlist(toCatalogId(currentId));
 });
 
-
 document.querySelectorAll('[data-acc]').forEach(item => {
   item.querySelector('.accordion-head').addEventListener('click', () => {
     item.classList.toggle('open');
   });
 });
-
 
 function getVisible() {
   if (window.innerWidth <= 480) return 1;
@@ -680,7 +681,6 @@ function selectProduct(id) {
 
 document.querySelectorAll('.shelf').forEach(shelf => {
   shelf.addEventListener('click', (e) => {
-
     const wishBtn = e.target.closest('.pcard-wish');
     if (wishBtn) {
       e.stopPropagation();
@@ -754,7 +754,7 @@ document.querySelectorAll('.shelf').forEach(shelf => {
 
       if (typeof CartManager !== 'undefined') {
         CartManager.addFromCatalog(realProductId, colorKey, 1);
-        showToast(`Đã thêm "${product.name} — ${colorLabel}" vào giỏ hàng`);
+        showToast(`${product.name} — ${colorLabel} đã được thêm vào giỏ hàng`, '🛒');
 
         addBtn.textContent = 'ĐÃ THÊM ✓';
         addBtn.classList.add('added');
@@ -781,7 +781,6 @@ document.querySelectorAll('.shelf').forEach(shelf => {
   });
 });
 
-
 document.addEventListener('DOMContentLoaded', async function () {
   const urlParams = new URLSearchParams(window.location.search);
   let productId = urlParams.get('id') || 'elysia';
@@ -801,14 +800,13 @@ document.addEventListener('DOMContentLoaded', async function () {
     const swatches = document.querySelectorAll('#swatchesContainer .swatch');
     if (swatches[urlColorIdx]) {
       swatches.forEach(s => s.classList.remove('selected'));
-      swatches[urlColorIdx].add('selected');
+      swatches[urlColorIdx].classList.add('selected');
     }
   }
 
   if (typeof syncGlobalBadges === 'function') syncGlobalBadges();
   else { updateCartBadge(); updateWishlistBadge(); }
 });
-
 
 function renderCartOffcanvas() {
     if (typeof CartManager === 'undefined') return;
@@ -846,7 +844,7 @@ function renderCartOffcanvas() {
                style="width:72px; height:80px; object-fit:cover; border-radius:6px; flex-shrink:0; background:#F5EFE6;">
           <div style="flex:1; min-width:0;">
             <div style="font-size:13px; font-weight:600; color:#2D231B; line-height:1.3; margin-bottom:4px;">${item.name}</div>
-            <div style="font-size:12px; color:#9C8E7E; margin-bottom:6px;">Màu: ${item.colorLabel}</div>
+            <div style="font-size:12px; color:#9C8E7E; margin-bottom:6px;">Màu: ${item.colorLabel}${item.size ? ` &nbsp;|&nbsp; Size: ${item.size}` : ''}</div>
             <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
               <div style="display:flex; align-items:center; border:1px solid #E3D7C7; border-radius:6px; overflow:hidden;">
                 <button class="cart-qty-btn" data-action="minus" data-cart-id="${item.cartItemId}"
