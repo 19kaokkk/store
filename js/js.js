@@ -2,11 +2,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
   const urlParams = new URLSearchParams(window.location.search);
   
-  // TẠO BIẾN LẤY TỪ KHÓA TÌM KIẾM TỪ THANH ĐỊA CHỈ URL
   const searchQuery = urlParams.get('search') ? urlParams.get('search').trim() : null;
 
   let currentCategory = urlParams.get('cat'); 
-  // Chỉ khi người dùng KHÔNG tìm kiếm và KHÔNG chọn danh mục cụ thể thì mới lấy mặc định là túi xách tay
   if (!currentCategory && !searchQuery) {
     currentCategory = 'tui-xach-tay';
   }
@@ -29,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const wrap = document.getElementById('categoryFilterList');
     if (!wrap) return;
 
-    const VISIBLE_COUNT = 3;   // Hiện 3 cái đầu tiên
+    const VISIBLE_COUNT = 3;  
     let html = '';
 
     CATEGORY_LIST.forEach(function (cat, index) {
@@ -71,7 +69,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function updateBannerAndBreadcrumb() {
-    // ---- ĐOẠN XỬ LÝ KHI NGƯỜI DÙNG TÌM KIẾM ----
+
     if (typeof searchQuery !== 'undefined' && searchQuery) {
       const eyebrowEl = document.getElementById('bannerEyebrow');
       const headingEl = document.getElementById('bannerHeading');
@@ -83,10 +81,9 @@ document.addEventListener('DOMContentLoaded', function () {
       if (descriptionEl) descriptionEl.textContent = `Hiển thị các sản phẩm phù hợp với từ khóa tìm kiếm của bạn.`;
       if (breadcrumbEl) breadcrumbEl.textContent = "Tìm kiếm";
       document.title = "Tìm kiếm sản phẩm - Lady Rose";
-      return; // Dừng hàm tại đây, không chạy tiếp đoạn code xử lý danh mục ở dưới
+      return; 
     }
 
-    // ---- ĐOẠN XỬ LÝ THEO DANH MỤC (NHƯ CŨ) ----
     const currentCat = CATEGORY_LIST.find(function (c) { return c.key === currentCategory; });
     if (!currentCat) return;
 
@@ -112,12 +109,10 @@ document.addEventListener('DOMContentLoaded', function () {
     let list = [];
     
     if (typeof searchQuery !== 'undefined' && searchQuery) {
-      // NẾU CÓ TỪ KHÓA TÌM KIẾM: Lọc sản phẩm có tên chứa từ khóa (không phân biệt chữ hoa/thường)
       list = PRODUCT_DATA.filter(function (p) { 
         return p.name.toLowerCase().includes(searchQuery.toLowerCase()); 
       });
     } else {
-      // NẾU KHÔNG TÌM KIẾM: Lọc theo danh mục như bình thường (Như cũ)
       list = PRODUCT_DATA.filter(function (p) { return p.category === currentCategory; });
     }
 
@@ -255,16 +250,13 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     });
 
-    // --- BƯỚC 1: ĐÃ CẬP NHẬT Ở ĐÂY ---
     document.querySelectorAll('.btn-quick-add').forEach(function (btn) {
       btn.addEventListener('click', function (e) {
         e.preventDefault();
         const card = this.closest('.product-item');
         
-        // Gọi hàm thêm vào giỏ hàng
         addToCart(card.dataset.id, card.dataset.color);
         
-        // Hiệu ứng UX đổi màu nút báo thành công
         const originalText = this.textContent;
         this.textContent = 'ĐÃ THÊM ✓';
         this.style.background = '#2e8b3a';
@@ -412,7 +404,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
-  // --- BƯỚC 2: ĐÃ CẬP NHẬT Ở ĐÂY ---
   function addToCart(productId, colorKey) {
     if (typeof CartManager !== 'undefined') {
       CartManager.addFromCatalog(productId, colorKey, 1);
@@ -516,7 +507,6 @@ document.addEventListener('DOMContentLoaded', function () {
   updateCartBadge();
   updateWishlistBadge();
 
-  // --- BƯỚC 3: ĐÃ CẬP NHẬT Ở ĐÂY ---
   function renderCartOffcanvas() {
     if (typeof CartManager === 'undefined') return;
     
