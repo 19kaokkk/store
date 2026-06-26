@@ -1,9 +1,11 @@
+
 const CartManager = (function() {
-    const STORAGE_KEY = "ladyrose_cart_local"; // Dùng key mới để tránh đụng độ dữ liệu cũ
+    const STORAGE_KEY = "ladyrose_cart_local";
     const EVENT_NAME = "cart:updated";
 
     function readCart() {
         try {
+            
             const raw = localStorage.getItem(STORAGE_KEY);
             return raw ? JSON.parse(raw) : [];
         } catch (err) {
@@ -128,7 +130,6 @@ function renderCartItemHTML(item) {
 function renderCart() {
     const cartItemsWrap = document.getElementById('cart-items-wrap');
     if (!cartItemsWrap) return; 
-
     const items = CartManager.getCart();
     const cartList = document.querySelector('.cart-list');
     const emptyState = document.getElementById('empty-cart');
@@ -226,7 +227,7 @@ function refreshCartBadge() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    renderCart();
+    renderCart(); 
     refreshCartBadge(); 
 });
 
