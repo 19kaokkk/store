@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
   renderHeader();
   renderFooter();
-  // Các hàm init cần chờ DOM được render xong
+
   setTimeout(function () {
     initMobileMenu();
     initHeaderModals();
@@ -501,25 +501,20 @@ function initServiceLinks() {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Đợi 800ms để đảm bảo giao diện Header đã được load xong hoàn toàn
     setTimeout(function() {
-        // Tìm tất cả các nút/icon đang được cài lệnh mở menu giỏ hàng trượt ngang
         const cartTriggers = document.querySelectorAll('[data-bs-target="#cartOffcanvas"], [href="#cartOffcanvas"]');
         
         cartTriggers.forEach(function(trigger) {
-            // 1. Tắt tính năng mở menu trượt của Bootstrap
             trigger.removeAttribute('data-bs-toggle');
             trigger.removeAttribute('data-bs-target');
             
-            // Nếu nó là thẻ <a> dùng href="#cartOffcanvas", đổi luôn thành link thật
             if (trigger.hasAttribute('href') && trigger.getAttribute('href') === '#cartOffcanvas') {
                 trigger.setAttribute('href', 'cart.html');
             }
             
-            // 2. Ép buộc chuyển hướng thẳng sang trang cart.html khi click
             trigger.addEventListener('click', function(e) {
-                e.preventDefault(); // Chặn mọi hành động cũ
-                window.location.href = 'cart.html'; // Đưa khách hàng sang trang giỏ hàng ngay lập tức
+                e.preventDefault(); 
+                window.location.href = 'cart.html'; 
             });
         });
     }, 800);
@@ -543,19 +538,15 @@ function syncGlobalBadges() {
     const wishBadge = document.getElementById('wishlistBadge');
     if (wishBadge) {
         wishBadge.textContent = wishlist.length;
-        // Ẩn badge nếu số lượng = 0 cho đẹp, hiện nếu > 0
         wishBadge.style.display = wishlist.length > 0 ? 'inline-flex' : 'none';
     }
 
-    // Cập nhật số lượng trên tiêu đề của Modal Yêu thích (nếu đang mở)
     const modalWishlistCount = document.getElementById('modalWishlistCount');
     if (modalWishlistCount) {
         modalWishlistCount.textContent = wishlist.length;
     }
 
-    // --- 2. ĐỒNG BỘ GIỎ HÀNG (CART) ---
     let cartCount = 0;
-    // Tự động tìm xem đang dùng hệ thống giỏ hàng nào để lấy đúng số lượng
     if (typeof CartManager !== 'undefined') {
         cartCount = CartManager.getTotalQuantity();
     } else {
@@ -570,24 +561,20 @@ function syncGlobalBadges() {
     }
 }
 
-// Chạy đồng bộ khi trang vừa load xong (đợi 800ms để Header render xong)
 document.addEventListener('DOMContentLoaded', function() {
     setTimeout(syncGlobalBadges, 800);
 });
 
-// Chạy đồng bộ mỗi khi click chuột (để bắt ngay lập tức sự kiện Thêm/Xóa)
 document.addEventListener('click', function() {
     setTimeout(syncGlobalBadges, 100); 
 });
 
-// Chạy đồng bộ khi khách hàng mở nhiều tab và thay đổi giỏ hàng ở tab khác
 window.addEventListener('storage', syncGlobalBadges);
 
 /* =========================================================
    MODAL DANH SÁCH YÊU THÍCH (DÙNG CHUNG CHO MỌI TRANG)
    ========================================================= */
 function showWishlistModal() {
-    // Kiểm tra xem đã có dữ liệu sản phẩm chưa
     if (typeof PRODUCT_DATA === 'undefined') {
         console.error('Chưa tải file product data.js');
         return;
@@ -596,14 +583,12 @@ function showWishlistModal() {
     const wishlistIds = JSON.parse(localStorage.getItem('ladyrose_wishlist') || '[]');
     let contentHTML = '';
 
-    // Nếu không có sản phẩm nào
     if (wishlistIds.length === 0) {
         contentHTML = `<p style="text-align:center; padding: 60px 20px; color: #9C8E7E; font-size: 15px;">
         Bạn chưa có sản phẩm yêu thích nào.<br>
         Hãy nhấn ❤️ trên sản phẩm để thêm vào đây.
         </p>`;
     } else {
-        // Nếu có sản phẩm, in ra lưới
         contentHTML = `<div class="row g-3">`;
         PRODUCT_DATA.forEach(function (product) {
             if (wishlistIds.includes(product.id)) {
@@ -637,7 +622,6 @@ function showWishlistModal() {
         contentHTML += `</div>`;
     }
 
-    // Khởi tạo Modal nếu chưa có
     let modal = document.getElementById('wishlistModal');
     if (!modal) {
         modal = document.createElement('div');
@@ -655,12 +639,10 @@ function showWishlistModal() {
         document.body.appendChild(modal);
     }
 
-    // Đổ dữ liệu vào Modal và hiển thị
     document.getElementById('wishlistModalContent').innerHTML = contentHTML;
     document.getElementById('modalWishlistCount').textContent = wishlistIds.length;
     modal.style.display = 'flex';
 
-    // Xử lý nút Xóa
     document.querySelectorAll('.remove-from-wishlist').forEach(function (btn) {
         btn.addEventListener('click', function () {
             const id = btn.dataset.id;
@@ -669,31 +651,26 @@ function showWishlistModal() {
             localStorage.setItem('ladyrose_wishlist', JSON.stringify(wishlist));
             
             if (typeof syncGlobalBadges === 'function') syncGlobalBadges(); // Nhảy số trên icon
-            showWishlistModal(); // Cập nhật lại bảng
+            showWishlistModal();
         });
     });
 
-    // Xử lý nút Đóng
     document.getElementById('closeWishlistModal').onclick = function () {
         modal.style.display = 'none';
     };
     
-    // Bấm ra nền đen bên ngoài để đóng
     modal.onclick = function(e) {
         if (e.target === modal) modal.style.display = 'none';
     };
 }
 
-// Bắt sự kiện khi click vào Icon trái tim trên Header (áp dụng mọi trang)
 document.addEventListener('DOMContentLoaded', function () {
     setTimeout(function () {
         const wishlistLinks = document.querySelectorAll('a[aria-label="Yêu thích"]');
         wishlistLinks.forEach(function(link) {
-            // Tắt chức năng offcanvas cũ (mở sidebar thừa) của Bootstrap
             link.removeAttribute('data-bs-toggle');
             link.removeAttribute('data-bs-target');
             
-            // Gắn lệnh mở Modal Yêu thích chuẩn
             link.addEventListener('click', function (e) {
                 e.preventDefault();
                 showWishlistModal();
