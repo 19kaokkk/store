@@ -4,14 +4,11 @@ document.addEventListener('DOMContentLoaded', function () {
     setupNewsletterValidation();
     handleHeaderSearch(); 
 });
-// 2. Kéo xuống DƯỚI CÙNG của file script.js, dán thêm toàn bộ đoạn code hàm này vào:
 function handleHeaderSearch() {
-    // Đảm bảo ID này trùng khớp với ID của thẻ <input> và <button> tìm kiếm trong chuỗi HTML của bạn
     const searchInput = document.getElementById('modalSearchInput'); 
     const searchBtn = document.getElementById('modalSearchBtn');
 
     if (searchInput && searchBtn) {
-        // Xử lý khi người dùng Click chuột vào nút TÌM KIẾM
         searchBtn.addEventListener('click', function (e) {
             e.preventDefault();
             const keyword = searchInput.value.trim();
@@ -22,7 +19,6 @@ function handleHeaderSearch() {
             }
         });
 
-        // Xử lý khi người dùng gõ từ khóa và nhấn phím Enter trên bàn phím
         searchInput.addEventListener('keypress', function (e) {
             if (e.key === 'Enter') {
                 e.preventDefault();
@@ -35,7 +31,6 @@ function handleHeaderSearch() {
     }
 }
 
-// 1. Hàm Render Header Nhóm (Đã cấu trúc lại khu vực logo dạng Chữ sang trọng)
 function renderHeader() {
     const headerRoot = document.getElementById('siteHeader');
     if (!headerRoot) return;
@@ -91,7 +86,6 @@ function renderHeader() {
     `;
 }
 
-// 2. Hàm Render Footer Nhóm
 function renderFooter() {
     const footerRoot = document.getElementById('siteFooter');
     if (!footerRoot) return;
@@ -150,7 +144,6 @@ function renderFooter() {
     `;
 }
 
-// 3. Hàm Validate Đăng Ký Email bằng Regex
 function setupNewsletterValidation() {
     const btnReg = document.getElementById('newsletter-btn');
     if (!btnReg) return;
@@ -177,26 +170,21 @@ function setupNewsletterValidation() {
         }
     });
 }
-// Hàm xử lý sự kiện khi bấm nút Tìm kiếm hoặc bấm Enter
 function handleHeaderSearch() {
-    // Lấy ô input nhập từ khóa và nút bấm kính lúp
     const searchInput = document.getElementById('modalSearchInput'); 
     const searchBtn = document.getElementById('modalSearchBtn');
 
     if (searchInput && searchBtn) {
-        // 1. Lắng nghe sự kiện người dùng CLICK vào nút kính lúp tìm kiếm
         searchBtn.addEventListener('click', function (e) {
             e.preventDefault();
             const keyword = searchInput.value.trim();
             if (keyword !== "") {
-                // Chuyển hướng sang trang sản phẩm kèm từ khóa tìm kiếm trên URL
                 window.location.href = `product.html?search=${encodeURIComponent(keyword)}`;
             } else {
                 alert("Vui lòng nhập từ khóa cần tìm kiếm!");
             }
         });
 
-        // 2. Lắng nghe sự kiện người dùng nhấn nút ENTER trên bàn phím khi đang gõ
         searchInput.addEventListener('keypress', function (e) {
             if (e.key === 'Enter') {
                 e.preventDefault();
