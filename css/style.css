@@ -1,4 +1,3 @@
-/* --- THIẾT LẬP MÀU SẮC CHUNG --- */
 :root {
     --rose-dark: #3e2723;
     --rose-cream: #f7f1eb;
@@ -10,7 +9,6 @@ body { font-family: Arial, sans-serif; color: #333; overflow-x: hidden; margin: 
 .main-heading { font-weight: bold; letter-spacing: 2px; text-transform: uppercase; font-size: 1.8rem; margin: 0; }
 .section-title { font-size: 1.25rem; font-weight: bold; margin-bottom: 15px; color: var(--rose-dark); }
 
-/* --- 1. HERO BANNER CHÍNH (Xóa khoảng trắng thừa) --- */
 .hero-banner { position: relative; width: 100%; margin: 0; padding: 0; line-height: 0; }
 .banner-img { min-height: 400px; max-height: 600px; object-fit: cover; width: 100%; }
 .hero-text {
@@ -21,21 +19,17 @@ body { font-family: Arial, sans-serif; color: #333; overflow-x: hidden; margin: 
 .hero-text h1 { font-size: 2.2rem; font-weight: bold; line-height: 1.3; color: var(--rose-dark); margin-bottom: 15px; }
 .hero-text p { font-size: 1rem; color: #444; margin-bottom: 25px; line-height: 1.6; }
 
-/* Nút bấm */
 .btn-dark-rose { display: inline-block; background: var(--rose-dark); color: white !important; border: none; padding: 12px 28px; font-weight: bold; font-size: 0.9rem; transition: 0.3s; text-transform: uppercase; text-decoration: none; }
 .btn-dark-rose:hover { background: #261613; letter-spacing: 1px; }
 
-/* --- 2. KHỐI TIỆN ÍCH TRÊN TRANG CHỦ --- */
 .trust-box { border-right: 1px solid #ddd; }
 .trust-box:last-child { border-right: none; }
 .trust-icon { font-size: 2.5rem; color: var(--rose-dark); margin-bottom: 10px; }
 .trust-box h5 { font-size: 1.05rem; font-weight: bold; margin-bottom: 5px; }
 .trust-box p { font-size: 0.85rem; color: #666; margin: 0; }
 
-/* --- TRIỆT TIÊU KHOẢNG TRẮNG FOOTER (Ẩn khối lặp lại và xóa space của nó) --- */
 .home-page #siteFooter .trust-section { display: none !important; margin: 0 !important; padding: 0 !important; height: 0 !important; overflow: hidden; }
 
-/* --- 3. BANNER NEW ARRIVALS --- */
 .new-arrivals-banner { position: relative; line-height: 0; }
 .banner-img-small { min-height: 300px; max-height: 450px; object-fit: cover; width: 100%; }
 .center-overlay {
@@ -52,19 +46,15 @@ body { font-family: Arial, sans-serif; color: #333; overflow-x: hidden; margin: 
 .btn-outline-rose { text-decoration: none; background: transparent; color: #333; border: 1px solid #333; padding: 10px 30px; font-weight: bold; transition: 0.3s; }
 .btn-outline-rose:hover { background: #333; color: white !important; }
 
-/* --- 4. HIỆU ỨNG GẠCH CHÂN KHI HOVER & ĐỒNG BỘ KHUNG KHÔNG BỊ LỆCH --- */
 .img-wrap { width: 100%; height: 280px; overflow: hidden; background: #fff; display: flex; align-items: center; justify-content: center; }
 .img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; }
 .category-card:hover img, .product-card:hover img { transform: scale(1.05); }
 
-/* Khung bọc sản phẩm đồng bộ chiều cao */
 .product-box { background: #fff; padding: 15px; height: 100%; display: flex; flex-direction: column; justify-content: space-between; }
 
-/* Tạo link gạch chân tinh tế khi hover cho text */
 .clickable-title { text-decoration: none; color: var(--rose-dark); font-weight: bold; transition: color 0.2s ease, border-bottom 0.2s ease; border-bottom: 1px solid transparent; padding-bottom: 2px; }
 .clickable-title:hover { color: black; border-bottom: 1px solid black; }
 
-/* --- BỔ TRỢ ĐỘC LẬP CHO HEADER / FOOTER TRONG JS --- */
 .top-bar { background-color: var(--rose-cream); text-align: center; padding: 8px 0; font-size: 0.9rem; font-weight: 500; }
 .top-bar i { margin-right: 6px; font-size: 1.1rem; vertical-align: middle; }
 .main-header { padding: 15px 0; border-bottom: 1px solid #eee; background: white; }
@@ -75,14 +65,12 @@ body { font-family: Arial, sans-serif; color: #333; overflow-x: hidden; margin: 
 .header-icons a { color: #222; font-size: 1.35rem; margin-left: 20px; position: relative; }
 .badge-count { position: absolute; top: -5px; right: -8px; background: red; color: white; font-size: 0.7rem; padding: 2px 5px; border-radius: 50%; }
 
-/* Dropdown Menu */
 .product-menu { position: relative; }
 .product-dropdown { display: none; position: absolute; top: 100%; left: 0; background: white; box-shadow: 0 4px 10px rgba(0,0,0,0.1); min-width: 180px; z-index: 999; }
 .product-dropdown a { display: block; padding: 10px 15px; color: #333; text-decoration: none; font-size: 0.9rem; border-bottom: 1px solid #f5f5f5; }
 .product-dropdown a:hover { background: var(--rose-cream); color: var(--rose-dark); }
 .product-menu:hover .product-dropdown { display: block; }
 
-/* Footer */
 .footer { background: #fdfbf9; padding: 40px 0 20px; border-top: 1px solid #f0eae4; }
 .footer-container { display: flex; max-width: 1200px; margin: 0 auto; padding: 0 15px; justify-content: space-between; flex-wrap: wrap; gap: 30px; }
 .footer-column { flex: 1; min-width: 180px; }
@@ -97,14 +85,13 @@ body { font-family: Arial, sans-serif; color: #333; overflow-x: hidden; margin: 
 .subscribe-form button { width: 100%; padding: 10px; background: var(--rose-dark); color: white; border: none; font-weight: bold; }
 .footer-bottom { text-align: center; padding-top: 20px; margin-top: 30px; border-top: 1px solid #eee; font-size: 0.85rem; color: #888; }
 
-/* ==================== LOGO HEADER ==================== */
 .logo-link {
     display: inline-block;
     line-height: 1;
 }
 
 .logo-img {
-    height: 65px;           /* Điều chỉnh kích thước theo ý muốn */
+    height: 65px;          
     width: auto;
     max-width: 180px;
     object-fit: contain;
@@ -115,14 +102,12 @@ body { font-family: Arial, sans-serif; color: #333; overflow-x: hidden; margin: 
     transform: scale(1.05);
 }
 
-/* Responsive cho mobile */
 @media (max-width: 768px) {
     .logo-img {
         height: 52px;
     }
 }
 
-/* --- RESPONSIVE MOBILE --- */
 @media (max-width: 768px) {
     .hero-text { position: relative; top: 0; left: 0; transform: none; width: 100%; padding: 30px 15px; text-align: center; max-width: 100%; }
     .hero-text h1 { font-size: 1.8rem; }
@@ -130,10 +115,8 @@ body { font-family: Arial, sans-serif; color: #333; overflow-x: hidden; margin: 
     .trust-box:last-child { border-bottom: none; }
     .center-overlay { width: 95%; padding: 20px; }
     .main-text { font-size: 24px; }
-    .img-wrap { height: 200px; } /* Trên mobile ảnh nhỏ lại cho cân đối */
-}
+    .img-wrap { height: 200px; } 
 
-/* ================= ĐOẠN CSS MỚI BỔ SUNG CHO CÁC POPUP ================= */
 #accountTabs .nav-link {
     color: #999;
     transition: all 0.3s ease;
@@ -146,7 +129,6 @@ body { font-family: Arial, sans-serif; color: #333; overflow-x: hidden; margin: 
     border-bottom: 2px solid var(--rose-dark) !important;
     background-color: transparent !important;
 }
-/* ================== DANH MỤC 5 SẢN PHẨM - FLEXBOX ================== */
 .category-flex {
     display: flex;
     flex-wrap: wrap;
@@ -159,12 +141,12 @@ body { font-family: Arial, sans-serif; color: #333; overflow-x: hidden; margin: 
 .category-item {
     flex: 1;
     min-width: 180px;
-    max-width: 230px; /* 1. Tăng từ 210px lên 230px để mở rộng chiều rộng */
+    max-width: 230px; 
     text-align: center;
 }
 
 .category-item .img-wrap {
-    height: 270px; /* 2. Tăng từ 220px lên 270px giúp khung ảnh cao ráo hơn */
+    height: 270px; 
     background: #fff;
     border-radius: 8px;
     overflow: hidden;
@@ -178,10 +160,8 @@ body { font-family: Arial, sans-serif; color: #333; overflow-x: hidden; margin: 
 .category-item img {
     width: 100%;
     height: 100%;
-    /* 3. Đổi sang 'cover' nếu muốn ảnh lấp đầy khung trắng sang trọng. 
-          Hoặc giữ 'contain' nhưng bỏ padding để ảnh to hết cỡ không bị mất góc */
     object-fit: cover; 
-    padding: 0; /* 4. Giảm từ 15px về 0 để ảnh phóng to tối đa */
+    padding: 0; 
     transition: transform 0.4s ease;
 }
 
@@ -193,13 +173,12 @@ body { font-family: Arial, sans-serif; color: #333; overflow-x: hidden; margin: 
     margin-top: 8px;
 }
 
-/* Kế thừa cấu trúc Responsive chuẩn theo tài liệu của bạn */
 @media (max-width: 768px) {
     .category-item {
         min-width: 140px;
         max-width: 160px;
     }
     .category-item .img-wrap {
-        height: 190px; /* Điều chỉnh nhẹ chiều cao trên mobile cho vừa mắt */
+        height: 190px; 
     }
 }
