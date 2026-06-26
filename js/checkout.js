@@ -2,10 +2,8 @@ document.addEventListener('DOMContentLoaded', function() {
     let baseShippingFee = 30000; 
     let currentShippingFee = 30000; 
 
-    // ĐỒNG BỘ AN TOÀN: Kiểm tra đồng thời cả sessionStorage và localStorage để tránh lỗi trình duyệt chặn file:///
     let cart = [];
-    const STORAGE_KEY = "ladyrose_cart_local"; // Đồng nhất Key với file cart.js mới
-
+    const STORAGE_KEY = "ladyrose_cart_local";
     try {
         cart = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
     } catch(e) {
@@ -15,7 +13,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
    
 
-    // Hàm render sản phẩm ra giao diện cột phải
     function renderCartItems() {
         const cartList = document.getElementById('cart-list');
         if (!cartList) return;
@@ -23,7 +20,6 @@ document.addEventListener('DOMContentLoaded', function() {
         cartList.innerHTML = ''; 
 
         cart.forEach((item, index) => {
-            // Xử lý fallback nếu thiếu ảnh hoặc thiếu tên để giao diện không bị vỡ lỗi
             const itemImg = item.image || (item.img || '');
             const itemName = item.name || (item.title || 'Sản phẩm Lady Rose');
 
@@ -49,7 +45,6 @@ document.addEventListener('DOMContentLoaded', function() {
         tinhToanGioHang();
     }
 
-    // Xử lý bấm tăng / giảm số lượng sản phẩm trực tiếp tại trang thanh toán
     const cartList = document.getElementById('cart-list');
     if (cartList) {
         cartList.addEventListener('click', function(e) {
@@ -76,16 +71,13 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-   // THÀNH HÀM ĐỒNG BỘ MỚI:
     function luuVaCapNhat() {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(cart));
         renderCartItems();
         
-        // Phát tín hiệu sự kiện để nếu có component nào dùng chung link sẽ cập nhật ngay lập tức
         window.dispatchEvent(new CustomEvent("cart:updated", { detail: { items: cart } }));
     }
 
-    // YÊU CẦU: Tự động miễn phí vận chuyển cho đơn hàng từ 800.000đ trở lên
     function tinhToanGioHang() {
         let tongTienHang = 0;
         cart.forEach(item => {
@@ -95,39 +87,33 @@ document.addEventListener('DOMContentLoaded', function() {
         const shippingFeeEl = document.getElementById('shipping-fee');
         const orderBtn = document.getElementById('order-submit-btn');
 
-        // --- ĐÃ SỬA: Nếu giỏ hàng trống (chưa có đơn hàng) ---
         if (cart.length === 0 || tongTienHang === 0) {
             currentShippingFee = 0;
             if (shippingFeeEl) {
                 shippingFeeEl.innerText = '0đ';
             }
-            // Khóa nút "Đặt Hàng" lại không cho khách nhấn
             if (orderBtn) {
                 orderBtn.disabled = true;
-                orderBtn.style.opacity = '0.5'; // Làm mờ nút đi để báo hiệu đang bị khóa
-                orderBtn.style.cursor = 'not-allowed'; // Hiện biểu tượng cấm khi di chuột vào
+                orderBtn.style.opacity = '0.5'; 
+                orderBtn.style.cursor = 'not-allowed';
             }
         } 
-        // --- Nếu có đơn hàng và tổng tiền từ 800.000đ trở lên ---
         else if (tongTienHang >= 800000) {
             currentShippingFee = 0;
             if (shippingFeeEl) {
                 shippingFeeEl.innerHTML = `<span style="color: #2D6A4F; font-weight: bold;"><i class="fa-solid fa-truck-fast"></i> Miễn phí</span>`;
             }
-            // Mở khóa nút Đặt Hàng
             if (orderBtn) {
                 orderBtn.disabled = false;
                 orderBtn.style.opacity = '1';
                 orderBtn.style.cursor = 'pointer';
             }
         } 
-        // --- Nếu có đơn hàng nhưng dưới 800.000đ (Tính phí ship bình thường) ---
         else {
             currentShippingFee = baseShippingFee;
             if (shippingFeeEl) {
                 shippingFeeEl.innerText = currentShippingFee.toLocaleString('vi-VN') + 'đ';
             }
-            // Mở khóa nút Đặt Hàng
             if (orderBtn) {
                 orderBtn.disabled = false;
                 orderBtn.style.opacity = '1';
@@ -135,11 +121,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
 
-        // Cập nhật Tổng tiền hàng lên màn hình
         const subtotalEl = document.getElementById('subtotal');
         if (subtotalEl) subtotalEl.innerText = tongTienHang.toLocaleString('vi-VN') + 'đ';
 
-        // Tính tổng thanh toán cuối cùng
         let tongThanhToan = tongTienHang + currentShippingFee;
         
         const totalPaymentEl = document.getElementById('total-payment');
@@ -149,7 +133,6 @@ document.addEventListener('DOMContentLoaded', function() {
         if (gatewayAmountEl) gatewayAmountEl.innerText = "Số tiền: " + tongThanhToan.toLocaleString('vi-VN') + 'đ';
     }
 
-    // Chọn phương thức vận chuyển
     const shippingItems = document.querySelectorAll('#shipping-methods .option-item');
     shippingItems.forEach(item => {
         item.addEventListener('click', function() {
@@ -163,7 +146,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Chọn phương thức thanh toán
     const paymentItems = document.querySelectorAll('#payment-methods .option-item');
     paymentItems.forEach(item => {
         item.addEventListener('click', function() {
@@ -174,7 +156,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Xử lý dữ liệu tỉnh thành đổ xuống
     const locationData = {
         hcm: {
             districts: {
@@ -220,7 +201,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Xử lý kiểm tra lỗi khi nhấn đặt hàng (Form Validation)
     const orderBtn = document.getElementById('order-submit-btn');
     if (orderBtn) {
         orderBtn.addEventListener('click', function() {
@@ -264,7 +244,6 @@ document.addEventListener('DOMContentLoaded', function() {
         const successPage = document.getElementById('success-page');
         if (successPage) successPage.style.display = 'flex';
         
-        // ĐÃ SỬA: Xóa sạch kho dữ liệu mới sau khi đặt hàng thành công
         localStorage.removeItem(STORAGE_KEY);
     }
 
@@ -277,6 +256,5 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Kích hoạt hàm khởi chạy vẽ dữ liệu lên màn hình
     renderCartItems();
 });
