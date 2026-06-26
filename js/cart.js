@@ -1,11 +1,9 @@
-
 const CartManager = (function() {
-    const STORAGE_KEY = "ladyrose_cart_local";
+    const STORAGE_KEY = "ladyrose_cart_local"; 
     const EVENT_NAME = "cart:updated";
 
     function readCart() {
         try {
-            
             const raw = localStorage.getItem(STORAGE_KEY);
             return raw ? JSON.parse(raw) : [];
         } catch (err) {
@@ -28,7 +26,7 @@ const CartManager = (function() {
             return readCart();
         },
 
-        addFromCatalog: function(productId, colorKey, qtyToAdd = 1) {
+        addFromCatalog: function(productId, colorKey, qtyToAdd = 1, size = null) {
             if (typeof PRODUCT_DATA === 'undefined') {
                 console.error("Chưa tải file product data.js");
                 return;
@@ -38,8 +36,8 @@ const CartManager = (function() {
             if (!product) return;
 
             const colorObj = product.colors.find(c => c.key === colorKey) || product.colors[0];
-            
-            const cartItemId = `${product.id}_${colorObj.key}`;
+
+            const cartItemId = size ? `${product.id}_${colorObj.key}_${size}` : `${product.id}_${colorObj.key}`;
             const items = readCart();
             const existing = items.find(it => it.cartItemId === cartItemId);
 
@@ -53,7 +51,8 @@ const CartManager = (function() {
                     price: product.price,
                     colorLabel: colorObj.label,
                     colorHex: colorObj.hex,
-                    image: colorObj.image, 
+                    image: colorObj.image,
+                    size: size,
                     qty: parseInt(qtyToAdd, 10)
                 });
             }
@@ -94,6 +93,7 @@ function formatPrice(price) {
 function renderCartItemHTML(item) {
     const lineTotal = item.qty * item.price;
     const colorDot = item.colorHex ? `<span class="color-dot" style="background:${item.colorHex}; border: 1px solid #ddd;"></span> <span style="font-size:13px; color:#777;">${item.colorLabel}</span>` : '';
+    const sizeInfo = item.size ? `<span style="font-size:13px; color:#777; margin-left:8px;">Size ${item.size}</span>` : '';
 
     return `
     <div class="cart-item" data-cart-id="${item.cartItemId}">
@@ -106,7 +106,7 @@ function renderCartItemHTML(item) {
                         <i class="fa-regular fa-trash-can"></i>
                     </button>
                 </div>
-                <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">${colorDot}</div>
+                <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">${colorDot}${sizeInfo}</div>
                 <strong>${formatPrice(item.price)}</strong>
                 <div class="quantity quantity-mobile">
                     <button class="minus">-</button>
@@ -130,6 +130,7 @@ function renderCartItemHTML(item) {
 function renderCart() {
     const cartItemsWrap = document.getElementById('cart-items-wrap');
     if (!cartItemsWrap) return; 
+
     const items = CartManager.getCart();
     const cartList = document.querySelector('.cart-list');
     const emptyState = document.getElementById('empty-cart');
@@ -227,7 +228,7 @@ function refreshCartBadge() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    renderCart(); 
+    renderCart();
     refreshCartBadge(); 
 });
 
